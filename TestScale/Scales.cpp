@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 #include <string>
 #include <windows.h>
+#include <vector>
 
 using namespace std;
 
@@ -8,47 +9,36 @@ enum Worlds { SADNESS, JOY, FEAR, CALM, ANGER, POWER }; // инициализи�
 string Emotion_Names[6] = { "Грусть", "Радость", "Страх", "Спокойствие", "Гнев", "Сила" };
 string Worlds_Names[6] = { "Мир Грусти", "Мир Радости", "Мир Страха", "Мир Спокойствия", "Мир Гнева", "Мир Силы" };
 
-class Dialog_System {
-private: // Здесь инициализируем приватные переменные
-    string Character_Name;
+struct info {
     string Dialog_Text;
-	 
-public: // здесь прописываю все остальное 
-    void Set_Data(string name, string text ) { // Через этот метод ввожу персонажей  и текст для них
-        Character_Name = name;
-        Dialog_Text = text;
+    int effect[6];
 
-    }
-
-    void Dialog_Method() {
-
-        cout << Character_Name << ": " << Dialog_Text << endl;
-
-    }
-
-    void Dialog_hero() {
-
-        cout << Dialog_Text << endl;
-
-    }
 };
 
-struct NPC {
-	string Name;
-	int Effect[3][6]; // 3 реплики, 6 эмоций
-    Dialog_System Dialog;
+class NPC {
+private:
+
+    string Name;
+    vector<info> Words;
+
+public:
+
+    box (string NPC_Name, vector<info> Dialog_Words) {}
+    
+
 
 };
 
 struct Player {
+
 	string Name;
 	int Current_loc = SADNESS;
-
+    int Emotions[6] = { 50, 50, 50, 50, 50, 50 };
 };
  
 
 Player Hero;
-int Emotions[6] = { 50, 50, 50, 50, 50, 50 };
+
 NPC Characters[3] = {
 		   {"Эла", {
 			   {10, -5, 0, 0, 0, 0},   // Реплика 1: сильное влияние
@@ -69,7 +59,10 @@ NPC Characters[3] = {
 
 
 void Init_Game() {
-    Characters->Dialog.Set_Data("dqwd", "efwf");
+    NPC Ela;
+    Ela.Set_Data("Эла", "Sosali?", { 10, -5, 0, 0, 0, 0 } )
+
+
 }
 
 void Start_Game() {
@@ -141,8 +134,8 @@ void Start_Game() {
 
 int main() {
 	setlocale(LC_ALL, "RU");
-	SetConsoleCP(1251); // ????
-	SetConsoleOutputCP(1251); // ?????
+	SetConsoleCP(1251); 
+	/*SetConsoleOutputCP(1251); */
 	Init_Game();
 	Start_Game();
 
