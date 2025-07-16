@@ -8,19 +8,7 @@ enum Worlds { SADNESS, JOY, FEAR, CALM, ANGER, POWER }; // инициализи�
 string Emotion_Names[6] = { "Грусть", "Радость", "Страх", "Спокойствие", "Гнев", "Сила" };
 string Worlds_Names[6] = { "Мир Грусти", "Мир Радости", "Мир Страха", "Мир Спокойствия", "Мир Гнева", "Мир Силы" };
 
-struct NPC {
-	string Name;
-	int Effect[3][6]; // 3 реплики, 6 эмоций
-
-};
-
-struct Player {
-	string Name;
-	int Current_loc = SADNESS;
-
-};
- 
-class Dialog {
+class Dialog_System {
 private: // Здесь инициализируем приватные переменные
     string Character_Name;
     string Dialog_Text;
@@ -37,7 +25,27 @@ public: // здесь прописываю все остальное
         cout << Character_Name << ": " << Dialog_Text << endl;
 
     }
+
+    void Dialog_hero() {
+
+        cout << Dialog_Text << endl;
+
+    }
 };
+
+struct NPC {
+	string Name;
+	int Effect[3][6]; // 3 реплики, 6 эмоций
+    Dialog_System Dialog;
+
+};
+
+struct Player {
+	string Name;
+	int Current_loc = SADNESS;
+
+};
+ 
 
 Player Hero;
 int Emotions[6] = { 50, 50, 50, 50, 50, 50 };
@@ -61,10 +69,7 @@ NPC Characters[3] = {
 
 
 void Init_Game() {
-    Dialog Ela; // инициализирую диалоги 
-    Dialog Loran;
-    Dialog Nimi;
-    Dialog GG;
+    Characters->Dialog.Set_Data("dqwd", "efwf");
 }
 
 void Start_Game() {
