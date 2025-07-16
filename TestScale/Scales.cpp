@@ -23,7 +23,7 @@ private:
 
 public:
 
-    box (string NPC_Name, vector<info> Dialog_Words) {}
+    NPC (string NPC_Name, vector<info> Dialog_Words) {}
     
 
 
