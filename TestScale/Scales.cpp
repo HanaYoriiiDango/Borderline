@@ -2,12 +2,28 @@
 #include <string>
 #include <windows.h>
 #include <vector>
+#include <iomanip>
 
 using namespace std;
 
-enum Worlds { SADNESS, JOY, FEAR, CALM, ANGER, POWER }; // инициализирую миры, name
+enum Worlds_Num { SADNESS, JOY, FEAR, CALM, ANGER, POWER }; // инициализирую миры, name
 string Emotion_Names[6] = { "Грусть", "Радость", "Страх", "Спокойствие", "Гнев", "Сила" };
 string Worlds_Names[6] = { "Мир Грусти", "Мир Радости", "Мир Страха", "Мир Спокойствия", "Мир Гнева", "Мир Силы" };
+
+struct portal_ {
+    string name;
+    int target;
+    bool open = true;
+
+};
+
+struct Location {
+    string name;
+    vector<portal_> portal;
+
+
+};
+
 
 struct info {
     
@@ -30,7 +46,7 @@ public:
         // наследование классов изучи полезно будет 
     }
 
-    void Info() {
+    void info() {
 
         cout << name << ": " << endl;
 
@@ -52,13 +68,14 @@ public:
 struct Player {
 
 	string Name;
-	int Current_loc = SADNESS;
+	int Current_loc = ANGER;
     int Emotions[6] = { 50, 50, 50, 50, 50, 50 };
 
 };
  
 
 Player Hero;
+Location Worlds[6];
 
 //NPC Characters[3] = {
 //		   {"Эла", {
@@ -80,11 +97,14 @@ Player Hero;
 
 /* 
 1) перемещение внутри мира пока что только в формате текста 
+1.1) все описания также нужно вводить сюда
+1.2) Выбор действий никак не меняетсЯ и не ограничивается выбранными репликами
 2) Перемещение будет как Go так и по шкалам - срастить 
-3) Master - готовая версия, всегда рабочая ветка. Test - ветка для тестов 
+3) Master - готовая версия, всегда рабочая ветка. Test - ветка для тестов  √ 
 4) По мере роста кода раскидать все по файлам, в них стараться сильно не срать
 5) Нужно автоатизировать систему с влиянием реплик на шкалы чтобы не прописывать для каждой реплики 
 6) эти эмоции с персонажей я буду использовать для изменения эмоций шкал 
+6.1) при достижении одной эмоции своих границ  (0 / 100) мир закрывается и мы пермещаемся в другой 
 7) мне нужно рандомить девку и пускай она чота должна пиздеть
 8) мне дают вариант ответов 
 9) в зависмимости от выбранного ответа я имзменяю шкалу согласно паттернам в таблице
@@ -98,12 +118,89 @@ void Init_Game() {
 
     NPC Ela("PORNO");
     Ela.text("BLADIMIR PUTIN MOLODEC", 100, 50, 100, 99, 90, 99);
-    Ela.Info();
+    Ela.info();
 
-}
+    Worlds[0].name = "Мир Грусти";
+    Worlds[0].portal.push_back({ "Мир Радости", 1 });
+    Worlds[0].portal.push_back({ "Мир Страха", 2 });
+    Worlds[0].portal.push_back({ "Мир Спокойствия", 3 });
+    Worlds[0].portal.push_back({ "Мир Гнева", 4 });
+    Worlds[0].portal.push_back({ "Мир Силы", 5 });
 
-//void Start_Game() {
-//
+    Worlds[1].name = "Мир Радости";
+    Worlds[1].portal.push_back({ "Мир Грусти", 0 });
+    Worlds[1].portal.push_back({ "Мир Страха", 2 });
+    Worlds[1].portal.push_back({ "Мир Спокойствия", 3 });
+    Worlds[1].portal.push_back({ "Мир Гнева", 4 });
+    Worlds[1].portal.push_back({ "Мир Силы", 5 });
+
+    Worlds[2].name = "Мир Страха";
+    Worlds[2].portal.push_back({ "Мир Грусти", 0 });
+    Worlds[2].portal.push_back({ "Мир Радости", 1 });
+    Worlds[2].portal.push_back({ "Мир Спокойствия", 3 });
+    Worlds[2].portal.push_back({ "Мир Гнева", 4 });
+    Worlds[2].portal.push_back({ "Мир Силы", 5 });
+
+    Worlds[3].name = "Мир Спокойствия";
+    Worlds[3].portal.push_back({ "Мир Грусти", 0 });
+    Worlds[3].portal.push_back({ "Мир Радости", 1 });
+    Worlds[3].portal.push_back({ "Мир Страха", 2 });
+    Worlds[3].portal.push_back({ "Мир Гнева", 4 });
+    Worlds[3].portal.push_back({ "Мир Силы", 5 });
+
+    Worlds[4].name = "Мир Гнева";
+    Worlds[4].portal.push_back({ "Мир Грусти", 0 });
+    Worlds[4].portal.push_back({ "Мир Радости", 1 });
+    Worlds[4].portal.push_back({ "Мир Страха", 2 });
+    Worlds[4].portal.push_back({ "Мир Спокойствия", 3 });
+    Worlds[4].portal.push_back({ "Мир Силы", 5 });
+
+    Worlds[5].name = "Мир Силы";
+    Worlds[5].portal.push_back({ "Мир Грусти", 0 });
+    Worlds[5].portal.push_back({ "Мир Радости", 1 });
+    Worlds[5].portal.push_back({ "Мир Страха", 2 });
+    Worlds[5].portal.push_back({ "Мир Спокойствия", 3 });
+    Worlds[5].portal.push_back({ "Мир Гнева", 4 });
+    
+
+void Start_Game() {
+
+    bool start = true;
+    string temp;
+
+    while (start) {
+
+        
+        cout << "тут ебанина какая то происходит, все в огне нахуй";
+        cout << "Go - для перемещения";
+        cin >> temp;
+        if (temp == "Go") {
+
+            for (int i = 0; i < Worlds[Hero.current_loc].portal.size(); i++) {
+            
+            
+            }
+
+            cout << "В какой мир желаешь переместиться?";
+            string temp1;
+            cin >> temp1;
+
+            if (temp1 == Worlds_Names[(int)Worlds.name] {
+
+
+
+            }
+
+
+        }
+    }
+
+
+
+
+
+
+
 //    bool start = true;
 //	int round = 0;
 //	int choice;
@@ -167,13 +264,13 @@ void Init_Game() {
 //
 //        round++;
 //	}
-//}
+}
 
 int main() {
 	setlocale(LC_ALL, "RU");
 	SetConsoleCP(1251); 
 	SetConsoleOutputCP(1251); 
 	Init_Game();
-	//Start_Game();
+	Start_Game();
 
 }
