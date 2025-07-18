@@ -48,17 +48,19 @@ public:
 
     void info() {
 
-        cout << name << ": " << endl;
+        cout << name << ": ";
 
         for (int i = 0; i < words.size(); i++) {
             
-            cout << words[i].dialog_Text << "\t";
+            cout << words[i].dialog_Text;
+
             for (int j = 0; j < 6; j++) {
 
+                cout << "(" << words[i].effect[j] << ") ";
 
-                cout <<  words[i].effect[j] << " ";
             }
 
+            cout << "\n";
         }
 
     }
@@ -76,6 +78,8 @@ struct Player {
 
 Player Hero;
 Location Worlds[6];
+vector<NPC> Characters;
+int Effect[2][6];
 
 //NPC Characters[3] = {
 //		   {"Эла", {
@@ -113,6 +117,35 @@ Location Worlds[6];
 
 
 */
+void limit() {
+
+    // Нужно разобратья логику перемещения по мирам через шкалы 
+    // Нужна такая проверка, которая будет проверять не зашло ли значение каждой шкалы за 0 и 100
+    // Нужно связать перемещение по мирам через шкалы попарно. Т.е если мы достигли 100 в sadness, то по такой механике мы перемещаемся только в Joy 
+    // миры попарно связаны
+    // я должен блокировать сам мир для перемещения как по шкале так и по команде Go - флаги? 
+    // Так как у меня отсутствует логика перемещения по миры через шкалы, то я сначало должен прописать ее  
+    Hero.emotions[JOY] = 100 - Hero.emotions[SADNESS]; // Эмоции как переливающиеся сосуды
+    Hero.emotions[CALM] = 100 - Hero.emotions[ANGER];
+    Hero.emotions[POWER] = 100 - Hero.emotions[FEAR];
+
+    for (int i = 0; i < 6; i++) {
+
+            if (Hero.emotions[i] <= 0 || Hero.emotions[i] >= 100) {
+
+                if (i != Hero.current_loc && Hero.emotions[i] > 0 && Hero.emotions[i] < 100) {
+                        Hero.current_loc = i;
+                        cout << ">> Ты переместился в " << Worlds_Names[Hero.Current_loc] << " из-за нестабильности.\n";
+                        break;
+                }
+                
+            }
+
+            Hero.emotions[i] = 100;
+            Worlds[Hero.current_loc].portal[i].open = false;
+        
+    }
+}
 
 
 void Init_Game() {
@@ -209,9 +242,47 @@ void Start_Game() {
         }
         if (temp == "Start") {
 
-            cout << "Current loc: " << Hero.current_loc << endl;
 
-            cout << 
+            bool start = true;
+
+            while (start) {
+
+            for (int i = 0; i < 6; i++ ) {
+
+                cout << left << setw(20) << Emotion_Names[i] << "\t" << Hero.emotions[i] << endl;
+
+            }
+
+                int choice;
+
+                NPC Ela("Ela");
+                Ela.text("Сосал? (выбери 1 или 2) ", 60, 40, 50, 50, 50, 50);
+                Ela.info();
+                cout << "1) нет ()" << endl;
+                cout << "2) да ()" << endl;
+                cin >> choice;
+
+                if (choice > 0 || choice < 2) {
+
+                    switch (choice) {
+                    case(1):
+                        Hero.emotions[SADNESS] += 10;
+                        cout << "Sadness: " << Hero.emotions[SADNESS] << "\n";
+                        break;
+                    case(2):
+                        Hero.emotions[JOY] += 10;
+                        cout << "Joy: " << Hero.emotions[JOY] << "\n";
+                        break;
+                    }
+
+                    limit();
+                 
+                    Hero.emotions[JOY] = 100 - Hero.emotions[SADNESS]; // Эмоции как переливающиеся сосуды
+                    Hero.emotions[CALM] = 100 - Hero.emotions[ANGER];
+                    Hero.emotions[POWER] = 100 - Hero.emotions[FEAR];
+
+                }
+            }
         }
     }    
 }
@@ -266,15 +337,15 @@ void Start_Game() {
 //        }
 //
 //        // Перенос в другой мир, если текущая эмоция вышла за пределы
-//        if (Emotions[Hero.Current_loc] <= 0 || Emotions[Hero.Current_loc] >= 100) {
-//            for (int i = 0; i < 6; i++) {
-//                if (i != Hero.Current_loc && Emotions[i] > 0 && Emotions[i] < 100) {
-//                    Hero.Current_loc = i;
-//                    cout << ">> Ты переместился в " << Worlds_Names[Hero.Current_loc] << " из-за нестабильности.\n";
-//                    break;
-//                }
-//            }
-//        }
+        if (Emotions[Hero.Current_loc] <= 0 || Emotions[Hero.Current_loc] >= 100) {
+            for (int i = 0; i < 6; i++) {
+                if (i != Hero.Current_loc && Emotions[i] > 0 && Emotions[i] < 100) {
+                    Hero.Current_loc = i;
+                    cout << ">> Ты переместился в " << Worlds_Names[Hero.Current_loc] << " из-за нестабильности.\n";
+                    break;
+                }
+            }
+        }
 //
 //        // Вывод эмоций
 //        cout << "\nТекущие эмоции:\n";
