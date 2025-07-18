@@ -207,6 +207,12 @@ void Start_Game() {
             cout << "Current loc: " << Hero.current_loc << endl;
 
         }
+        if (temp == "Start") {
+
+            cout << "Current loc: " << Hero.current_loc << endl;
+
+            cout << 
+        }
     }    
 }
 
