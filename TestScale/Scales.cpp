@@ -10,7 +10,7 @@ enum Worlds_Num { SADNESS, JOY, FEAR, CALM, ANGER, POWER }; // инициали�
 string Emotion_Names[6] = { "Грусть", "Радость", "Страх", "Спокойствие", "Гнев", "Сила" };
 string Worlds_Names[6] = { "Мир Грусти", "Мир Радости", "Мир Страха", "Мир Спокойствия", "Мир Гнева", "Мир Силы" };
 
-struct portal_ {
+struct Portal_ {
     string name;
     int target;
     bool open = true;
@@ -19,7 +19,7 @@ struct portal_ {
 
 struct Location {
     string name;
-    vector<portal_> portal;
+    vector<Portal_> portal;
 
 
 };
@@ -27,7 +27,7 @@ struct Location {
 
 struct info {
     
-    string Dialog_Text;
+    string dialog_Text;
     int effect[6];
 
 };
@@ -36,13 +36,13 @@ class NPC {
 public:
 
     string name;
-    vector<info> Words;
+    vector<info> words;
 
-    NPC(string name) : name(name){}
+    NPC(string name) : name(name) {};
 
     void text( string letter, int sadness, int joy,int fear , int calm, int anger, int power) {
 
-        Words.push_back({ letter, {sadness, joy, fear, calm, anger, power} });
+        words.push_back({ letter, {sadness, joy, fear, calm, anger, power} });
         // наследование классов изучи полезно будет 
     }
 
@@ -50,13 +50,13 @@ public:
 
         cout << name << ": " << endl;
 
-        for (int i = 0; i < Words.size(); i++) {
+        for (int i = 0; i < words.size(); i++) {
             
-            cout << Words[i].Dialog_Text << "\t";
+            cout << words[i].dialog_Text << "\t";
             for (int j = 0; j < 6; j++) {
 
 
-                cout <<  Words[i].effect[j] << " ";
+                cout <<  words[i].effect[j] << " ";
             }
 
         }
@@ -67,9 +67,9 @@ public:
 
 struct Player {
 
-	string Name;
-	int Current_loc = ANGER;
-    int Emotions[6] = { 50, 50, 50, 50, 50, 50 };
+	string name;
+	int current_loc = ANGER;
+    int emotions[6] = { 50, 50, 50, 50, 50, 50 };
 
 };
  
@@ -108,7 +108,8 @@ Location Worlds[6];
 7) мне нужно рандомить девку и пускай она чота должна пиздеть
 8) мне дают вариант ответов 
 9) в зависмимости от выбранного ответа я имзменяю шкалу согласно паттернам в таблице
-10) 
+10) Насколько подойдут для проекта ассоциативные контейнеры?
+
 
 
 */
@@ -118,7 +119,7 @@ void Init_Game() {
 
     NPC Ela("PORNO");
     Ela.text("BLADIMIR PUTIN MOLODEC", 100, 50, 100, 99, 90, 99);
-    Ela.info();
+    //Ela.info();
 
     Worlds[0].name = "Мир Грусти";
     Worlds[0].portal.push_back({ "Мир Радости", 1 });
@@ -161,7 +162,7 @@ void Init_Game() {
     Worlds[5].portal.push_back({ "Мир Страха", 2 });
     Worlds[5].portal.push_back({ "Мир Спокойствия", 3 });
     Worlds[5].portal.push_back({ "Мир Гнева", 4 });
-    
+}
 
 void Start_Game() {
 
@@ -170,31 +171,29 @@ void Start_Game() {
 
     while (start) {
 
-        
-        cout << "тут ебанина какая то происходит, все в огне нахуй";
-        cout << "Go - для перемещения";
+
+        cout << "тут ебанина какая то происходит, все в огне нахуй \n";
+        cout << "Go - для перемещения \n";
         cin >> temp;
+
         if (temp == "Go") {
 
             for (int i = 0; i < Worlds[Hero.current_loc].portal.size(); i++) {
-            
-            
+
+                cout << i + 1 << ")" << left << setw(20) << Worlds[Hero.current_loc].portal[i].name << "\t"
+                     << (Worlds[Hero.current_loc].portal[i].open ? "Мир открыт \n" : "Мир закрыт \n") << endl;
+
             }
 
-            cout << "В какой мир желаешь переместиться?";
+            cout << "В какой мир желаешь переместиться? \n";
             string temp1;
             cin >> temp1;
 
-            if (temp1 == Worlds_Names[(int)Worlds.name] {
-
-
-
-            }
-
+ 
 
         }
     }
-
+}
 
 
 
@@ -264,7 +263,7 @@ void Start_Game() {
 //
 //        round++;
 //	}
-}
+
 
 int main() {
 	setlocale(LC_ALL, "RU");
