@@ -353,7 +353,7 @@ void Start_Game() {
 //            cout << Emotion_Names[i] << ": " << Emotions[i] << "\n";
 //        }
 //
-//        round++;
+//        round++;вы
 //	}
 
 
