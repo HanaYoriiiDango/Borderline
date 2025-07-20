@@ -312,6 +312,8 @@ void Start_Game() {
 //        }
 //
 //        // Применение эффекта
+//		NPC& c = Characters[round % 3];
+// 
 //        int idx = choice - 1;
 //        for (int i = 0; i < 6; i++) {
 //            Emotions[i] += c.Effect[idx][i];
