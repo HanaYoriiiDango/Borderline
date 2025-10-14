@@ -124,11 +124,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="GameLogic.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="GameLogicSystem.cpp" />
+    <ClCompile Include="InitSystem.cpp" />
+    <ClCompile Include="InputSystem.cpp" />
+    <ClCompile Include="OutputSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameLogic.h" />
+    <ClInclude Include="Headers.h" />
+    <ClInclude Include="Init.h" />
+    <ClInclude Include="Input.h" />
+    <ClInclude Include="Output.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
