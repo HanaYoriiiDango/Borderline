@@ -131,6 +131,7 @@
     <ClCompile Include="OutputSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameCore.h" />
     <ClInclude Include="Init.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
