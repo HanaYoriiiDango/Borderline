@@ -2,7 +2,7 @@
 
 bool InputSystem::InputHandler(int choice, int npcID) {
 
-    int counter = 0;
+    int counter = 0; // счетчик
 
     if (choice == 0) return false;
     if (choice != 0) choice -= 1; // тк в демонтрации j + 1
@@ -13,7 +13,7 @@ bool InputSystem::InputHandler(int choice, int npcID) {
 
             for (int j = 0; j < Worlds[Hero.current_loc].character[i].Answer.size(); j++) { // перебираю ответные реплики игрока персонажу
 
-                if (choice == j) { // сравниваю ввод с репликой w3wйц
+                if (choice == j) { // сравниваю ввод с репликой 
 
                     ChangeEmotions(Worlds[Hero.current_loc].character[i].Answer[j].id, true); // записываю ID в функцию, true - по умолчанию
                     counter++;
@@ -22,6 +22,6 @@ bool InputSystem::InputHandler(int choice, int npcID) {
             }
         }
     }
-    if (counter == 1) return true;
+    if (counter == 1) return true; // счетчик == 1 возвращаем true (условия прошли)
 
 }
