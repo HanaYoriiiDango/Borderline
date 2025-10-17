@@ -3,6 +3,12 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <iomanip>
+#include <map>
+#include <cstdlib>
+#include <ctime>
+#include <thread>  // Для использования std::this_thread::sleep_for 
+#include <chrono>  // Для использования std::chrono::seconds 
 
 using namespace std;
 
