@@ -132,7 +132,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameLogic.h" />
-    <ClInclude Include="Headers.h" />
     <ClInclude Include="Init.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Output.h" />
