@@ -124,16 +124,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="GameCore.cpp" />
+    <ClCompile Include="Global.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="GameLogicSystem.cpp" />
-    <ClCompile Include="InitSystem.cpp" />
-    <ClCompile Include="InputSystem.cpp" />
-    <ClCompile Include="OutputSystem.cpp" />
+    <ClCompile Include="Systems.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameCore.h" />
-    <ClInclude Include="Init.h" />
+    <ClInclude Include="Global.h" />
+    <ClInclude Include="Systems.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

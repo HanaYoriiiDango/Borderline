@@ -1,34 +1,41 @@
-#include "GameCore.h"
-/*____________________________________ЗАМЕТКИ______________________________________________________________
-1) массив слов как способ борьбы с несоотвествием состояния игрока с текстом в диалогах 
-2) переделать инициализацию диалогов - фразы персонажа сделать вектором
-3) Обдумать еще раз моменты со сложной комбинаторикой и ее обработкой
-4) механика состояний - отдельная ветка (потом надо мерджить) 
-5) сбор статистики - txt файл
+// main.cpp
+#include <iostream>
+#include <string>
+#include <vector>
+#include <iomanip>
+#include <cstdlib>
+#include <ctime>
+#include <thread>
+#include <chrono>
+#include <windows.h>
+#include <fstream>
 
-*/
+#include "Global.h"
+#include "systems.h"
+
+using namespace std;
 
 int main() {
     // Настройки:
-    setlocale(LC_ALL, "RU"); // настраивает локализацию (даты числа валюты и тд)
-    SetConsoleCP(1251); // ввод на кириллице
-    SetConsoleOutputCP(1251); // вывод кириллици
-    srand((time(nullptr))); // nullptr == NULL == 0, nullptr - более современный и типобезопасный стандарт 
+    setlocale(LC_ALL, "RU");
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+    srand((time(nullptr)));
 
-    GameCore Game; // игровое ядро
-    Game.InitGame(); // команда инициализации
-    Game.Help(); // вывод комад
-    string temp; // переменная для ввода команд 
+    GameCore Game;
+    Game.InitGame();
+    Game.Help();
+    string temp;
 
     // Игровой цикл:
-    while (Hero.life) { // пока игрок жив 
-
-        cin >> temp; // ожидаем ввода одной из команд 
-        if (temp == "Edit") Game.Edit(); // Позволяет напрямую менять шкалы
-        if (temp == "Help") Game.Help(); // выводит все команды
-        if (temp == "Status") Game.StatusInfo(); // выводит шкалы 
-        if (temp == "Info") Game.InitInfo(); // выводит инфу о инциализированных обьектах
-        if (temp == "Go") Game.Go(); // выводит все доступные миры для игрока и позволяет перемещаться по тем мирам что  ему доступны  
-        if (temp == "Start") Game.StartDialog(); // начинаем диалог с персонажем
+    while (Hero.life) {
+        cin >> temp;
+        if (temp == "Edit") Game.Edit();
+        if (temp == "Help") Game.Help();
+        if (temp == "Status") Game.StatusInfo();
+        if (temp == "Info") Game.InitInfo();
+        if (temp == "Go") Game.Go();
+        if (temp == "Start") Game.StartDialog();
     }
+    return 0;
 }
