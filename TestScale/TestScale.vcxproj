@@ -124,6 +124,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameCore.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameLogicSystem.cpp" />
     <ClCompile Include="InitSystem.cpp" />
