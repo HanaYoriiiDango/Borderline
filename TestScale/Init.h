@@ -22,20 +22,20 @@ struct Portal_ { // структура для реализации перемещения
 };
 
 struct Peplace { // структура реплик, к каждой реплики привязан айди
-    Emotion_ id;
-    string text;
+    Emotion_ id; // ее айди
+    string text; // реплика
 
 };
 
 struct NPC { // структура NPC 
     string name; // имя NPC
     vector <string> text_NPC; // текст NPC
-    int ID;
+    int ID; // айди персонажа
     vector <Peplace> Answer; // Ответные реплики игрока
 
     void AddReplace(Emotion_ id, string t) { // Добавляет ответную реплику 
 
-        Answer.push_back({ id, t });
+        Answer.push_back({ id, t }); // пушим
 
     }
 };
@@ -58,13 +58,47 @@ struct Location { // структура миров по которым игрок будет перемещаться
 
 };
 
-class InitSystem {
+class InitSystem { // система быстрой инициализации
 public:
-    void Info(); // 
+    void Info(); // выводит всю информацию об инициализированных объектах
     void CreateWorlds(); // инициализирует миры вне зависимости от их количества
     void CreatePortals(Emotion_ WorldEmotion); // инициализирует порталы за исключением портала = линку мира 
 };
 
+class GameLogicSystem { // система обработки игровой логики
+private:
+    Emotion_ ArrayNum; // переменная для записи в нее конкретных эмоций
+    int dominationRate = 10; // переменные для изменения доминантной/пассивной эмоции 
+    int passiveRate = 5; // пока что они с фиксированными значениями
+
+public:
+    vector<Emotion_> Positive; // массивы для группировки эмоций на негативные и позитивные
+    vector<Emotion_> Negative; // они нужны чтобы оптимизировать логику паттернов
+    Emotion_ GetOpposite(Emotion_ feels); // принимает одну эмоцию а возвращает противоположную
+    bool LimitCheck(int value); // проверка эмоций на достижение лимитов
+    void HeroLocCheck(); //проверка местоположения игрока 
+    void LockedWorlds(); // закрытие миров
+    void ChangeGamerule(); // здесь буду менять игровые правила исходя из значений шкал 
+    void Transfuse(Emotion_ feels); // "Эмоции как переливающиеся сосуды"
+    void Addition(Emotion_ feels, vector<Emotion_> Array); // увеличение доминирующей эмоции
+    void Subtraction(Emotion_ feels, vector<Emotion_> Array); // уменьшение доминирующей эмоции
+    void ChangeEmotions(Emotion_ DominationEmotion, bool sign); // принимает доминирующую эмоцию и знак для фикс. значений
+
+};
+
+class OutputSystem { // система вывода информации
+public:
+    void OutputDialog(int npcID);// вывод диалога 
+    void OutputStates(); // вывод шакал
+    void CommandInfo(); // вывод списка команд
+    
+};
+
+class InputSystem : GameLogicSystem { // система обработки ввода, связана с системой обработки логики
+public:
+    bool InputHandler(int choice, int npcID); // Обрабатывает ввод игрока во время диалога
+
+};
+
 Player Hero; // Инициализирую персонажа игрока 
 Location Worlds[COUNT_Emotions]; // Массив с мирами
-InitSystem Init;
