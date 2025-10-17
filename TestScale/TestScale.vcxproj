@@ -131,10 +131,7 @@
     <ClCompile Include="OutputSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameLogic.h" />
     <ClInclude Include="Init.h" />
-    <ClInclude Include="Input.h" />
-    <ClInclude Include="Output.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

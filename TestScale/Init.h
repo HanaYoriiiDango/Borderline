@@ -13,7 +13,7 @@ vector <Emotion_> Emotion{ JOY, SADNESS, POWER, FEAR, CALM, ANGER }; // но юзать
 string Emotion_Names[COUNT_Emotions] = { "Радость", "Грусть", "Сила", "Страх", "Спокойствие", "Гнев", }; // названия эмоций 
 string Worlds_Names[COUNT_Emotions] = { "Мир Радости", "Мир Грусти", "Мир Силы", "Мир Страха", "Мир Спокойствия", "Мир Гнева" }; // названия миров
 
-struct Portal_ { // структура для реализации перемещения 
+struct Portal_ { // структура для реализации перемещения  
 
     string name; // куда ведет
     int target; // таргет на определенный мир
