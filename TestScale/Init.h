@@ -1,23 +1,24 @@
 #pragma once
 
-#include <iostream>
-#include <string>
-#include <vector>
-#include <iomanip>
-#include <map>
-#include <cstdlib>
-#include <ctime>
+#include <iostream> // база
+#include <string> // база
+#include <vector> // база
+#include <iomanip> // форматирование вывода 
+#include <cstdlib> //рандом и преобразования
+#include <ctime> //  для работы с таймерами
 #include <thread>  // Для использования std::this_thread::sleep_for 
 #include <chrono>  // Для использования std::chrono::seconds 
+#include <windows.h> // для настройки ввода и вывода кириллицы
 
 using namespace std;
 
-enum Emotion_ { JOY, SADNESS, POWER, FEAR, CALM, ANGER, COUNT_Emotions }; // инициализирую эмоции,  count - для инициализации  
+enum Emotion_ { JOY, SADNESS, POWER, FEAR, CALM, ANGER, COUNT_Emotions }; // инициализирую эмоции,  count - для быстрой инициализации  
 vector <Emotion_> Emotion{ JOY, SADNESS, POWER, FEAR, CALM, ANGER }; // но юзать буду именно массив, 
 // все эмоции в нем расположены попарно и по логике: четное - позитивная эмоция, нечетная - негативная 
 
-string Emotion_Names[COUNT_Emotions] = { "Радость", "Грусть", "Сила", "Страх", "Спокойствие", "Гнев", }; // названия эмоций 
-string Worlds_Names[COUNT_Emotions] = { "Мир Радости", "Мир Грусти", "Мир Силы", "Мир Страха", "Мир Спокойствия", "Мир Гнева" }; // названия миров
+// названия эмоций и миров
+string Emotion_Names[COUNT_Emotions] = { "Радость", "Грусть", "Сила", "Страх", "Спокойствие", "Гнев", }; 
+string Worlds_Names[COUNT_Emotions] = { "Мир Радости", "Мир Грусти", "Мир Силы", "Мир Страха", "Мир Спокойствия", "Мир Гнева" }; 
 
 struct Portal_ { // структура для реализации перемещения  
 
@@ -35,7 +36,7 @@ struct Peplace { // структура реплик, к каждой реплики привязан айди
 
 struct NPC { // структура NPC 
     string name; // имя NPC
-    vector <string> text_NPC; // текст NPC
+    string text_NPC; // текст NPC
     int ID; // айди персонажа
     vector <Peplace> Answer; // Ответные реплики игрока
 
@@ -64,6 +65,10 @@ struct Location { // структура миров по которым игрок будет перемещаться
 
 };
 
+// Метод разделения объявления и определения: в классе пишем только объявление метода (+параметрика) 
+// а вот уже логику этих методов распиывать в соответствующих cpp файлах
+// при обьявлении метода желательно давать к нему краткий комент о функционале
+
 class InitSystem { // система быстрой инициализации
 public:
     void Info(); // выводит всю информацию об инициализированных объектах
@@ -72,12 +77,12 @@ public:
 };
 
 class GameLogicSystem { // система обработки игровой логики
-private:
+private: // вспомогательные переменные:
     Emotion_ ArrayNum; // переменная для записи в нее конкретных эмоций
     int dominationRate = 10; // переменные для изменения доминантной/пассивной эмоции 
     int passiveRate = 5; // пока что они с фиксированными значениями
 
-public:
+public:// логика:
     vector<Emotion_> Positive; // массивы для группировки эмоций на негативные и позитивные
     vector<Emotion_> Negative; // они нужны чтобы оптимизировать логику паттернов
     Emotion_ GetOpposite(Emotion_ feels); // принимает одну эмоцию а возвращает противоположную
