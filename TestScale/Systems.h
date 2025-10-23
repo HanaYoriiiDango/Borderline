@@ -31,6 +31,7 @@ public:
 class InputSystem : public GameLogicSystem { // обработка ввода, связана с игровой логикой
 public:
     bool InputHandler(int choice, int npcID);
+
 };
 
 class OutputSystem { // обработка вывода
