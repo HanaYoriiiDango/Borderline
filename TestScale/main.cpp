@@ -29,12 +29,12 @@ int main() {
     // Игровой цикл:
     while (Hero.life) {
         cin >> temp;
-        if (temp == "Edit") Game.Edit();
-        if (temp == "Help") Game.Help();
-        if (temp == "Status") Game.StatusInfo();
-        if (temp == "Info") Game.InitInfo();
-        if (temp == "Go") Game.Go();
-        if (temp == "Start") Game.StartDialog();
+        if (temp == "edit") Game.Edit();
+        if (temp == "help") Game.Help();
+        if (temp == "status") Game.StatusInfo();
+        if (temp == "info") Game.InitInfo();
+        if (temp == "go") Game.Go();
+        if (temp == "start") Game.StartDialog();
     }
     return 0;
 }
