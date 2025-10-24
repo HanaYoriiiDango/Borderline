@@ -7,7 +7,6 @@
 #include <thread>
 #include <chrono>
 #include <windows.h>
-#include <fstream>
 
 #include "Global.h"
 #include "systems.h"
