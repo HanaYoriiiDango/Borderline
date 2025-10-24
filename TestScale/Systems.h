@@ -57,3 +57,13 @@ public:
     void StartDialog();
     void Go();
 };
+
+class StatisticsCollector {
+private: 
+    GameSession currentSession;
+
+public:
+    void StartSession();
+    void EndSession();
+
+};
