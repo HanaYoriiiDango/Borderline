@@ -52,7 +52,7 @@ struct GameSession {
     // Основная информация о сессии
     string sessionId; // номер сессии
     time_t startTime, endTime; // Начало сессии / конец сессии
-    double sessionMin; // перевод в минутах
+    double TimeMin; // перевод в минутах
 
     // Основная статистика
     int worldVisitCount;        // Сколько раз посещал каждый мир

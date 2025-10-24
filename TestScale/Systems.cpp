@@ -299,7 +299,10 @@ void StatisticsCollector::StartSession() {
 void StatisticsCollector::EndSession() {
 
     Session.endTime = time(0);
-    Session.sessionMin = difftime(Session.endTime, Session.startTime) / 60.0;
+    Session.TimeMin = difftime(Session.endTime, Session.startTime) / 60.0;
+
+    cout << "" << Session.endTime << endl;
+    cout << "" << Session.TimeMin << endl;
 
 }
 
