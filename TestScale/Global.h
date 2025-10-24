@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <ctime> 
+#include <map>
 
 using namespace std;
 
@@ -44,6 +46,24 @@ struct Location {
     bool is_locked = false;
     vector<Portal_> portal;
     vector<NPC> character;
+};
+
+struct GameSession { 
+    // Основная информация о сессии
+    string sessionId; // номер сессии
+    time_t startTime, endTime; // Начало сессии / конец сессии
+    double sessionMin; // перевод в минутах
+
+    // Основная статистика
+    int worldVisitCount;        // Сколько раз посещал каждый мир
+    map<string, double> timeInWorld;         // Время в каждом мире (минуты)
+    vector<string> worldHistory;   // История перемещений между мирами
+
+    // Статистика по диалогам
+    int counterChoices;                  // Всего принятых диалоговых решений
+    map<string, int> popularChoices;        // Как часто выбирался каждый вариант
+    map<string, vector<string>> choiceChains;// Цепочки решений (что выбирал после чего)
+
 };
 
 // Глобальные переменные
