@@ -288,6 +288,21 @@ bool InputSystem::InputHandler(int choice, int npcID) {
     if (counter == 1) return true;
 }
 
+// Реализации методов StatisticsCollector
+void StatisticsCollector::StartSession() {
+
+    Session.startTime = time(0); 
+    Session.sessionId = to_string(Session.startTime); 
+
+}
+
+void StatisticsCollector::EndSession() {
+
+    Session.endTime = time(0);
+    Session.sessionMin = difftime(Session.endTime, Session.startTime) / 60.0;
+
+}
+
 // Реализации методов GameCore
 void GameCore::InitGame() {
 
@@ -305,6 +320,19 @@ void GameCore::InitGame() {
     Worlds[SADNESS].character[2].AddReplace(SADNESS, " (C горькой иронией):  Вот и поговорили. Как всегда, я один несу свою чушь в пустоту");
     Worlds[SADNESS].character[2].AddReplace(FEAR, " (Взяв себя в руки): Ладно... ладно. Сосредоточься. Нужно идти дальше.");
     Worlds[SADNESS].character[2].AddReplace(ANGER, " (Смирившись): Тишина... Иногда она лучше любых слов");
+}
+
+void GameCore::StartGame() {
+
+    Collector.StartSession();
+
+}
+
+void GameCore::EndGame() {
+
+    Collector.EndSession();
+
+
 }
 
 void GameCore::Edit() {
@@ -420,18 +448,4 @@ void GameCore::Go() {
             cout << "Этот мир закрыт!\n";
         }
     }
-}
-
-void StatisticsCollector::StartSession() {
-
-    Session.startTime = time(0); 
-    Session.sessionId = to_string(Session.startTime); 
-
-}
-
-void StatisticsCollector::EndSession() {
-
-    Session.endTime = time(0);
-    Session.sessionMin = difftime(Session.endTime, Session.startTime) / 60.0;
-
 }

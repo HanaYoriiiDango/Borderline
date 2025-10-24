@@ -61,6 +61,8 @@ private:
 
 public:
     void InitGame();
+    void StartGame();
+    void EndGame();
     void Edit();
     void Help();
     void StatusInfo();
