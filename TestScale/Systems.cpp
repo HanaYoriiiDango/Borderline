@@ -358,6 +358,7 @@ void GameCore::StartGame() {
 void GameCore::EndGame() {
 
     Collector.EndSession();
+    Collector.SaveData();
     Hero.life = false;
 
 }
