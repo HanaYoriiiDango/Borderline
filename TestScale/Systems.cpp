@@ -310,6 +310,26 @@ void StatisticsCollector::EndSession() {
 
 }
 
+void StatisticsCollector::SaveData() {
+
+    SaveStatistics.open("SaveStatistics.txt", ios::app);
+
+    if (SaveStatistics.is_open()) {
+
+        SaveStatistics << " Игровая сессия №: " << Session.ID << endl;
+        SaveStatistics << " Start time: " << Session.startTime << endl;
+        SaveStatistics << " End time: " << Session.endTime << endl;
+        SaveStatistics << " End of time in minutes: " << Session.TimeMin << endl;
+        
+        SaveStatistics.close();
+
+    }
+    else {
+        cout << "Файл не открыт или не существует" << endl;
+
+    }
+}
+
 // Реализации методов GameCore
 void GameCore::InitGame() {
 
