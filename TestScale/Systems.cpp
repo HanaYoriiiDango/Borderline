@@ -301,8 +301,8 @@ void StatisticsCollector::EndSession() {
     Session.endTime = time(0);
     Session.TimeMin = difftime(Session.endTime, Session.startTime) / 60.0;
 
-    cout << "" << Session.endTime << endl;
-    cout << "" << Session.TimeMin << endl;
+    cout << "All: " << Session.endTime << endl;
+    cout << "Minute: " << Session.TimeMin << endl;
 
 }
 
