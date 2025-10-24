@@ -41,12 +41,23 @@ public:
     void CommandInfo();
 };
 
+class StatisticsCollector {
+private: 
+    GameSession Session;
+
+public:
+    void StartSession();
+    void EndSession();
+
+};
+
 class GameCore { // игровое ядро, все системы разделены по модулям
 private:
     InitSystem Init;
     InputSystem Input;
     OutputSystem Output;
     GameLogicSystem Logic;
+    StatisticsCollector Collector;
 
 public:
     void InitGame();
@@ -58,12 +69,3 @@ public:
     void Go();
 };
 
-class StatisticsCollector {
-private: 
-    GameSession Session;
-
-public:
-    void StartSession();
-    void EndSession();
-
-};
