@@ -2,3 +2,7 @@
  Start time: 1761298769
  End time: 1761298787
  End of time in minutes: 0.3
+ Игровая сессия №: 1761298909
+ Start time: 1761298909
+ End time: 1761299053
+ End of time in minutes: 2.4
