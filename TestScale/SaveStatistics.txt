@@ -1,0 +1,4 @@
+ Игровая сессия №: 1761298769
+ Start time: 1761298769
+ End time: 1761298787
+ End of time in minutes: 0.3
