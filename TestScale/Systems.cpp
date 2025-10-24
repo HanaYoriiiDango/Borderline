@@ -428,3 +428,10 @@ void StatisticsCollector::StartSession() {
     Session.sessionId = to_string(Session.startTime); 
 
 }
+
+void StatisticsCollector::EndSession() {
+
+    Session.endTime = time(0);
+    Session.sessionMin = difftime(Session.endTime, Session.startTime) / 60.0;
+
+}
