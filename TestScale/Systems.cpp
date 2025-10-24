@@ -421,3 +421,12 @@ void GameCore::Go() {
         }
     }
 }
+
+void StatisticsCollector::StartSession() {
+
+    Session.startTime = time(0);
+    Session.sessionId = to_string(Session.startTime);
+    
+
+
+}

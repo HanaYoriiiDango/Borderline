@@ -60,7 +60,7 @@ public:
 
 class StatisticsCollector {
 private: 
-    GameSession currentSession;
+    GameSession Session;
 
 public:
     void StartSession();
