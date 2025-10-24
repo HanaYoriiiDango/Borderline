@@ -44,10 +44,12 @@ public:
 class StatisticsCollector {
 private: 
     GameSession Session;
+    ofstream SaveStatistics;
 
 public:
     void StartSession();
     void EndSession();
+    void SaveData();
 
 };
 

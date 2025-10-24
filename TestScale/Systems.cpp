@@ -292,10 +292,10 @@ bool InputSystem::InputHandler(int choice, int npcID) {
 void StatisticsCollector::StartSession() {
 
     Session.startTime = time(0); 
-    Session.sessionId = to_string(Session.startTime); 
+    Session.ID = Session.startTime; 
 
     cout << "=== Начата новая игровая сессия ===" << endl;
-    cout << "ID сессии: " << Session.Id << endl;
+    cout << "ID сессии: " << Session.ID << endl;
 
 }
 
@@ -304,8 +304,9 @@ void StatisticsCollector::EndSession() {
     Session.endTime = time(0);
     Session.TimeMin = difftime(Session.endTime, Session.startTime) / 60.0;
 
-    cout << "All: " << Session.endTime << endl;
-    cout << "Minute: " << Session.TimeMin << endl;
+    cout << "=== Игровая сессия завершена ===" << endl;
+    cout << "endTime: " << Session.endTime << endl;
+    cout << "TimeMin: " << Session.TimeMin << endl;
 
 }
 
