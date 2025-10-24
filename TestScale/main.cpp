@@ -11,7 +11,7 @@
 #include "Global.h"
 #include "systems.h"
 
-using namespace std;
+using namespace std; // this static
 
 int main() {
     // Настройки: gg
