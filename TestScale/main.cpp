@@ -21,6 +21,7 @@ int main() {
     srand((time(nullptr)));
 
     GameCore Game;
+    Game.StartGame();
     Game.InitGame();
     Game.Help();
     string temp;
@@ -34,6 +35,7 @@ int main() {
         if (temp == "info" || temp == "Info") Game.InitInfo();
         if (temp == "go" || temp == "Go") Game.Go();
         if (temp == "start" || temp == "Start") Game.StartDialog();
+        if (temp == "exit" || temp == "Exit") Game.EndGame();
     }
     return 0;
 }
