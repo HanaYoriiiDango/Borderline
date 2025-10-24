@@ -50,7 +50,7 @@ struct Location {
 
 struct GameSession { 
     // Основная информация о сессии
-    string sessionId; // номер сессии
+    int ID; // номер сессии
     time_t startTime, endTime; // Начало сессии / конец сессии
     double TimeMin; // перевод в минутах
 

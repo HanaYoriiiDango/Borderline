@@ -294,6 +294,9 @@ void StatisticsCollector::StartSession() {
     Session.startTime = time(0); 
     Session.sessionId = to_string(Session.startTime); 
 
+    cout << "=== Начата новая игровая сессия ===" << endl;
+    cout << "ID сессии: " << Session.Id << endl;
+
 }
 
 void StatisticsCollector::EndSession() {
@@ -334,7 +337,7 @@ void GameCore::StartGame() {
 void GameCore::EndGame() {
 
     Collector.EndSession();
-
+    Hero.life = false;
 
 }
 
