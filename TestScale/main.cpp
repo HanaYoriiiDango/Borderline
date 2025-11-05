@@ -12,7 +12,7 @@
 #include "Systems.h"
 
 using namespace std; 
-
+ 
 int main() {
     // Настройки:  
     setlocale(LC_ALL, "RU");
