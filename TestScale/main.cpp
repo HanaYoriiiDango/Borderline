@@ -14,7 +14,7 @@
 using namespace std; 
 
 int main() {
-    // Настройки: ggg
+    // Настройки:
     setlocale(LC_ALL, "RU");
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
