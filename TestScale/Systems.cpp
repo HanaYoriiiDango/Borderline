@@ -1,4 +1,4 @@
-#include "systems.h"
+п»ї#include "systems.h"
 #include <iostream>
 #include <iomanip>
 #include <cstdlib>
@@ -6,7 +6,7 @@
 
 using namespace std;
 
-// Реализации методов InitSystem
+// Р РµР°Р»РёР·Р°С†РёРё РјРµС‚РѕРґРѕРІ InitSystem 
 void InitSystem::Info() {
 
     for (int i = 0; i < Emotion.size(); i++) {
@@ -53,14 +53,31 @@ void InitSystem::CreatePortals(Emotion_ WorldEmotion) {
     }
 }
 
-// Реализации методов NPC
+// Р РµР°Р»РёР·Р°С†РёРё РјРµС‚РѕРґРѕРІ NPC
 void NPC::AddReplace(Emotion_ id, string t) {
 
     Answer.push_back({ id, t });
 
 }
 
-// Реализации методов GameLogicSystem
+void InitSystem::Dialogues() {
+
+    Worlds[SADNESS].character.push_back({ "Beam1", "РџРѕР»СѓСЂР°Р·Р»РѕР¶РёРІС€РµРµСЃСЏ Р±СЂРµРІРЅРѕ Р»РµР¶РёС‚ РїРѕРґ СѓРіСЂСЋРјС‹Рј РЅРµР±РѕРј", 0 });
+    Worlds[SADNESS].character[0].AddReplace(SADNESS, " (РЎР°СЂРєР°Р·Рј) : РќСѓ С‡С‚Рѕ, СЃС‚Р°СЂРёРЅР° - Р±СЂРµРІРЅРѕ ? РќР°С€РµР» РѕС‚Р»РёС‡РЅСѓСЋ РєРѕРјРїР°РЅРёСЋ РґР»СЏ Р±РµСЃРµРґС‹.РўРµР±СЏ С‚РѕР¶Рµ СЃСЋРґР° РІС‹Р±СЂРѕСЃРёР»Рѕ Р·Р° РЅРµРЅР°РґРѕР±РЅРѕСЃС‚СЊСЋ ?");
+    Worlds[SADNESS].character[0].AddReplace(FEAR, " (Р Р°Р·РґСЂР°Р¶РµРЅРЅРѕ): Р С‡РµРіРѕ РјРѕР»С‡РёС€СЊ? Р’СЃРµ РІРѕРєСЂСѓРі С‚РѕР»СЊРєРѕ Рё СѓРјРµСЋС‚, С‡С‚Рѕ РјРѕР»С‡Р°С‚СЊ! РЎРєР°Р¶Рё С…РѕС‚СЊ С‡С‚Рѕ-РЅРёР±СѓРґСЊ! ");
+    Worlds[SADNESS].character[0].AddReplace(ANGER, " (РЎ РѕРїР°СЃРєРѕР№): РўС‹... С‚С‹ РІРµРґСЊ РЅРµ РїСЂРµРІСЂР°С‚РёС€СЊСЃСЏ СЃРµР№С‡Р°СЃ РІ РєРѕРіРѕ-РЅРёР±СѓРґСЊ? Р’ РјРѕРЅСЃС‚СЂР°?");
+    Worlds[SADNESS].character.push_back({ "Beam2", "(Р‘СЂРµРІРЅРѕ РјРѕР»С‡РёС‚. Р’РµС‚РµСЂ С€РµР»РµСЃС‚РёС‚ Р»РёСЃС‚СЊСЏРјРё)", 1 });
+    Worlds[SADNESS].character[1].AddReplace(JOY, " (РЎ РіРѕСЂСЏС‡Р° РїРЅСѓС‚СЊ Р±СЂРµРІРЅРѕ Р±РѕС‚РёРЅРєРѕРј): [РџРЅСѓС‚СЊ]");
+    Worlds[SADNESS].character[1].AddReplace(POWER, " (Р“СЂСѓСЃС‚РЅРѕ СЃРµСЃС‚СЊ СЂСЏРґРѕРј): Р—РЅР°РµС€СЊ, Р° РІРµРґСЊ С‚С‹ РёРґРµР°Р»СЊРЅС‹Р№ СЃРѕР±РµСЃРµРґРЅРёРє. РўРµР±СЏ РЅРµРІРѕР·РјРѕР¶РЅРѕ СЂР°Р·Р°С‡Р°СЂРѕРІР°С‚СЊ");
+    Worlds[SADNESS].character[1].AddReplace(CALM, " (РџСЂРёСЃР»СѓС€РёРІР°СЏСЃСЊ Рє СЃРµР±Рµ): РЎС‚РѕРї. Рђ С‡С‚Рѕ РµСЃР»Рё СЌС‚Рѕ Р»РѕРІСѓС€РєР°? РќР°РґРѕ Р±С‹ РїСЂРѕРІРµСЂРёС‚СЊ РѕРєСЂРµСЃС‚РЅРѕСЃС‚Рё");
+    Worlds[SADNESS].character.push_back({ "Beam3", "...", 2 });
+    Worlds[SADNESS].character[2].AddReplace(SADNESS, " (C РіРѕСЂСЊРєРѕР№ РёСЂРѕРЅРёРµР№):  Р’РѕС‚ Рё РїРѕРіРѕРІРѕСЂРёР»Рё. РљР°Рє РІСЃРµРіРґР°, СЏ РѕРґРёРЅ РЅРµСЃСѓ СЃРІРѕСЋ С‡СѓС€СЊ РІ РїСѓСЃС‚РѕС‚Сѓ");
+    Worlds[SADNESS].character[2].AddReplace(FEAR, " (Р’Р·СЏРІ СЃРµР±СЏ РІ СЂСѓРєРё): Р›Р°РґРЅРѕ... Р»Р°РґРЅРѕ. РЎРѕСЃСЂРµРґРѕС‚РѕС‡СЊСЃСЏ. РќСѓР¶РЅРѕ РёРґС‚Рё РґР°Р»СЊС€Рµ.");
+    Worlds[SADNESS].character[2].AddReplace(ANGER, " (РЎРјРёСЂРёРІС€РёСЃСЊ): РўРёС€РёРЅР°... РРЅРѕРіРґР° РѕРЅР° Р»СѓС‡С€Рµ Р»СЋР±С‹С… СЃР»РѕРІ");
+
+}
+
+// Р РµР°Р»РёР·Р°С†РёРё РјРµС‚РѕРґРѕРІ GameLogicSystem
 Emotion_ GameLogicSystem::GetOpposite(Emotion_ feels) {
 
     switch (feels) {
@@ -103,19 +120,19 @@ void GameLogicSystem::HeroLocCheck() {
                 int random_index = rand() % available_worlds.size();
                 Hero.current_loc = available_worlds[random_index];
 
-                cout << ">> Переход в " << Worlds_Names[Hero.current_loc]
-                    << " из-за блокировки " << Worlds_Names[i]
-                    << " и " << Worlds_Names[opposite] << endl;
+                cout << ">> РџРµСЂРµС…РѕРґ РІ " << Worlds_Names[Hero.current_loc]
+                    << " РёР·-Р·Р° Р±Р»РѕРєРёСЂРѕРІРєРё " << Worlds_Names[i]
+                    << " Рё " << Worlds_Names[opposite] << endl;
 
             }
             else {
                 Hero.life = false;
-                cout << ">> Все миры закрыты! Игра завершена.\n";
+                cout << ">> Р’СЃРµ РјРёСЂС‹ Р·Р°РєСЂС‹С‚С‹! РРіСЂР° Р·Р°РІРµСЂС€РµРЅР°.\n";
             }
         }
         else {
-            cout << ">> " << Worlds_Names[i] << " и "
-                << Worlds_Names[opposite] << " закрыты!\n";
+            cout << ">> " << Worlds_Names[i] << " Рё "
+                << Worlds_Names[opposite] << " Р·Р°РєСЂС‹С‚С‹!\n";
         }
     }
 }
@@ -226,7 +243,38 @@ void GameLogicSystem::ChangeEmotions(Emotion_ DominationEmotion, bool sign) {
     vector<Emotion_>().swap(Negative);
 }
 
-// Реализации методов OutputSystem
+void GameLogicSystem::ProcessGo() {
+
+    for (int i = 0; i < Worlds[Hero.current_loc].portal.size(); i++) {
+
+        cout << i + 1 << ")" << left << setw(20) << Worlds[Hero.current_loc].portal[i].name << "\t"
+            << (!Worlds[i].is_locked ? "РњРёСЂ РѕС‚РєСЂС‹С‚ \n" : "РњРёСЂ Р·Р°РєСЂС‹С‚ \n") << endl;
+
+    }
+
+    cout << "Р’ РєР°РєРѕР№ РјРёСЂ Р¶РµР»Р°РµС€СЊ РїРµСЂРµРјРµСЃС‚РёС‚СЊСЃСЏ? \n";
+    int choice;
+
+    cin >> choice;
+
+    if (choice > 0 || choice <= Worlds[Hero.current_loc].portal.size()) {
+
+        int target_index = choice - 1;
+        Portal_& portal = Worlds[Hero.current_loc].portal[target_index];
+
+        if (portal.open && !Worlds[portal.target].is_locked) {
+
+            Hero.current_loc = portal.target;
+            cout << "РўС‹ РїРµСЂРµРјРµСЃС‚РёР»СЃСЏ РІ " << Worlds_Names[Hero.current_loc] << endl;
+
+        }
+        else {
+            cout << "Р­С‚РѕС‚ РјРёСЂ Р·Р°РєСЂС‹С‚!\n";
+        }
+    }
+}
+
+// Р РµР°Р»РёР·Р°С†РёРё РјРµС‚РѕРґРѕРІ OutputSystem
 void OutputSystem::OutputDialog(int npcID) {
 
     for (int i = 0; i < Worlds[Hero.current_loc].character.size(); i++) {
@@ -254,16 +302,17 @@ void OutputSystem::OutputStates() {
 
 void OutputSystem::CommandInfo() {
 
-    cout << "help - список команд \n";
-    cout << "edit - изменить эмоции\n";
-    cout << "info - информация о инициализированных объектах \n";
-    cout << "status - информация о состоянии персонажа \n";
-    cout << "go - для перемещения \n";
-    cout << "start - начать диалог с персонажем (если есть с кем поболтать)\n";
+    cout << "help - СЃРїРёСЃРѕРє РєРѕРјР°РЅРґ \n";
+    cout << "edit - РёР·РјРµРЅРёС‚СЊ СЌРјРѕС†РёРё\n";
+    cout << "info - РёРЅС„РѕСЂРјР°С†РёСЏ Рѕ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅРЅС‹С… РѕР±СЉРµРєС‚Р°С… \n";
+    cout << "status - РёРЅС„РѕСЂРјР°С†РёСЏ Рѕ СЃРѕСЃС‚РѕСЏРЅРёРё РїРµСЂСЃРѕРЅР°Р¶Р° \n";
+    cout << "go - РґР»СЏ РїРµСЂРµРјРµС‰РµРЅРёСЏ \n";
+    cout << "start - РЅР°С‡Р°С‚СЊ РґРёР°Р»РѕРі СЃ РїРµСЂСЃРѕРЅР°Р¶РµРј (РµСЃР»Рё РµСЃС‚СЊ СЃ РєРµРј РїРѕР±РѕР»С‚Р°С‚СЊ)\n";
+    cout << "exit - Р·Р°РІРµСЂС€РёС‚СЊ РёРіСЂРѕРІСѓСЋ СЃРµСЃСЃРёСЋ\n";
 
 }
 
-// Реализации методов InputSystem
+// Р РµР°Р»РёР·Р°С†РёРё РјРµС‚РѕРґРѕРІ InputSystem
 bool InputSystem::InputHandler(int choice, int npcID) {
 
     int counter = 0;
@@ -288,23 +337,81 @@ bool InputSystem::InputHandler(int choice, int npcID) {
     if (counter == 1) return true;
 }
 
-// Реализации методов GameCore
+// Р РµР°Р»РёР·Р°С†РёРё РјРµС‚РѕРґРѕРІ StatisticsCollector
+void StatisticsCollector::StartSession() {
+
+    Session.startTime = time(0); 
+    Session.ID = Session.startTime; 
+
+    cout << "=== РќР°С‡Р°С‚Р° РЅРѕРІР°СЏ РёРіСЂРѕРІР°СЏ СЃРµСЃСЃРёСЏ ===" << endl;
+    cout << "ID СЃРµСЃСЃРёРё: " << Session.ID << endl;
+
+}
+
+void StatisticsCollector::EndSession() {
+
+    Session.endTime = time(0);
+    Session.TimeMin = difftime(Session.endTime, Session.startTime) / 60.0;
+
+    cout << "=== РРіСЂРѕРІР°СЏ СЃРµСЃСЃРёСЏ Р·Р°РІРµСЂС€РµРЅР° ===" << endl;
+    cout << "endTime: " << Session.endTime << endl;
+    cout << "TimeMin: " << Session.TimeMin << endl;
+
+}
+
+void StatisticsCollector::SaveData() {
+
+    SaveStatistics.open("SaveStatistics.txt", ios::app);
+
+    if (SaveStatistics.is_open()) {
+
+        SaveStatistics << " РРіСЂРѕРІР°СЏ СЃРµСЃСЃРёСЏ в„–: " << Session.ID << endl;
+        SaveStatistics << " Start time: " << Session.startTime << endl;
+        SaveStatistics << " End time: " << Session.endTime << endl;
+        SaveStatistics << " End of time in minutes: " << Session.TimeMin << endl;
+        
+        SaveStatistics.close();
+
+    }
+    else {
+        cout << "Р¤Р°Р№Р» РЅРµ РѕС‚РєСЂС‹С‚ РёР»Рё РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚" << endl;
+
+    }
+}
+
+void StatisticsCollector::ClearStatistics() {
+
+    SaveStatistics.open("SaveStatistics.txt", ios::trunc);
+
+    if (SaveStatistics.is_open()) {
+        SaveStatistics << "РЎС‚Р°С‚РёСЃС‚РёРєР° РѕС‡РёС‰РµРЅР° " << "\n";
+        SaveStatistics << "РРіСЂРѕРІР°СЏ СЃРµСЃСЃРёСЏ в„–: " << Session.ID << "\n";
+        SaveStatistics.close();
+        cout << "вњ“ Statistics cleared!\n";
+
+    }
+}
+
+// Р РµР°Р»РёР·Р°С†РёРё РјРµС‚РѕРґРѕРІ GameCore
 void GameCore::InitGame() {
 
     Init.CreateWorlds();
+    Init.Dialogues();
+   
+}
 
-    Worlds[SADNESS].character.push_back({ "Beam1", "Полуразложившееся бревно лежит под угрюмым небом", 0 });
-    Worlds[SADNESS].character[0].AddReplace(SADNESS, " (Сарказм) : Ну что, старина - бревно ? Нашел отличную компанию для беседы.Тебя тоже сюда выбросило за ненадобностью ?");
-    Worlds[SADNESS].character[0].AddReplace(FEAR, " (Раздраженно): И чего молчишь? Все вокруг только и умеют, что молчать! Скажи хоть что-нибудь! ");
-    Worlds[SADNESS].character[0].AddReplace(ANGER, " (С опаской): Ты... ты ведь не превратишься сейчас в кого-нибудь? В монстра?");
-    Worlds[SADNESS].character.push_back({ "Beam2", "(Бревно молчит. Ветер шелестит листьями)", 1 });
-    Worlds[SADNESS].character[1].AddReplace(JOY, " (С горяча пнуть бревно ботинком): [Пнуть]");
-    Worlds[SADNESS].character[1].AddReplace(POWER, " (Грустно сесть рядом): Знаешь, а ведь ты идеальный собеседник. Тебя невозможно разачаровать");
-    Worlds[SADNESS].character[1].AddReplace(CALM, " (Прислушиваясь к себе): Стоп. А что если это ловушка? Надо бы проверить окрестности");
-    Worlds[SADNESS].character.push_back({ "Beam3", "...", 2 });
-    Worlds[SADNESS].character[2].AddReplace(SADNESS, " (C горькой иронией):  Вот и поговорили. Как всегда, я один несу свою чушь в пустоту");
-    Worlds[SADNESS].character[2].AddReplace(FEAR, " (Взяв себя в руки): Ладно... ладно. Сосредоточься. Нужно идти дальше.");
-    Worlds[SADNESS].character[2].AddReplace(ANGER, " (Смирившись): Тишина... Иногда она лучше любых слов");
+void GameCore::StartGame() {
+
+    Collector.StartSession();
+
+}
+
+void GameCore::EndGame() {
+
+    Collector.EndSession();
+    Collector.SaveData();
+    Hero.life = false;
+
 }
 
 void GameCore::Edit() {
@@ -319,16 +426,16 @@ void GameCore::Edit() {
 
     }
 
-    cout << "Какую эмоцию хотите изменить? (номер)" << endl;
+    cout << "РљР°РєСѓСЋ СЌРјРѕС†РёСЋ С…РѕС‚РёС‚Рµ РёР·РјРµРЅРёС‚СЊ? (РЅРѕРјРµСЂ)" << endl;
     cin >> choice1;
 
     if (choice1 > 0 && choice1 < Emotion.size()) {
 
-        cout << "Какое значение установить для выбранной шкалы?" << endl;
+        cout << "РљР°РєРѕРµ Р·РЅР°С‡РµРЅРёРµ СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РґР»СЏ РІС‹Р±СЂР°РЅРЅРѕР№ С€РєР°Р»С‹?" << endl;
         cin >> choice2;
         int num = choice1 - 1;
         Hero.emotions[num] = choice2;
-        cout << "Установлено новое значение для шкалы " << Emotion_Names[num] << ": " << Hero.emotions[num] << endl;
+        cout << "РЈСЃС‚Р°РЅРѕРІР»РµРЅРѕ РЅРѕРІРѕРµ Р·РЅР°С‡РµРЅРёРµ РґР»СЏ С€РєР°Р»С‹ " << Emotion_Names[num] << ": " << Hero.emotions[num] << endl;
 
     }
 }
@@ -345,7 +452,7 @@ void GameCore::InitInfo() {
     Init.Info();
 }
 
-void GameCore::StartDialog() {
+void GameCore::ProcessDialog() {
 
     bool start = true;
 
@@ -355,15 +462,15 @@ void GameCore::StartDialog() {
 
             int choice;
 
-            cout << "____Поляна на окраине Мира Грусти____" << endl;
-            cout << "Немо подходит к бревну. Он выглядит растерянным и усталым" << endl;
+            cout << "____РџРѕР»СЏРЅР° РЅР° РѕРєСЂР°РёРЅРµ РњРёСЂР° Р“СЂСѓСЃС‚Рё____" << endl;
+            cout << "РќРµРјРѕ РїРѕРґС…РѕРґРёС‚ Рє Р±СЂРµРІРЅСѓ. РћРЅ РІС‹РіР»СЏРґРёС‚ СЂР°СЃС‚РµСЂСЏРЅРЅС‹Рј Рё СѓСЃС‚Р°Р»С‹Рј" << endl;
 
             Output.OutputStates();
             Output.OutputDialog(0);
             cin >> choice;
             if (Input.InputHandler(choice, 0)) start = true;
             else {
-                cout << "Диалог окончен" << endl;
+                cout << "Р”РёР°Р»РѕРі РѕРєРѕРЅС‡РµРЅ" << endl;
                 start = false;
             }
 
@@ -372,7 +479,7 @@ void GameCore::StartDialog() {
             cin >> choice;
             if (Input.InputHandler(choice, 1)) start = true;
             else {
-                cout << "Диалог окончен" << endl;
+                cout << "Р”РёР°Р»РѕРі РѕРєРѕРЅС‡РµРЅ" << endl;
                 start = false;
             }
 
@@ -381,43 +488,37 @@ void GameCore::StartDialog() {
             cin >> choice;
             if (Input.InputHandler(choice, 2)) start = true;
             else {
-                cout << "Диалог окончен" << endl;
+                cout << "Р”РёР°Р»РѕРі РѕРєРѕРЅС‡РµРЅ" << endl;
                 start = false;
             }
         }
     }
     else {
-        cout << "Похоже в этом одиноком мире не с кем разговаривать(" << endl;
+        cout << "РџРѕС…РѕР¶Рµ РІ СЌС‚РѕРј РѕРґРёРЅРѕРєРѕРј РјРёСЂРµ РЅРµ СЃ РєРµРј СЂР°Р·РіРѕРІР°СЂРёРІР°С‚СЊ(" << endl;
     }
 }
 
 void GameCore::Go() {
 
-    for (int i = 0; i < Worlds[Hero.current_loc].portal.size(); i++) {
+    Logic.ProcessGo();
 
-        cout << i + 1 << ")" << left << setw(20) << Worlds[Hero.current_loc].portal[i].name << "\t"
-        << (!Worlds[i].is_locked ? "Мир открыт \n" : "Мир закрыт \n") << endl;
+}
 
-    }
+void GameCore::ProcessClear() {
 
-    cout << "В какой мир желаешь переместиться? \n";
-    int choice;
+    Collector.ClearStatistics();
 
-    cin >> choice;
+}
 
-    if (choice > 0 || choice <= Worlds[Hero.current_loc].portal.size()) {
+void GameCore::ProcessCommand() {
 
-        int target_index = choice - 1;
-        Portal_& portal = Worlds[Hero.current_loc].portal[target_index];
-
-        if (portal.open && !Worlds[portal.target].is_locked) {
-
-            Hero.current_loc = portal.target;
-            cout << "Ты переместился в " << Worlds_Names[Hero.current_loc] << endl;
-
-        }
-        else {
-            cout << "Этот мир закрыт!\n";
-        }
-    }
+    cin >> temp;
+    if (temp == "edit" || temp == "Edit") Edit();
+    if (temp == "help" || temp == "Help") Help();
+    if (temp == "status" || temp == "Status") StatusInfo();
+    if (temp == "info" || temp == "Info") InitInfo();
+    if (temp == "go" || temp == "Go") Go();
+    if (temp == "start" || temp == "Start") ProcessDialog();
+    if (temp == "exit" || temp == "Exit") EndGame();
+    if (temp == "CLEAR23") ProcessClear();
 }

@@ -6,6 +6,8 @@ public:
     void Info();
     void CreateWorlds();
     void CreatePortals(Emotion_ WorldEmotion);
+    void Dialogues();
+
 };
 
 class GameLogicSystem { // игровая логика
@@ -26,6 +28,8 @@ public:
     void Addition(Emotion_ feels, vector<Emotion_> Array);
     void Subtraction(Emotion_ feels, vector<Emotion_> Array);
     void ChangeEmotions(Emotion_ DominationEmotion, bool sign);
+    void ProcessGo();
+
 };
 
 class InputSystem : public GameLogicSystem { // обработка ввода, связана с игровой логикой
@@ -41,19 +45,40 @@ public:
     void CommandInfo();
 };
 
+class StatisticsCollector {
+private: 
+    GameSession Session;
+    ofstream SaveStatistics;
+
+public:
+    void StartSession();
+    void EndSession();
+    void SaveData();
+    void ClearStatistics();
+
+};
+
 class GameCore { // игровое ядро, все системы разделены по модулям
 private:
     InitSystem Init;
     InputSystem Input;
     OutputSystem Output;
     GameLogicSystem Logic;
+    StatisticsCollector Collector;
+    string temp;
+
 
 public:
     void InitGame();
+    void StartGame();
+    void EndGame();
     void Edit();
     void Help();
     void StatusInfo();
     void InitInfo();
-    void StartDialog();
+    void ProcessDialog();
     void Go();
+    void ProcessCommand();
+    void ProcessClear();
 };
+
