@@ -6,6 +6,7 @@ public:
     void Info();
     void CreateWorlds();
     void CreatePortals(Emotion_ WorldEmotion);
+    
 };
 
 class GameLogicSystem { // игровая логика
@@ -52,6 +53,7 @@ public:
     void StartSession();
     void EndSession();
     void SaveData();
+    void ClearStatistics();
 
 };
 
@@ -76,6 +78,6 @@ public:
     void ProcessDialog();
     void Go();
     void ProcessCommand();
-
+    void ProcessClear();
 };
 

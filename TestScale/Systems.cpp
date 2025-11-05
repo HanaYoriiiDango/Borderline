@@ -362,6 +362,19 @@ void StatisticsCollector::SaveData() {
     }
 }
 
+void StatisticsCollector::ClearStatistics() {
+
+    SaveStatistics.open("SaveStatistics.txt", ios::trunc);
+
+    if (SaveStatistics.is_open()) {
+        SaveStatistics << "Статистика очищена " << "\n";
+        SaveStatistics << "Игровая сессия №: " << Session.ID << "\n";
+        SaveStatistics.close();
+        cout << "✓ Statistics cleared!\n";
+
+    }
+}
+
 // Реализации методов GameCore
 void GameCore::InitGame() {
 
@@ -485,6 +498,12 @@ void GameCore::Go() {
 
 }
 
+void GameCore::ProcessClear() {
+
+    Collector.ClearStatistics();
+
+}
+
 void GameCore::ProcessCommand() {
 
     cin >> temp;
@@ -495,5 +514,5 @@ void GameCore::ProcessCommand() {
     if (temp == "go" || temp == "Go") Go();
     if (temp == "start" || temp == "Start") ProcessDialog();
     if (temp == "exit" || temp == "Exit") EndGame();
-
+    if (temp == "CLEAR23") ProcessClear();
 }

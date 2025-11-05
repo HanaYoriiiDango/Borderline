@@ -1,12 +1,2 @@
- Игровая сессия №: 1761298769
- Start time: 1761298769
- End time: 1761298787
- End of time in minutes: 0.3
- Игровая сессия №: 1761298909
- Start time: 1761298909
- End time: 1761299053
- End of time in minutes: 2.4
- Игровая сессия №: 1762324899
- Start time: 1762324899
- End time: 1762325003
- End of time in minutes: 1.73333
+Статистика очищена 
+Игровая сессия №: 1762326920
