@@ -226,6 +226,37 @@ void GameLogicSystem::ChangeEmotions(Emotion_ DominationEmotion, bool sign) {
     vector<Emotion_>().swap(Negative);
 }
 
+void GameLogicSystem::ProcessGo() {
+
+    for (int i = 0; i < Worlds[Hero.current_loc].portal.size(); i++) {
+
+        cout << i + 1 << ")" << left << setw(20) << Worlds[Hero.current_loc].portal[i].name << "\t"
+            << (!Worlds[i].is_locked ? "Мир открыт \n" : "Мир закрыт \n") << endl;
+
+    }
+
+    cout << "В какой мир желаешь переместиться? \n";
+    int choice;
+
+    cin >> choice;
+
+    if (choice > 0 || choice <= Worlds[Hero.current_loc].portal.size()) {
+
+        int target_index = choice - 1;
+        Portal_& portal = Worlds[Hero.current_loc].portal[target_index];
+
+        if (portal.open && !Worlds[portal.target].is_locked) {
+
+            Hero.current_loc = portal.target;
+            cout << "Ты переместился в " << Worlds_Names[Hero.current_loc] << endl;
+
+        }
+        else {
+            cout << "Этот мир закрыт!\n";
+        }
+    }
+}
+
 // Реализации методов OutputSystem
 void OutputSystem::OutputDialog(int npcID) {
 
@@ -402,7 +433,7 @@ void GameCore::InitInfo() {
     Init.Info();
 }
 
-void GameCore::StartDialog() {
+void GameCore::ProcessDialog() {
 
     bool start = true;
 
@@ -450,31 +481,6 @@ void GameCore::StartDialog() {
 
 void GameCore::Go() {
 
-    for (int i = 0; i < Worlds[Hero.current_loc].portal.size(); i++) {
+    Logic.ProcessGo();
 
-        cout << i + 1 << ")" << left << setw(20) << Worlds[Hero.current_loc].portal[i].name << "\t"
-        << (!Worlds[i].is_locked ? "Мир открыт \n" : "Мир закрыт \n") << endl;
-
-    }
-
-    cout << "В какой мир желаешь переместиться? \n";
-    int choice;
-
-    cin >> choice;
-
-    if (choice > 0 || choice <= Worlds[Hero.current_loc].portal.size()) {
-
-        int target_index = choice - 1;
-        Portal_& portal = Worlds[Hero.current_loc].portal[target_index];
-
-        if (portal.open && !Worlds[portal.target].is_locked) {
-
-            Hero.current_loc = portal.target;
-            cout << "Ты переместился в " << Worlds_Names[Hero.current_loc] << endl;
-
-        }
-        else {
-            cout << "Этот мир закрыт!\n";
-        }
-    }
 }

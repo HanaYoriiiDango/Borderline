@@ -26,6 +26,8 @@ public:
     void Addition(Emotion_ feels, vector<Emotion_> Array);
     void Subtraction(Emotion_ feels, vector<Emotion_> Array);
     void ChangeEmotions(Emotion_ DominationEmotion, bool sign);
+    void ProcessGo();
+
 };
 
 class InputSystem : public GameLogicSystem { // обработка ввода, связана с игровой логикой
@@ -69,7 +71,7 @@ public:
     void Help();
     void StatusInfo();
     void InitInfo();
-    void StartDialog();
+    void ProcessDialog();
     void Go();
 };
 

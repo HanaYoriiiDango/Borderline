@@ -34,7 +34,7 @@ int main() {
         if (temp == "status" || temp == "Status") Game.StatusInfo();
         if (temp == "info" || temp == "Info") Game.InitInfo();
         if (temp == "go" || temp == "Go") Game.Go();
-        if (temp == "start" || temp == "Start") Game.StartDialog();
+        if (temp == "start" || temp == "Start") Game.ProcessDialog();
         if (temp == "exit" || temp == "Exit") Game.EndGame();
     }
     return 0;
