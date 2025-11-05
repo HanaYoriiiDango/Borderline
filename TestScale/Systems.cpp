@@ -484,3 +484,16 @@ void GameCore::Go() {
     Logic.ProcessGo();
 
 }
+
+void GameCore::ProcessCommand() {
+
+    cin >> temp;
+    if (temp == "edit" || temp == "Edit") Edit();
+    if (temp == "help" || temp == "Help") Help();
+    if (temp == "status" || temp == "Status") StatusInfo();
+    if (temp == "info" || temp == "Info") InitInfo();
+    if (temp == "go" || temp == "Go") Go();
+    if (temp == "start" || temp == "Start") ProcessDialog();
+    if (temp == "exit" || temp == "Exit") EndGame();
+
+}

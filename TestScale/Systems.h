@@ -62,6 +62,8 @@ private:
     OutputSystem Output;
     GameLogicSystem Logic;
     StatisticsCollector Collector;
+    string temp;
+
 
 public:
     void InitGame();
@@ -73,5 +75,7 @@ public:
     void InitInfo();
     void ProcessDialog();
     void Go();
+    void ProcessCommand();
+
 };
 

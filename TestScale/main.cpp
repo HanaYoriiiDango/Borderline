@@ -24,18 +24,12 @@ int main() {
     Game.StartGame();
     Game.InitGame();
     Game.Help();
-    string temp;
 
     // Игровой цикл:
     while (Hero.life) {
-        cin >> temp;
-        if (temp == "edit" || temp == "Edit") Game.Edit();
-        if (temp == "help" || temp == "Help") Game.Help();
-        if (temp == "status" || temp == "Status") Game.StatusInfo();
-        if (temp == "info" || temp == "Info") Game.InitInfo();
-        if (temp == "go" || temp == "Go") Game.Go();
-        if (temp == "start" || temp == "Start") Game.ProcessDialog();
-        if (temp == "exit" || temp == "Exit") Game.EndGame();
+
+        Game.ProcessCommand();
+
     }
     return 0;
 }
