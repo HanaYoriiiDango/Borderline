@@ -90,6 +90,6 @@ public:
     void ProcessDialog();
     void Go();
     void ProcessCommand();
-    void ProcessClear();
+    void ProcessClear(); 
 };
 
