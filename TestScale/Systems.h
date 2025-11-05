@@ -37,8 +37,11 @@ public:
     vector<Emotion_> Negative;
     Emotion_ GetOpposite(Emotion_ feels);
     bool LimitCheck(int value);
-    void HeroLocCheck();
+    bool HeroLocCheck();
     void LockedWorlds();
+    void UnlockedWorlds();
+    Emotion_ DetectedEmotion(int feels);
+    void MovingPlayer();
     void ChangeGamerule();
     void Transfuse(Emotion_ feels);
     void Addition(Emotion_ feels, vector<Emotion_> Array);
