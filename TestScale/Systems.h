@@ -10,13 +10,29 @@ public:
 
 };
 
+class StatisticsCollector {
+public:
+    GameSession Session;
+    ofstream SaveStatistics;
+    void StartSession();
+    void EndSession();
+    void SaveData();
+    void ClearStatistics();
+
+};
+
 class GameLogicSystem { // игровая логика
 private:
     Emotion_ ArrayNum;
     int dominationRate = 10;
     int passiveRate = 5;
 
+protected:
+    StatisticsCollector* statsCollector;
+
 public:
+    GameLogicSystem(StatisticsCollector* collector) : statsCollector(collector) {}
+
     vector<Emotion_> Positive;
     vector<Emotion_> Negative;
     Emotion_ GetOpposite(Emotion_ feels);
@@ -34,6 +50,7 @@ public:
 
 class InputSystem : public GameLogicSystem { // обработка ввода, связана с игровой логикой
 public:
+    InputSystem(StatisticsCollector* collector) : GameLogicSystem(collector) {}
     bool InputHandler(int choice, int npcID);
 
 };
@@ -45,30 +62,21 @@ public:
     void CommandInfo();
 };
 
-class StatisticsCollector {
-private: 
-    GameSession Session;
-    ofstream SaveStatistics;
-
-public:
-    void StartSession();
-    void EndSession();
-    void SaveData();
-    void ClearStatistics();
-
-};
 
 class GameCore { // игровое ядро, все системы разделены по модулям
 private:
     InitSystem Init;
-    InputSystem Input;
     OutputSystem Output;
-    GameLogicSystem Logic;
     StatisticsCollector Collector;
+    GameLogicSystem Logic;
+    InputSystem Input;
     string temp;
 
 
 public:
+
+    GameCore() : Logic(&Collector), Input(&Collector) {}
+
     void InitGame();
     void StartGame();
     void EndGame();

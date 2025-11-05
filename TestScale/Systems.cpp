@@ -265,6 +265,17 @@ void GameLogicSystem::ProcessGo() {
         if (portal.open && !Worlds[portal.target].is_locked) {
 
             Hero.current_loc = portal.target;
+            statsCollector->Session.AllVisitCount++;
+
+            switch (Hero.current_loc) {
+                case SADNESS: statsCollector->Session.worldVisitSad++; break;
+                case JOY: statsCollector->Session.worldVisitJoy++; break;
+                case POWER: statsCollector->Session.worldVisitPower++; break;
+                case FEAR: statsCollector->Session.worldVisitFear++; break;
+                case CALM: statsCollector->Session.worldVisitCalm++; break;
+                case ANGER: statsCollector->Session.worldVisitAnger++; break;
+            }
+
             cout << "Ты переместился в " << Worlds_Names[Hero.current_loc] << endl;
 
         }
@@ -328,6 +339,9 @@ bool InputSystem::InputHandler(int choice, int npcID) {
                 if (choice == j) {
 
                     ChangeEmotions(Worlds[Hero.current_loc].character[i].Answer[j].id, true);
+
+                    statsCollector->Session.counterChoices++;
+
                     counter++;
 
                 }
@@ -365,11 +379,24 @@ void StatisticsCollector::SaveData() {
 
     if (SaveStatistics.is_open()) {
 
+        SaveStatistics << "_________________________________________________ " << endl;
         SaveStatistics << " Игровая сессия №: " << Session.ID << endl;
         SaveStatistics << " Start time: " << Session.startTime << endl;
+
+        SaveStatistics << "Visit Sadness: " << Session.worldVisitSad << endl;
+        SaveStatistics << "Visit Joy: " << Session.worldVisitJoy << endl;
+        SaveStatistics << "Visit Power: " << Session.worldVisitPower << endl;
+        SaveStatistics << "Visit Anger: " << Session.worldVisitAnger << endl;
+        SaveStatistics << "Visit Fear: " << Session.worldVisitFear << endl;
+        SaveStatistics << "Visit Calm:" << Session.worldVisitCalm << endl;
+        SaveStatistics << "Всего перемещений по мирам: " << Session.AllVisitCount << endl;
+
+        SaveStatistics << "выбрано ответных реплик: " << Session.counterChoices << endl;
+
         SaveStatistics << " End time: " << Session.endTime << endl;
         SaveStatistics << " End of time in minutes: " << Session.TimeMin << endl;
-        
+        SaveStatistics << "_________________________________________________ " << endl;
+
         SaveStatistics.close();
 
     }

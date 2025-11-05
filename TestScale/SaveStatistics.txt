@@ -1,2 +1,82 @@
 Статистика очищена 
 Игровая сессия №: 1762326920
+ Игровая сессия №: 1762334589
+Всего перемещений по мирам: 0
+ Start time: 1762334589
+ End time: 1762334606
+ End of time in minutes: 0.283333
+ Игровая сессия №: 1762334672
+Всего перемещений по мирам: 0
+ Start time: 1762334672
+ End time: 1762334695
+ End of time in minutes: 0.383333
+ Игровая сессия №: 1762334783
+Всего перемещений по мирам: 0
+ Start time: 1762334783
+ End time: 1762334793
+ End of time in minutes: 0.166667
+ Игровая сессия №: 1762335209
+Всего перемещений по мирам: 0
+ Start time: 1762335209
+ End time: 1762335222
+ End of time in minutes: 0.216667
+ Игровая сессия №: 1762335331
+Всего перемещений по мирам: 0
+ Start time: 1762335331
+ End time: 1762335339
+ End of time in minutes: 0.133333
+ Игровая сессия №: 1762336360
+Всего перемещений по мирам: 3
+ Start time: 1762336360
+ End time: 1762336408
+ End of time in minutes: 0.8
+ Игровая сессия №: 1762336858
+Visit Sadness: 0
+Visit Joy: 1
+Visit Power: 1
+Visit Anger: 0
+Visit Fear: 1
+Visit Calm:0
+Всего перемещений по мирам: 3
+ Start time: 1762336858
+ End time: 1762336887
+ End of time in minutes: 0.483333
+ Игровая сессия №: 1762338640
+ Start time: 1762338640
+Visit Sadness: 1
+Visit Joy: 1
+Visit Power: 0
+Visit Anger: 0
+Visit Fear: 0
+Visit Calm:0
+Всего перемещений по мирам: 2
+выбрано ответных реплик: 2
+ End time: 1762338667
+ End of time in minutes: 0.45
+_________________________________________________ 
+ Игровая сессия №: 1762338764
+ Start time: 1762338764
+Visit Sadness: 0
+Visit Joy: 1
+Visit Power: 0
+Visit Anger: 0
+Visit Fear: 0
+Visit Calm:0
+Всего перемещений по мирам: 1
+выбрано ответных реплик: 0
+ End time: 1762338772
+ End of time in minutes: 0.133333
+_________________________________________________ 
+ Игровая сессия №: 1762338807
+ Start time: 1762338807
+Visit Sadness: 0
+Visit Joy: 1
+Visit Power: 0
+Visit Anger: 0
+Visit Fear: 0
+Visit Calm:0
+Всего перемещений по мирам: 1
+выбрано ответных реплик: 0
+ End time: 1762338812
+ End of time in minutes: 0.0833333
+_________________________________________________ 
