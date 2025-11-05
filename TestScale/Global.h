@@ -56,14 +56,16 @@ struct GameSession {
     double TimeMin; // перевод в минутах
 
     // Основная статистика
-    int worldVisitCount;        // Сколько раз посещал каждый мир
-    map<string, double> timeInWorld;         // Время в каждом мире (минуты)
-    vector<string> worldHistory;   // История перемещений между мирами
+    int worldVisitSad;        // Сколько раз посещал sadness
+    int worldVisitJoy;        // Сколько раз посещал joy и т.д
+    int worldVisitPower;        
+    int worldVisitFear;        
+    int worldVisitCalm;        
+    int worldVisitAnger;       
+    int AllVisitCount;        // Сколько раз перемещался в общем 
 
     // Статистика по диалогам
     int counterChoices;                  // Всего принятых диалоговых решений
-    map<string, int> popularChoices;        // Как часто выбирался каждый вариант
-    map<string, vector<string>> choiceChains;// Цепочки решений (что выбирал после чего)
 
 };
 

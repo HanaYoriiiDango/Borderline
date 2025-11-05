@@ -62,118 +62,183 @@ void NPC::AddReplace(Emotion_ id, string t) {
 
 void InitSystem::Dialogues() {
 
-    Worlds[SADNESS].character.push_back({ "Beam1", "Полуразложившееся бревно лежит под угрюмым небом", 0 });
-    Worlds[SADNESS].character[0].AddReplace(SADNESS, " (Сарказм) : Ну что, старина - бревно ? Нашел отличную компанию для беседы.Тебя тоже сюда выбросило за ненадобностью ?");
-    Worlds[SADNESS].character[0].AddReplace(FEAR, " (Раздраженно): И чего молчишь? Все вокруг только и умеют, что молчать! Скажи хоть что-нибудь! ");
-    Worlds[SADNESS].character[0].AddReplace(ANGER, " (С опаской): Ты... ты ведь не превратишься сейчас в кого-нибудь? В монстра?");
-    Worlds[SADNESS].character.push_back({ "Beam2", "(Бревно молчит. Ветер шелестит листьями)", 1 });
-    Worlds[SADNESS].character[1].AddReplace(JOY, " (С горяча пнуть бревно ботинком): [Пнуть]");
-    Worlds[SADNESS].character[1].AddReplace(POWER, " (Грустно сесть рядом): Знаешь, а ведь ты идеальный собеседник. Тебя невозможно разачаровать");
-    Worlds[SADNESS].character[1].AddReplace(CALM, " (Прислушиваясь к себе): Стоп. А что если это ловушка? Надо бы проверить окрестности");
-    Worlds[SADNESS].character.push_back({ "Beam3", "...", 2 });
-    Worlds[SADNESS].character[2].AddReplace(SADNESS, " (C горькой иронией):  Вот и поговорили. Как всегда, я один несу свою чушь в пустоту");
-    Worlds[SADNESS].character[2].AddReplace(FEAR, " (Взяв себя в руки): Ладно... ладно. Сосредоточься. Нужно идти дальше.");
-    Worlds[SADNESS].character[2].AddReplace(ANGER, " (Смирившись): Тишина... Иногда она лучше любых слов");
+        Worlds[SADNESS].character.push_back({ "Beam1", "Полуразложившееся бревно лежит под угрюмым небом", 0 });
+        Worlds[SADNESS].character[0].AddReplace(SADNESS, " (Сарказм) : Ну что, старина - бревно ? Нашел отличную компанию для беседы.Тебя тоже сюда выбросило за ненадобностью ?");
+        Worlds[SADNESS].character[0].AddReplace(FEAR, " (Раздраженно): И чего молчишь? Все вокруг только и умеют, что молчать! Скажи хоть что-нибудь! ");
+        Worlds[SADNESS].character[0].AddReplace(CALM, " (С опаской): Ты... ты ведь не превратишься сейчас в кого-нибудь? В монстра?");
+        Worlds[SADNESS].character.push_back({ "Beam2", "(Бревно молчит. Ветер шелестит листьями)", 1 });
+        Worlds[SADNESS].character[1].AddReplace(SADNESS, " (С горяча пнуть бревно ботинком): [Пнуть]");
+        Worlds[SADNESS].character[1].AddReplace(FEAR, " (Грустно сесть рядом): Знаешь, а ведь ты идеальный собеседник. Тебя невозможно разачаровать");
+        Worlds[SADNESS].character[1].AddReplace(CALM, " (Прислушиваясь к себе): Стоп. А что если это ловушка? Надо бы проверить окрестности");
+        Worlds[SADNESS].character.push_back({ "Beam3", "...", 2 });
+        Worlds[SADNESS].character[2].AddReplace(SADNESS, " (C горькой иронией):  Вот и поговорили. Как всегда, я один несу свою чушь в пустоту");
+        Worlds[SADNESS].character[2].AddReplace(FEAR, " (Взяв себя в руки): Ладно... ладно. Сосредоточься. Нужно идти дальше.");
+        Worlds[SADNESS].character[2].AddReplace(CALM, " (Смирившись): Тишина... Иногда она лучше любых слов");
 
 }
 
 // Реализации методов GameLogicSystem
 Emotion_ GameLogicSystem::GetOpposite(Emotion_ feels) {
-
     switch (feels) {
-    case (SADNESS): return JOY;
-    case (JOY): return SADNESS;
-    case (FEAR): return POWER;
-    case (POWER): return FEAR;
-    case (ANGER): return CALM;
-    case (CALM): return ANGER;
+    case SADNESS: return JOY;
+    case JOY: return SADNESS;
+    case FEAR: return POWER;
+    case POWER: return FEAR;
+    case ANGER: return CALM;
+    case CALM: return ANGER;
+    default: cout << "ERROR: Unknown emotion in GetOpposite: " << feels << endl;
     }
-
 }
-
 bool GameLogicSystem::LimitCheck(int value) {
 
-    if (value <= 0 || value >= 100) return true;
+    if (value <= 2 || value >= 98) return true;
     else return false;
 
 }
 
-void GameLogicSystem::HeroLocCheck() {
+bool GameLogicSystem::HeroLocCheck() {
 
-    for (int i = 0; i < Emotion.size(); i++) {
+    return Worlds[Hero.current_loc].is_locked;
 
-        Emotion_ opposite = GetOpposite((Emotion_)i);
+}
 
-        if (Hero.current_loc == i || Hero.current_loc == (opposite)) {
+Emotion_ GameLogicSystem::DetectedEmotion(int feels) {
 
-            vector<int> available_worlds;
+    if (LimitCheck(Hero.emotions[feels])) return (Emotion_)feels;
+    return COUNT_Emotions; 
 
-            for (int j = 0; j < 6; j++) {
+}
 
-                if (!Worlds[j].is_locked) {
-                    available_worlds.push_back(j);
-                }
+void GameLogicSystem::LockedWorlds() { // Закрывает миры 
 
-            }
-            if (!available_worlds.empty()) {
+    for (int i = 0; i < Emotion.size(); i++) { // перебирает все эмоции
 
-                int random_index = rand() % available_worlds.size();
-                Hero.current_loc = available_worlds[random_index];
+        Emotion_ feels = DetectedEmotion(i); // смотрит достигли ли они предела, если да - return emotion
+        if (feels == COUNT_Emotions) continue; // если таких эмоций нет, то пропускаем иттерацию
 
-                cout << ">> Переход в " << Worlds_Names[Hero.current_loc]
-                    << " из-за блокировки " << Worlds_Names[i]
-                    << " и " << Worlds_Names[opposite] << endl;
+        if (!Worlds[feels].is_locked) {
 
-            }
-            else {
-                Hero.life = false;
-                cout << ">> Все миры закрыты! Игра завершена.\n";
-            }
-        }
-        else {
-            cout << ">> " << Worlds_Names[i] << " и "
-                << Worlds_Names[opposite] << " закрыты!\n";
+            Worlds[feels].is_locked = true;
+            Emotion_ OppositeWorld = GetOpposite(Emotion[feels]);
+            Worlds[OppositeWorld].is_locked = true;
+            cout << "Мир " << Worlds[feels].name << " и " << Worlds[OppositeWorld].name << " закрыты!" << endl;
+            cout << Emotion_Names[feels] << " и " << Emotion_Names[OppositeWorld] << " достигли своих пределов!" << endl;
+
         }
     }
 }
 
-void GameLogicSystem::LockedWorlds() {
+void GameLogicSystem::UnlockedWorlds() {
 
-    for (int i = 0; i < Emotion.size(); i++) {
+    for (int i = 0; i < Emotion.size(); i++) { // перебирает все эмоции
 
-        HeroLocCheck();
+        if (Worlds[i].is_locked) {
 
-        if (!Worlds[i].is_locked) {
-
-            Worlds[i].is_locked = true;
+            Worlds[i].is_locked = false;
             Emotion_ OppositeWorld = GetOpposite(Emotion[i]);
-            Worlds[OppositeWorld].is_locked = true;
+            Worlds[OppositeWorld].is_locked = false;
+            cout << "Мир " << Worlds[i].name << " и " << Worlds[OppositeWorld].name << " открыты!" << endl;
+            cout << Emotion_Names[i] << " и " << Emotion_Names[OppositeWorld] << " восстановились!" << endl;
 
         }
+    }
+}
+
+void GameLogicSystem::MovingPlayer() {
+    vector<int> available_worlds;
+
+    // Собираем все открытые миры
+    for (int j = 0; j < Emotion.size(); j++) {
+        if (!Worlds[j].is_locked) {
+            available_worlds.push_back(j);
+        }
+    }
+
+    if (!available_worlds.empty()) {
+        int random_index = rand() % available_worlds.size();
+        Hero.current_loc = available_worlds[random_index];
+        cout << ">> Переход в " << Worlds_Names[Hero.current_loc] << endl;
+
+        vector<int>().swap(available_worlds);
+
+    }
+    else {
+        Hero.life = false;
+        vector<int>().swap(available_worlds);
+
+        cout << ">> Все миры закрыты! Игра завершена.\n";
     }
 }
 
 void GameLogicSystem::ChangeGamerule() {
 
+    // ПРОПУСКАЕМ УЖЕ ОБРАБОТАННЫЕ ПАРЫ МИРОВ
+    bool processedPairs[COUNT_Emotions] = { false };
+
+    // Сначала проверяем какие миры нужно ЗАКРЫТЬ
     for (int i = 0; i < Emotion.size(); i++) {
+        if (processedPairs[i]) continue; // уже обработали эту пару
 
-        int OpenLimit = Hero.emotions[i];
-        OpenLimit -= 2;
+        if (LimitCheck(Hero.emotions[i])) {
+            Emotion_ feels = (Emotion_)i;
+            Emotion_ OppositeWorld = GetOpposite(feels);
 
-        if (LimitCheck(OpenLimit)) {
+            if (feels >= 0 && feels < COUNT_Emotions &&
+                OppositeWorld >= 0 && OppositeWorld < COUNT_Emotions) {
 
-            LockedWorlds();
-
-
-
+                // Закрываем оба мира и помечаем пару как обработанную
+                if (!Worlds[feels].is_locked || !Worlds[OppositeWorld].is_locked) {
+                    Worlds[feels].is_locked = true;
+                    Worlds[OppositeWorld].is_locked = true;
+                    processedPairs[feels] = true;
+                    processedPairs[OppositeWorld] = true;
+                    cout << "Закрыты: " << Worlds[feels].name << " и " << Worlds[OppositeWorld].name << endl;
+                }
+            }
         }
+    }
+
+    // Сбрасываем флаги для открытия
+    bool processedPairsOpen[COUNT_Emotions] = { false };
+
+    // Затем проверяем какие миры нужно ОТКРЫТЬ
+    for (int i = 0; i < Emotion.size(); i++) {
+        if (processedPairsOpen[i]) continue; // ✅ уже обработали эту пару
+
+        if (Hero.emotions[i] > 10 && Hero.emotions[i] < 90) {
+            Emotion_ OppositeWorld = GetOpposite((Emotion_)i);
+
+            if (i >= 0 && i < COUNT_Emotions &&
+                OppositeWorld >= 0 && OppositeWorld < COUNT_Emotions) {
+
+                // Открываем оба мира и помечаем пару как обработанную
+                if (Worlds[i].is_locked || Worlds[OppositeWorld].is_locked) {
+                    Worlds[i].is_locked = false;
+                    Worlds[OppositeWorld].is_locked = false;
+                    processedPairsOpen[i] = true;
+                    processedPairsOpen[OppositeWorld] = true;
+                    cout << "Открыты: " << Worlds[i].name << " и " << Worlds[OppositeWorld].name << endl;
+                }
+            }
+        }
+    }
+
+    // Проверка игрока
+    if (Worlds[Hero.current_loc].is_locked) {
+        cout << "Игрок в закрытом мире: " << Worlds_Names[Hero.current_loc] << endl;
+        MovingPlayer();
     }
 }
 
 void GameLogicSystem::Transfuse(Emotion_ feels) {
 
     Emotion_ opposite_emotion = GetOpposite(feels);
-    Hero.emotions[opposite_emotion] = 100 - Hero.emotions[feels];
+    int new_value = 100 - Hero.emotions[feels];
+
+    //if (new_value < 0) new_value = 0;
+    //if (new_value > 100) new_value = 100;
+
+    Hero.emotions[opposite_emotion] = new_value;
 
 }
 
@@ -241,6 +306,9 @@ void GameLogicSystem::ChangeEmotions(Emotion_ DominationEmotion, bool sign) {
 
     vector<Emotion_>().swap(Positive);
     vector<Emotion_>().swap(Negative);
+
+    ChangeGamerule(); // изменяем игровые правила
+
 }
 
 void GameLogicSystem::ProcessGo() {
@@ -265,6 +333,17 @@ void GameLogicSystem::ProcessGo() {
         if (portal.open && !Worlds[portal.target].is_locked) {
 
             Hero.current_loc = portal.target;
+            statsCollector->Session.AllVisitCount++;
+
+            switch (Hero.current_loc) {
+                case SADNESS: statsCollector->Session.worldVisitSad++; break;
+                case JOY: statsCollector->Session.worldVisitJoy++; break;
+                case POWER: statsCollector->Session.worldVisitPower++; break;
+                case FEAR: statsCollector->Session.worldVisitFear++; break;
+                case CALM: statsCollector->Session.worldVisitCalm++; break;
+                case ANGER: statsCollector->Session.worldVisitAnger++; break;
+            }
+
             cout << "Ты переместился в " << Worlds_Names[Hero.current_loc] << endl;
 
         }
@@ -315,27 +394,37 @@ void OutputSystem::CommandInfo() {
 // Реализации методов InputSystem
 bool InputSystem::InputHandler(int choice, int npcID) {
 
-    int counter = 0;
+    bool worked = false;
     if (choice == 0) return false;
-    if (choice != 0) choice -= 1;
+    int actualChoice = choice - 1;
 
-    for (int i = 0; i < Worlds[Hero.current_loc].character.size(); i++) {
+    // СНАЧАЛА НАХОДИМ НУЖНЫЙ ВАРИАНТ ОТВЕТА
+    Emotion_ selectedEmotion = COUNT_Emotions;
+    int originalLocation = Hero.current_loc;
 
-        if (Worlds[Hero.current_loc].character[i].ID == npcID) {
-
-            for (int j = 0; j < Worlds[Hero.current_loc].character[i].Answer.size(); j++) {
-
-                if (choice == j) {
-
-                    ChangeEmotions(Worlds[Hero.current_loc].character[i].Answer[j].id, true);
-                    counter++;
-
+    for (int i = 0; i < Worlds[originalLocation].character.size(); i++) {
+        if (Worlds[originalLocation].character[i].ID == npcID) {
+            for (int j = 0; j < Worlds[originalLocation].character[i].Answer.size(); j++) {
+                if (actualChoice == j) {
+                    selectedEmotion = Worlds[originalLocation].character[i].Answer[j].id;
+                    break;
                 }
             }
+            break;
         }
     }
-    if (counter == 1) return true;
+
+    // ЕСЛИ НАШЛИ ВАРИАНТ - ПРИМЕНЯЕМ ИЗМЕНЕНИЯ
+    if (selectedEmotion != COUNT_Emotions) {
+        ChangeEmotions(selectedEmotion, true);
+        statsCollector->Session.counterChoices++;
+        worked = true;
+    }
+
+    if (worked) return true;
+    else return false;
 }
+
 
 // Реализации методов StatisticsCollector
 void StatisticsCollector::StartSession() {
@@ -365,11 +454,24 @@ void StatisticsCollector::SaveData() {
 
     if (SaveStatistics.is_open()) {
 
+        SaveStatistics << "_________________________________________________ " << endl;
         SaveStatistics << " Игровая сессия №: " << Session.ID << endl;
         SaveStatistics << " Start time: " << Session.startTime << endl;
+
+        SaveStatistics << "Visit Sadness: " << Session.worldVisitSad << endl;
+        SaveStatistics << "Visit Joy: " << Session.worldVisitJoy << endl;
+        SaveStatistics << "Visit Power: " << Session.worldVisitPower << endl;
+        SaveStatistics << "Visit Anger: " << Session.worldVisitAnger << endl;
+        SaveStatistics << "Visit Fear: " << Session.worldVisitFear << endl;
+        SaveStatistics << "Visit Calm:" << Session.worldVisitCalm << endl;
+        SaveStatistics << "Всего перемещений по мирам: " << Session.AllVisitCount << endl;
+
+        SaveStatistics << "выбрано ответных реплик: " << Session.counterChoices << endl;
+
         SaveStatistics << " End time: " << Session.endTime << endl;
         SaveStatistics << " End of time in minutes: " << Session.TimeMin << endl;
-        
+        SaveStatistics << "_________________________________________________ " << endl;
+
         SaveStatistics.close();
 
     }
@@ -456,7 +558,7 @@ void GameCore::ProcessDialog() {
 
     bool start = true;
 
-    if (!Worlds[Hero.current_loc].character.empty()) {
+    if (Worlds[Hero.current_loc].linked_emotion == SADNESS) {
 
         while (start) {
 
@@ -494,7 +596,8 @@ void GameCore::ProcessDialog() {
         }
     }
     else {
-        cout << "Похоже в этом одиноком мире не с кем разговаривать(" << endl;
+        cout << "Похоже в этом одиноком мире не с кем беседовать((" << endl;
+
     }
 }
 
