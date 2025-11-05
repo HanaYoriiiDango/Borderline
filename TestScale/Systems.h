@@ -6,7 +6,8 @@ public:
     void Info();
     void CreateWorlds();
     void CreatePortals(Emotion_ WorldEmotion);
-    
+    void Dialogues();
+
 };
 
 class GameLogicSystem { // игровая логика

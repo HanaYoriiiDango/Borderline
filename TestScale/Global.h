@@ -5,7 +5,6 @@
 #include <map>
 #include <fstream>
 
-
 using namespace std;
 
 // Перечисления
@@ -71,4 +70,3 @@ struct GameSession {
 // Глобальные переменные
 extern Player Hero;
 extern Location Worlds[COUNT_Emotions];
-

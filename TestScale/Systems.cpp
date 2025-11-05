@@ -60,6 +60,23 @@ void NPC::AddReplace(Emotion_ id, string t) {
 
 }
 
+void InitSystem::Dialogues() {
+
+    Worlds[SADNESS].character.push_back({ "Beam1", "Полуразложившееся бревно лежит под угрюмым небом", 0 });
+    Worlds[SADNESS].character[0].AddReplace(SADNESS, " (Сарказм) : Ну что, старина - бревно ? Нашел отличную компанию для беседы.Тебя тоже сюда выбросило за ненадобностью ?");
+    Worlds[SADNESS].character[0].AddReplace(FEAR, " (Раздраженно): И чего молчишь? Все вокруг только и умеют, что молчать! Скажи хоть что-нибудь! ");
+    Worlds[SADNESS].character[0].AddReplace(ANGER, " (С опаской): Ты... ты ведь не превратишься сейчас в кого-нибудь? В монстра?");
+    Worlds[SADNESS].character.push_back({ "Beam2", "(Бревно молчит. Ветер шелестит листьями)", 1 });
+    Worlds[SADNESS].character[1].AddReplace(JOY, " (С горяча пнуть бревно ботинком): [Пнуть]");
+    Worlds[SADNESS].character[1].AddReplace(POWER, " (Грустно сесть рядом): Знаешь, а ведь ты идеальный собеседник. Тебя невозможно разачаровать");
+    Worlds[SADNESS].character[1].AddReplace(CALM, " (Прислушиваясь к себе): Стоп. А что если это ловушка? Надо бы проверить окрестности");
+    Worlds[SADNESS].character.push_back({ "Beam3", "...", 2 });
+    Worlds[SADNESS].character[2].AddReplace(SADNESS, " (C горькой иронией):  Вот и поговорили. Как всегда, я один несу свою чушь в пустоту");
+    Worlds[SADNESS].character[2].AddReplace(FEAR, " (Взяв себя в руки): Ладно... ладно. Сосредоточься. Нужно идти дальше.");
+    Worlds[SADNESS].character[2].AddReplace(ANGER, " (Смирившись): Тишина... Иногда она лучше любых слов");
+
+}
+
 // Реализации методов GameLogicSystem
 Emotion_ GameLogicSystem::GetOpposite(Emotion_ feels) {
 
@@ -379,19 +396,8 @@ void StatisticsCollector::ClearStatistics() {
 void GameCore::InitGame() {
 
     Init.CreateWorlds();
-
-    Worlds[SADNESS].character.push_back({ "Beam1", "Полуразложившееся бревно лежит под угрюмым небом", 0 });
-    Worlds[SADNESS].character[0].AddReplace(SADNESS, " (Сарказм) : Ну что, старина - бревно ? Нашел отличную компанию для беседы.Тебя тоже сюда выбросило за ненадобностью ?");
-    Worlds[SADNESS].character[0].AddReplace(FEAR, " (Раздраженно): И чего молчишь? Все вокруг только и умеют, что молчать! Скажи хоть что-нибудь! ");
-    Worlds[SADNESS].character[0].AddReplace(ANGER, " (С опаской): Ты... ты ведь не превратишься сейчас в кого-нибудь? В монстра?");
-    Worlds[SADNESS].character.push_back({ "Beam2", "(Бревно молчит. Ветер шелестит листьями)", 1 });
-    Worlds[SADNESS].character[1].AddReplace(JOY, " (С горяча пнуть бревно ботинком): [Пнуть]");
-    Worlds[SADNESS].character[1].AddReplace(POWER, " (Грустно сесть рядом): Знаешь, а ведь ты идеальный собеседник. Тебя невозможно разачаровать");
-    Worlds[SADNESS].character[1].AddReplace(CALM, " (Прислушиваясь к себе): Стоп. А что если это ловушка? Надо бы проверить окрестности");
-    Worlds[SADNESS].character.push_back({ "Beam3", "...", 2 });
-    Worlds[SADNESS].character[2].AddReplace(SADNESS, " (C горькой иронией):  Вот и поговорили. Как всегда, я один несу свою чушь в пустоту");
-    Worlds[SADNESS].character[2].AddReplace(FEAR, " (Взяв себя в руки): Ладно... ладно. Сосредоточься. Нужно идти дальше.");
-    Worlds[SADNESS].character[2].AddReplace(ANGER, " (Смирившись): Тишина... Иногда она лучше любых слов");
+    Init.Dialogues();
+   
 }
 
 void GameCore::StartGame() {
