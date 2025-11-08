@@ -384,7 +384,8 @@ void OutputSystem::OutputStates() {
 
     for (int i = 0; i < Emotion.size(); i++) {
 
-        cout << left << setw(20) << Emotion_Names[i] << "\t" << Hero.emotions[i] << endl;
+        cout << left << setw(20) << Emotion_Names[i] << "\t" <<
+                ((Hero.emotions[i] > 98 || Hero.emotions[i] < 2) ? "Disabled" : to_string(Hero.emotions[i])) << endl;
 
     }
 }
