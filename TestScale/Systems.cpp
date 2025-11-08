@@ -144,6 +144,17 @@ void GameLogicSystem::UnlockedWorlds() {
     }
 }
 
+void GameLogicSystem::LockedValue(Emotion_ feels) {
+
+    int value = Hero.emotions[feels];
+
+    if (value < 0) value = 0;
+    if (value > 100) value = 100;
+
+    Hero.emotions[feels] = value;
+
+}
+
 void GameLogicSystem::MovingPlayer() {
     vector<int> available_worlds;
 
@@ -225,20 +236,19 @@ void GameLogicSystem::ChangeGamerule() {
 
     // Проверка игрока
     if (Worlds[Hero.current_loc].is_locked) {
-        cout << "Игрок в закрытом мире: " << Worlds_Names[Hero.current_loc] << endl;
+        cout << "Игрок был в закрытом мире: " << Worlds_Names[Hero.current_loc] << endl;
         MovingPlayer();
     }
 }
+
 
 void GameLogicSystem::Transfuse(Emotion_ feels) {
 
     Emotion_ opposite_emotion = GetOpposite(feels);
     int new_value = 100 - Hero.emotions[feels];
-
-    //if (new_value < 0) new_value = 0;
-    //if (new_value > 100) new_value = 100;
-
     Hero.emotions[opposite_emotion] = new_value;
+    LockedValue(feels);
+    LockedValue(opposite_emotion);
 
 }
 
@@ -528,16 +538,24 @@ void GameCore::Edit() {
 
     }
 
-    cout << "Какую эмоцию хотите изменить? (номер)" << endl;
+    cout << "Номер эмоции которую хотите изменить?" << endl;
     cin >> choice1;
 
     if (choice1 > 0 && choice1 < Emotion.size()) {
 
-        cout << "Какое значение установить для выбранной шкалы?" << endl;
+        cout << "Какое значение установить для выбранной шкалы? (изменит сразу всю пару на указанное значение)" << endl;
         cin >> choice2;
         int num = choice1 - 1;
+
+        Emotion_ Opposite_num = Logic.GetOpposite((Emotion_)num);
         Hero.emotions[num] = choice2;
-        cout << "Установлено новое значение для шкалы " << Emotion_Names[num] << ": " << Hero.emotions[num] << endl;
+        Hero.emotions[Opposite_num] = choice2;
+        cout << "Установлено новое значение для шкал: " << Emotion_Names[num] << ": " << Hero.emotions[num]  
+             << " и " << Emotion_Names[Opposite_num] << ": " << Hero.emotions[Opposite_num] << endl;
+        Logic.ChangeGamerule();
+    }
+    else {
+        cout << "Выбор неккоректный, пиши команду заново" << endl;
 
     }
 }

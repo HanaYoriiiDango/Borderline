@@ -40,6 +40,7 @@ public:
     bool HeroLocCheck();
     void LockedWorlds();
     void UnlockedWorlds();
+    void LockedValue(Emotion_ feels);
     Emotion_ DetectedEmotion(int feels);
     void MovingPlayer();
     void ChangeGamerule();
