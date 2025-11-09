@@ -55,7 +55,7 @@ public:
 class InputSystem : public GameLogicSystem { // обработка ввода, связана с игровой логикой
 public:
     InputSystem(StatisticsCollector* collector) : GameLogicSystem(collector) {}
-    bool InputHandler(int choice, int npcID);
+    void InputHandler(int choice, int npcID);
 
 };
 

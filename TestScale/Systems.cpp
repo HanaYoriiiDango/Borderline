@@ -403,10 +403,8 @@ void OutputSystem::CommandInfo() {
 }
 
 // Реализации методов InputSystem
-bool InputSystem::InputHandler(int choice, int npcID) {
+void InputSystem::InputHandler(int choice, int npcID) {
 
-    bool worked = false;
-    if (choice == 0) return false;
     int actualChoice = choice - 1;
 
     // СНАЧАЛА НАХОДИМ НУЖНЫЙ ВАРИАНТ ОТВЕТА
@@ -429,11 +427,7 @@ bool InputSystem::InputHandler(int choice, int npcID) {
     if (selectedEmotion != COUNT_Emotions) {
         ChangeEmotions(selectedEmotion, true);
         statsCollector->Session.counterChoices++;
-        worked = true;
     }
-
-    if (worked) return true;
-    else return false;
 }
 
 
@@ -575,44 +569,31 @@ void GameCore::InitInfo() {
 
 void GameCore::ProcessDialog() {
 
-    bool start = true;
-
     if (Worlds[Hero.current_loc].linked_emotion == SADNESS) {
 
-        while (start) {
+        int choice;
 
-            int choice;
+        cout << "____Поляна на окраине Мира Грусти____" << endl;
+        cout << "Немо подходит к бревну. Он выглядит растерянным и усталым" << endl;
 
-            cout << "____Поляна на окраине Мира Грусти____" << endl;
-            cout << "Немо подходит к бревну. Он выглядит растерянным и усталым" << endl;
+        Output.OutputStates();
+        Output.OutputDialog(0);
+        cin >> choice;
+        Input.InputHandler(choice, 0);
 
-            Output.OutputStates();
-            Output.OutputDialog(0);
-            cin >> choice;
-            if (Input.InputHandler(choice, 0)) start = true;
-            else {
-                cout << "Диалог окончен" << endl;
-                start = false;
-            }
+        Output.OutputStates();
+        Output.OutputDialog(1);
+        cin >> choice;
+        Input.InputHandler(choice, 1);
 
-            Output.OutputStates();
-            Output.OutputDialog(1);
-            cin >> choice;
-            if (Input.InputHandler(choice, 1)) start = true;
-            else {
-                cout << "Диалог окончен" << endl;
-                start = false;
-            }
+        Output.OutputStates();
+        Output.OutputDialog(2);
+        cin >> choice;
+        Input.InputHandler(choice, 2);
+        Output.OutputStates();
 
-            Output.OutputStates();
-            Output.OutputDialog(2);
-            cin >> choice;
-            if (Input.InputHandler(choice, 2)) start = true;
-            else {
-                cout << "Диалог окончен" << endl;
-                start = false;
-            }
-        }
+        cout << "Диалог окончен" << endl;
+
     }
     else {
         cout << "Похоже в этом одиноком мире не с кем беседовать((" << endl;
