@@ -1,4 +1,4 @@
-#include <iostream>
+п»ї#include <iostream>
 #include <string>
 #include <vector>
 #include <iomanip>
@@ -14,7 +14,7 @@
 using namespace std;  
 
 int main() {
-    // Настройки:  
+    // РќР°СЃС‚СЂРѕР№РєРё:  
     setlocale(LC_ALL, "RU");
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
@@ -25,7 +25,7 @@ int main() {
     Game.InitGame();
     Game.Help();
 
-    // Игровой цикл:
+    // РРіСЂРѕРІРѕР№ С†РёРєР»: 
     while (Hero.life) {
 
         Game.ProcessCommand();
