@@ -7,7 +7,7 @@
 using namespace std;
 
 // Реализации методов InitSystem 
-void InitSystem::Info() {
+void InitSystem::Info() { 
 
     for (int i = 0; i < Emotion.size(); i++) {
 
