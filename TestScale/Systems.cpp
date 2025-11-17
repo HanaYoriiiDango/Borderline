@@ -388,7 +388,7 @@ void OutputSystem::OutputDialog(int npcID, int textID) {
 
         if (Worlds[Hero.current_loc].character[i].ID == npcID) {
 
-            cout << Worlds[Hero.current_loc].character[i].text_NPC[textID].text << endl;
+            cout << Worlds[Hero.current_loc].character[i].text_NPC[textID].text << endl << endl;
 
             for (int j = 0; j < Worlds[Hero.current_loc].character[i].text_NPC[textID].Answer.size(); j++) {
 
@@ -589,8 +589,13 @@ int GameCore::DialogList(int npcID, int textID, int action) {
 
     int choice;
 
+    cout << endl;
+
     Output.OutputStates();
+    cout << endl;
+
     Output.OutputDialog(npcID, textID);
+
     cin >> choice;
     Input.InputHandler(choice, npcID, textID);
 
