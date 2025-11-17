@@ -377,7 +377,7 @@ void GameLogicSystem::ProcessGo() {
     }
 }
 
-// Реализации методов OutputSystem
+// Реализации методов OutputSystem 
 void OutputSystem::OutputDialog(int npcID) {
 
     for (int i = 0; i < Worlds[Hero.current_loc].character.size(); i++) {
