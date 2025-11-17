@@ -1,8 +1,8 @@
-#include "Global.h"
+п»ї#include "Global.h"
 
-// Определения глобальных переменных
+// РћРїСЂРµРґРµР»РµРЅРёСЏ РіР»РѕР±Р°Р»СЊРЅС‹С… РїРµСЂРµРјРµРЅРЅС‹С…
 vector<Emotion_> Emotion{ JOY, SADNESS, POWER, FEAR, CALM, ANGER };
-string Emotion_Names[COUNT_Emotions] = { "Радость", "Грусть", "Сила", "Страх", "Спокойствие", "Гнев" };
-string Worlds_Names[COUNT_Emotions] = { "Мир Радости", "Мир Грусти", "Мир Силы", "Мир Страха", "Мир Спокойствия", "Мир Гнева" };
+string Emotion_Names[COUNT_Emotions] = { "Р Р°РґРѕСЃС‚СЊ", "Р“СЂСѓСЃС‚СЊ", "РЎРёР»Р°", "РЎС‚СЂР°С…", "РЎРїРѕРєРѕР№СЃС‚РІРёРµ", "Р“РЅРµРІ" };
+string Worlds_Names[COUNT_Emotions] = { "РњРёСЂ Р Р°РґРѕСЃС‚Рё", "РњРёСЂ Р“СЂСѓСЃС‚Рё", "РњРёСЂ РЎРёР»С‹", "РњРёСЂ РЎС‚СЂР°С…Р°", "РњРёСЂ РЎРїРѕРєРѕР№СЃС‚РІРёСЏ", "РњРёСЂ Р“РЅРµРІР°" };
 Player Hero;
 Location Worlds[COUNT_Emotions];
