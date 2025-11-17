@@ -1,7 +1,7 @@
-#pragma once
+п»ї#pragma once
 #include "Global.h"
 
-class InitSystem { // инициализация
+class InitSystem { // РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ 
 public:
     void Info();
     void CreateWorlds();
@@ -21,7 +21,7 @@ public:
 
 };
 
-class GameLogicSystem { // игровая логика
+class GameLogicSystem { // РёРіСЂРѕРІР°СЏ Р»РѕРіРёРєР°
 private:
     Emotion_ ArrayNum;
     int dominationRate = 10;
@@ -52,14 +52,14 @@ public:
 
 };
 
-class InputSystem : public GameLogicSystem { // обработка ввода, связана с игровой логикой
+class InputSystem : public GameLogicSystem { // РѕР±СЂР°Р±РѕС‚РєР° РІРІРѕРґР°, СЃРІСЏР·Р°РЅР° СЃ РёРіСЂРѕРІРѕР№ Р»РѕРіРёРєРѕР№
 public:
     InputSystem(StatisticsCollector* collector) : GameLogicSystem(collector) {}
     void InputHandler(int choice, int npcID);
 
 };
 
-class OutputSystem { // обработка вывода
+class OutputSystem { // РѕР±СЂР°Р±РѕС‚РєР° РІС‹РІРѕРґР°
 public:
     void OutputDialog(int npcID);
     void OutputStates();
@@ -67,7 +67,7 @@ public:
 };
 
 
-class GameCore { // игровое ядро, все системы разделены по модулям
+class GameCore { // РёРіСЂРѕРІРѕРµ СЏРґСЂРѕ, РІСЃРµ СЃРёСЃС‚РµРјС‹ СЂР°Р·РґРµР»РµРЅС‹ РїРѕ РјРѕРґСѓР»СЏРј
 private:
     InitSystem Init;
     OutputSystem Output;
