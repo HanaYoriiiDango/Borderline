@@ -585,21 +585,17 @@ void GameCore::InitInfo() {
     Init.Info();
 }
 
-bool GameCore::DialogList(int npcID, int textID, int numAction = -1) {
+int GameCore::DialogList(int npcID, int textID, int action) {
 
     int choice;
-    bool action = false;
 
     Output.OutputStates();
     Output.OutputDialog(npcID, textID);
     cin >> choice;
     Input.InputHandler(choice, npcID, textID);
 
-    if (choice == numAction) {
-        action = true;
-        return action;
-    
-    }
+    if (action == choice) return action;
+
 }
 
 void GameCore::ProcessDialog() {
@@ -614,7 +610,7 @@ void GameCore::ProcessDialog() {
 
     case SADNESS: 
         DialogList(0, 0);
-        if (DialogList(0, 1, 1)) DialogList(0, 2);
+        if (DialogList(0, 1, 1) == 1) DialogList(0, 2);
         DialogList(0, 3);
         
         break;

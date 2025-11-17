@@ -89,7 +89,7 @@ public:
     void StatusInfo();
     void InitInfo();
     void ProcessDialog();
-    bool DialogList(int npcID, int textID, int numAction);
+    int DialogList(int npcID, int textID, int action = -1);
     void Go();
     void ProcessCommand();
     void ProcessClear(); 
