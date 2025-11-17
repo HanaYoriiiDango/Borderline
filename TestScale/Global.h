@@ -53,7 +53,7 @@ public:
 };
 
 struct Location {
-    string name;
+    string name; 
     Emotion_ linked_emotion;
     bool is_locked = false;
     vector<Portal_> portal;
