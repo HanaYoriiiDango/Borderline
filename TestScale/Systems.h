@@ -85,7 +85,7 @@ public:
     void StartGame();
     void EndGame();
     void Edit();
-    void Help();
+    void Help(); 
     void StatusInfo();
     void InitInfo();
     void ProcessDialog();
