@@ -378,17 +378,17 @@ void GameLogicSystem::ProcessGo() {
 }
 
 // Реализации методов OutputSystem 
-void OutputSystem::OutputDialog(int npcID) {
+void OutputSystem::OutputDialog(int npcID, int textID) {
 
     for (int i = 0; i < Worlds[Hero.current_loc].character.size(); i++) {
 
         if (Worlds[Hero.current_loc].character[i].ID == npcID) {
 
-            cout << Worlds[Hero.current_loc].character[i].text_NPC << endl;
+            cout << Worlds[Hero.current_loc].character[i].text_NPC[textID].text << endl;
 
-            for (int j = 0; j < Worlds[Hero.current_loc].character[i].Answer.size(); j++) {
+            for (int j = 0; j < Worlds[Hero.current_loc].character[i].text_NPC[textID].Answer.size(); j++) {
 
-                cout << j + 1 << ") " << Worlds[Hero.current_loc].character[npcID].Answer[j].text << endl;
+                cout << j + 1 << ") " << Worlds[Hero.current_loc].character[npcID].text_NPC[textID].Answer[j].text << endl;
             }
         }
     }
@@ -417,19 +417,18 @@ void OutputSystem::CommandInfo() {
 }
 
 // Реализации методов InputSystem
-void InputSystem::InputHandler(int choice, int npcID) {
+void InputSystem::InputHandler(int choice, int npcID, int textID) {
 
     int actualChoice = choice - 1;
 
-    // СНАЧАЛА НАХОДИМ НУЖНЫЙ ВАРИАНТ ОТВЕТА
     Emotion_ selectedEmotion = COUNT_Emotions;
     int originalLocation = Hero.current_loc;
 
     for (int i = 0; i < Worlds[originalLocation].character.size(); i++) {
         if (Worlds[originalLocation].character[i].ID == npcID) {
-            for (int j = 0; j < Worlds[originalLocation].character[i].Answer.size(); j++) {
+            for (int j = 0; j < Worlds[originalLocation].character[i].text_NPC[textID].Answer.size(); j++) {
                 if (actualChoice == j) {
-                    selectedEmotion = Worlds[originalLocation].character[i].Answer[j].id;
+                    selectedEmotion = Worlds[originalLocation].character[i].text_NPC[textID].Answer[j].id;
                     break;
                 }
             }
@@ -437,7 +436,6 @@ void InputSystem::InputHandler(int choice, int npcID) {
         }
     }
 
-    // ЕСЛИ НАШЛИ ВАРИАНТ - ПРИМЕНЯЕМ ИЗМЕНЕНИЯ
     if (selectedEmotion != COUNT_Emotions) {
         ChangeEmotions(selectedEmotion, true);
         statsCollector->Session.counterChoices++;

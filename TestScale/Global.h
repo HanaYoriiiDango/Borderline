@@ -35,14 +35,6 @@ struct Text_NPC {
 
 };
 
-//struct NPC {
-//    string name;
-//    string text_NPC;
-//    int ID;
-//    vector<Peplace> Answer;
-//    void AddReplace(Emotion_ id, string t);
-//};
-
 struct Player {
     int current_loc = SADNESS;
     int emotions[COUNT_Emotions] = { 50, 50, 50, 50, 50, 50 };
@@ -50,12 +42,10 @@ struct Player {
 };
 
 class NPC {
-protected:
+public:
     string name;
     vector<Text_NPC> text_NPC;
     int ID;
-
-public:
     void AddtextNPC(int id, string t);
     void AddReplace(int textID, Emotion_ id, string t);
 

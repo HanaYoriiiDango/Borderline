@@ -55,13 +55,13 @@ public:
 class InputSystem : public GameLogicSystem { // обработка ввода, связана с игровой логикой
 public:
     InputSystem(StatisticsCollector* collector) : GameLogicSystem(collector) {}
-    void InputHandler(int choice, int npcID);
+    void InputHandler(int choice, int npcID, int textID);
 
 };
 
 class OutputSystem : NPC { // обработка вывода
 public:
-    void OutputDialog(int npcID);
+    void OutputDialog(int npcID, int textID);
     void OutputStates();
     void CommandInfo();
 };
