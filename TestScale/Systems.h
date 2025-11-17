@@ -67,7 +67,7 @@ public:
 };
 
 
-class GameCore { // игровое ядро, все системы разделены по модулям
+class GameCore { // игровое ядро, все системы разделены по модулям 
 private:
     InitSystem Init;
     OutputSystem Output;
