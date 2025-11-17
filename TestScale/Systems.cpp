@@ -54,9 +54,9 @@ void InitSystem::CreatePortals(Emotion_ WorldEmotion) {
 }
 
 // Реализации методов NPC
-void NPC::AddReplace(int textID, Emotion_ id, string t) {
+void NPC::AddReplace(int textID, Emotion_ id, bool sign, string t) {
 
-    text_NPC[textID].Answer.push_back({ id, t});
+    text_NPC[textID].Answer.push_back({ id, sign, t});
 
 }
 
@@ -68,26 +68,30 @@ void NPC::AddtextNPC(int id, string t) {
 
 void InitSystem::Dialogues() {
 
+    Worlds[SADNESS].character.emplace_back();
+    Worlds[SADNESS].character[0].name = "Beam";
+    Worlds[SADNESS].character[0].ID = 0;
+
     Worlds[SADNESS].character[0].AddtextNPC( 0, "Полуразложившееся бревно лежит под угрюмым небом");
     Worlds[SADNESS].character[0].AddtextNPC( 1, "(Бревно молчит. Ветер шелестит листьями)");
     Worlds[SADNESS].character[0].AddtextNPC( 2, "От бревна откалывается щепка");
     Worlds[SADNESS].character[0].AddtextNPC( 3, "...");
 
-    Worlds[SADNESS].character[0].AddReplace(0, SADNESS, " (Сарказм) : Ну что, старина - бревно ? Нашел отличную компанию для беседы.Тебя тоже сюда выбросило за ненадобностью ?");
-    Worlds[SADNESS].character[0].AddReplace(0, ANGER, " (Раздраженно): И чего молчишь? Все вокруг только и умеют, что молчать! Скажи хоть что-нибудь! ");
-    Worlds[SADNESS].character[0].AddReplace(0, FEAR, " (С опаской): Ты... ты ведь не превратишься сейчас в кого-нибудь? В монстра?");
+    Worlds[SADNESS].character[0].AddReplace(0, SADNESS, true, " (Сарказм) : Ну что, старина - бревно ? Нашел отличную компанию для беседы.Тебя тоже сюда выбросило за ненадобностью ?");
+    Worlds[SADNESS].character[0].AddReplace(0, ANGER, true, " (Раздраженно): И чего молчишь? Все вокруг только и умеют, что молчать! Скажи хоть что-нибудь! ");
+    Worlds[SADNESS].character[0].AddReplace(0, FEAR, true, " (С опаской): Ты... ты ведь не превратишься сейчас в кого-нибудь? В монстра?");
 
-    Worlds[SADNESS].character[0].AddReplace(1, ANGER, " (С горяча пнуть бревно ботинком): [Пнуть]");
-    Worlds[SADNESS].character[0].AddReplace(1, ANGER, " (Грустно сесть рядом): Знаешь, а ведь ты идеальный собеседник. Тебя невозможно разачаровать");
-    Worlds[SADNESS].character[0].AddReplace(1, FEAR, " (Прислушиваясь к себе): Стоп. А что если это ловушка? Надо бы проверить окрестности");
+    Worlds[SADNESS].character[0].AddReplace(1, ANGER, true, " (С горяча пнуть бревно ботинком): [Пнуть]");
+    Worlds[SADNESS].character[0].AddReplace(1, ANGER, false, " (Грустно сесть рядом): Знаешь, а ведь ты идеальный собеседник. Тебя невозможно разачаровать");
+    Worlds[SADNESS].character[0].AddReplace(1, FEAR, true," (Прислушиваясь к себе): Стоп. А что если это ловушка? Надо бы проверить окрестности");
 
-    Worlds[SADNESS].character[0].AddReplace(2, FEAR, " (В ужасе): Ой... Прости... Я не хотел... Я не хотел ломать...");
-    Worlds[SADNESS].character[0].AddReplace(2, ANGER, " (С новым приливом ярости): Да сгнивай ты тут, кому ты нужен!");
-    Worlds[SADNESS].character[0].AddReplace(2, FEAR, " (С облегчением): Фух... Кажется, ничего страшного.Просто дерево.");
+    Worlds[SADNESS].character[0].AddReplace(2, FEAR, true," (В ужасе): Ой... Прости... Я не хотел... Я не хотел ломать...");
+    Worlds[SADNESS].character[0].AddReplace(2, ANGER, true, " (С новым приливом ярости): Да сгнивай ты тут, кому ты нужен!");
+    Worlds[SADNESS].character[0].AddReplace(2, FEAR, false," (С облегчением): Фух... Кажется, ничего страшного.Просто дерево.");
 
-    Worlds[SADNESS].character[0].AddReplace(3, SADNESS, " (C горькой иронией):  Вот и поговорили. Как всегда, я один несу свою чушь в пустоту");
-    Worlds[SADNESS].character[0].AddReplace(3, FEAR, " (Взяв себя в руки): Ладно... ладно. Сосредоточься. Нужно идти дальше.");
-    Worlds[SADNESS].character[0].AddReplace(3, CALM, " (Смирившись): Тишина... Иногда она лучше любых слов");
+    Worlds[SADNESS].character[0].AddReplace(3, SADNESS, true, " (C горькой иронией):  Вот и поговорили. Как всегда, я один несу свою чушь в пустоту");
+    Worlds[SADNESS].character[0].AddReplace(3, FEAR, false, " (Взяв себя в руки): Ладно... ладно. Сосредоточься. Нужно идти дальше.");
+    Worlds[SADNESS].character[0].AddReplace(3, CALM, false, " (Смирившись): Тишина... Иногда она лучше любых слов");
 
 }
 
@@ -422,6 +426,7 @@ void InputSystem::InputHandler(int choice, int npcID, int textID) {
     int actualChoice = choice - 1;
 
     Emotion_ selectedEmotion = COUNT_Emotions;
+    bool flag;
     int originalLocation = Hero.current_loc;
 
     for (int i = 0; i < Worlds[originalLocation].character.size(); i++) {
@@ -429,6 +434,7 @@ void InputSystem::InputHandler(int choice, int npcID, int textID) {
             for (int j = 0; j < Worlds[originalLocation].character[i].text_NPC[textID].Answer.size(); j++) {
                 if (actualChoice == j) {
                     selectedEmotion = Worlds[originalLocation].character[i].text_NPC[textID].Answer[j].id;
+                    flag = Worlds[originalLocation].character[i].text_NPC[textID].Answer[j].sign;
                     break;
                 }
             }
@@ -437,7 +443,7 @@ void InputSystem::InputHandler(int choice, int npcID, int textID) {
     }
 
     if (selectedEmotion != COUNT_Emotions) {
-        ChangeEmotions(selectedEmotion, true);
+        ChangeEmotions(selectedEmotion, flag);
         statsCollector->Session.counterChoices++;
     }
 }
@@ -579,36 +585,55 @@ void GameCore::InitInfo() {
     Init.Info();
 }
 
+bool GameCore::DialogList(int npcID, int textID, int numAction = -1) {
+
+    int choice;
+    bool action = false;
+
+    Output.OutputStates();
+    Output.OutputDialog(npcID, textID);
+    cin >> choice;
+    Input.InputHandler(choice, npcID, textID);
+
+    if (choice == numAction) {
+        action = true;
+        return action;
+    
+    }
+}
+
 void GameCore::ProcessDialog() {
 
-    if (Worlds[Hero.current_loc].linked_emotion == SADNESS) {
+    cout << "____Поляна на окраине " << Worlds[Hero.current_loc].name << "____" << endl;
+    cout << "Немо подходит к бревну. Он выглядит растерянным и усталым" << endl;
 
-        int choice;
+    switch (Hero.current_loc) {
+    case JOY: 
+        cout << "Не с кем болтать(((" << endl;
+        break;
 
-        cout << "____Поляна на окраине Мира Грусти____" << endl;
-        cout << "Немо подходит к бревну. Он выглядит растерянным и усталым" << endl;
+    case SADNESS: 
+        DialogList(0, 0);
+        if (DialogList(0, 1, 1)) DialogList(0, 2);
+        DialogList(0, 3);
+        
+        break;
 
-        Output.OutputStates();
-        Output.OutputDialog(0);
-        cin >> choice;
-        Input.InputHandler(choice, 0);
+    case POWER:
+        cout << "Не с кем болтать(((" << endl;
+        break;
 
-        Output.OutputStates();
-        Output.OutputDialog(1);
-        cin >> choice;
-        Input.InputHandler(choice, 1);
+    case FEAR: 
+        cout << "Не с кем болтать(((" << endl;
+        break;
 
-        Output.OutputStates();
-        Output.OutputDialog(2);
-        cin >> choice;
-        Input.InputHandler(choice, 2);
-        Output.OutputStates();
+    case CALM:
+        cout << "Не с кем болтать(((" << endl;
+        break;
 
-        cout << "Диалог окончен" << endl;
-
-    }
-    else {
-        cout << "Похоже в этом одиноком мире не с кем беседовать((" << endl;
+    case ANGER:
+        cout << "Не с кем болтать(((" << endl;
+        break;
 
     }
 }

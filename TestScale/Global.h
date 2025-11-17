@@ -24,6 +24,7 @@ struct Portal_ {
 
 struct Peplace {
     Emotion_ id;
+    bool sign;
     string text;
 };
 
@@ -44,10 +45,10 @@ struct Player {
 class NPC {
 public:
     string name;
-    vector<Text_NPC> text_NPC;
     int ID;
+    vector<Text_NPC> text_NPC;
     void AddtextNPC(int id, string t);
-    void AddReplace(int textID, Emotion_ id, string t);
+    void AddReplace(int textID, Emotion_ id, bool sign, string t);
 
 };
 
