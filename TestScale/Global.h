@@ -1,21 +1,21 @@
-#pragma once
+п»ї#pragma once
 #include <vector>
 #include <string>
 #include <ctime> 
-#include <map>
+#include <map> 
 #include <fstream>
 
 using namespace std;
 
-// Перечисления
+// РџРµСЂРµС‡РёСЃР»РµРЅРёСЏ
 enum Emotion_ { JOY, SADNESS, POWER, FEAR, CALM, ANGER, COUNT_Emotions };
 
-// Внешние объявления глобальных переменных
+// Р’РЅРµС€РЅРёРµ РѕР±СЉСЏРІР»РµРЅРёСЏ РіР»РѕР±Р°Р»СЊРЅС‹С… РїРµСЂРµРјРµРЅРЅС‹С…
 extern vector<Emotion_> Emotion;
 extern string Emotion_Names[COUNT_Emotions];
 extern string Worlds_Names[COUNT_Emotions];
 
-// Структуры
+// РЎС‚СЂСѓРєС‚СѓСЂС‹
 struct Portal_ {
     string name;
     int target;
@@ -50,25 +50,25 @@ struct Location {
 };
 
 struct GameSession { 
-    // Основная информация о сессии
-    int ID; // номер сессии
-    time_t startTime, endTime; // Начало сессии / конец сессии
-    double TimeMin; // перевод в минутах
+    // РћСЃРЅРѕРІРЅР°СЏ РёРЅС„РѕСЂРјР°С†РёСЏ Рѕ СЃРµСЃСЃРёРё
+    int ID; // РЅРѕРјРµСЂ СЃРµСЃСЃРёРё
+    time_t startTime, endTime; // РќР°С‡Р°Р»Рѕ СЃРµСЃСЃРёРё / РєРѕРЅРµС† СЃРµСЃСЃРёРё
+    double TimeMin; // РїРµСЂРµРІРѕРґ РІ РјРёРЅСѓС‚Р°С…
 
-    // Основная статистика
-    int worldVisitSad;        // Сколько раз посещал sadness
-    int worldVisitJoy;        // Сколько раз посещал joy и т.д
+    // РћСЃРЅРѕРІРЅР°СЏ СЃС‚Р°С‚РёСЃС‚РёРєР°
+    int worldVisitSad;        // РЎРєРѕР»СЊРєРѕ СЂР°Р· РїРѕСЃРµС‰Р°Р» sadness
+    int worldVisitJoy;        // РЎРєРѕР»СЊРєРѕ СЂР°Р· РїРѕСЃРµС‰Р°Р» joy Рё С‚.Рґ
     int worldVisitPower;        
     int worldVisitFear;        
     int worldVisitCalm;        
     int worldVisitAnger;       
-    int AllVisitCount;        // Сколько раз перемещался в общем 
+    int AllVisitCount;        // РЎРєРѕР»СЊРєРѕ СЂР°Р· РїРµСЂРµРјРµС‰Р°Р»СЃСЏ РІ РѕР±С‰РµРј 
 
-    // Статистика по диалогам
-    int counterChoices;                  // Всего принятых диалоговых решений
+    // РЎС‚Р°С‚РёСЃС‚РёРєР° РїРѕ РґРёР°Р»РѕРіР°Рј
+    int counterChoices;                  // Р’СЃРµРіРѕ РїСЂРёРЅСЏС‚С‹С… РґРёР°Р»РѕРіРѕРІС‹С… СЂРµС€РµРЅРёР№
 
 };
 
-// Глобальные переменные
+// Р“Р»РѕР±Р°Р»СЊРЅС‹Рµ РїРµСЂРµРјРµРЅРЅС‹Рµ
 extern Player Hero;
 extern Location Worlds[COUNT_Emotions];
