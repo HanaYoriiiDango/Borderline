@@ -605,15 +605,15 @@ int GameCore::DialogList(int npcID, int textID, int action) {
 
 void GameCore::ProcessDialog() {
 
-    cout << "____Поляна на окраине " << Worlds[Hero.current_loc].name << "____" << endl;
-    cout << "Немо подходит к бревну. Он выглядит растерянным и усталым" << endl;
-
     switch (Hero.current_loc) {
     case JOY: 
         cout << "Не с кем болтать(((" << endl;
         break;
 
     case SADNESS: 
+        cout << "____Поляна на окраине " << Worlds[Hero.current_loc].name << "____" << endl;
+        cout << "Немо подходит к бревну. Он выглядит растерянным и усталым" << endl;
+
         DialogList(0, 0);
         if (DialogList(0, 1, 1) == 1) DialogList(0, 2);
         DialogList(0, 3);
