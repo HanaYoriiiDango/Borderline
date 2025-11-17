@@ -6,3 +6,4 @@ string Emotion_Names[COUNT_Emotions] = { "Радость", "Грусть", "Си
 string Worlds_Names[COUNT_Emotions] = { "Мир Радости", "Мир Грусти", "Мир Силы", "Мир Страха", "Мир Спокойствия", "Мир Гнева" };
 Player Hero; 
 Location Worlds[COUNT_Emotions];
+ 
