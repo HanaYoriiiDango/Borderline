@@ -54,26 +54,40 @@ void InitSystem::CreatePortals(Emotion_ WorldEmotion) {
 }
 
 // Реализации методов NPC
-void NPC::AddReplace(Emotion_ id, string t) {
+void NPC::AddReplace(int textID, Emotion_ id, string t) {
 
-    Answer.push_back({ id, t });
+    text_NPC[textID].Answer.push_back({ id, t});
+
+}
+
+void NPC::AddtextNPC(int id, string t) {
+
+    text_NPC.push_back({ id, t });
 
 }
 
 void InitSystem::Dialogues() {
 
-        Worlds[SADNESS].character.push_back({ "Beam1", "Полуразложившееся бревно лежит под угрюмым небом", 0 });
-        Worlds[SADNESS].character[0].AddReplace(SADNESS, " (Сарказм) : Ну что, старина - бревно ? Нашел отличную компанию для беседы.Тебя тоже сюда выбросило за ненадобностью ?");
-        Worlds[SADNESS].character[0].AddReplace(FEAR, " (Раздраженно): И чего молчишь? Все вокруг только и умеют, что молчать! Скажи хоть что-нибудь! ");
-        Worlds[SADNESS].character[0].AddReplace(CALM, " (С опаской): Ты... ты ведь не превратишься сейчас в кого-нибудь? В монстра?");
-        Worlds[SADNESS].character.push_back({ "Beam2", "(Бревно молчит. Ветер шелестит листьями)", 1 });
-        Worlds[SADNESS].character[1].AddReplace(SADNESS, " (С горяча пнуть бревно ботинком): [Пнуть]");
-        Worlds[SADNESS].character[1].AddReplace(FEAR, " (Грустно сесть рядом): Знаешь, а ведь ты идеальный собеседник. Тебя невозможно разачаровать");
-        Worlds[SADNESS].character[1].AddReplace(CALM, " (Прислушиваясь к себе): Стоп. А что если это ловушка? Надо бы проверить окрестности");
-        Worlds[SADNESS].character.push_back({ "Beam3", "...", 2 });
-        Worlds[SADNESS].character[2].AddReplace(SADNESS, " (C горькой иронией):  Вот и поговорили. Как всегда, я один несу свою чушь в пустоту");
-        Worlds[SADNESS].character[2].AddReplace(FEAR, " (Взяв себя в руки): Ладно... ладно. Сосредоточься. Нужно идти дальше.");
-        Worlds[SADNESS].character[2].AddReplace(CALM, " (Смирившись): Тишина... Иногда она лучше любых слов");
+    Worlds[SADNESS].character[0].AddtextNPC( 0, "Полуразложившееся бревно лежит под угрюмым небом");
+    Worlds[SADNESS].character[0].AddtextNPC( 1, "(Бревно молчит. Ветер шелестит листьями)");
+    Worlds[SADNESS].character[0].AddtextNPC( 2, "От бревна откалывается щепка");
+    Worlds[SADNESS].character[0].AddtextNPC( 3, "...");
+
+    Worlds[SADNESS].character[0].AddReplace(0, SADNESS, " (Сарказм) : Ну что, старина - бревно ? Нашел отличную компанию для беседы.Тебя тоже сюда выбросило за ненадобностью ?");
+    Worlds[SADNESS].character[0].AddReplace(0, ANGER, " (Раздраженно): И чего молчишь? Все вокруг только и умеют, что молчать! Скажи хоть что-нибудь! ");
+    Worlds[SADNESS].character[0].AddReplace(0, FEAR, " (С опаской): Ты... ты ведь не превратишься сейчас в кого-нибудь? В монстра?");
+
+    Worlds[SADNESS].character[0].AddReplace(1, ANGER, " (С горяча пнуть бревно ботинком): [Пнуть]");
+    Worlds[SADNESS].character[0].AddReplace(1, ANGER, " (Грустно сесть рядом): Знаешь, а ведь ты идеальный собеседник. Тебя невозможно разачаровать");
+    Worlds[SADNESS].character[0].AddReplace(1, FEAR, " (Прислушиваясь к себе): Стоп. А что если это ловушка? Надо бы проверить окрестности");
+
+    Worlds[SADNESS].character[0].AddReplace(2, FEAR, " (В ужасе): Ой... Прости... Я не хотел... Я не хотел ломать...");
+    Worlds[SADNESS].character[0].AddReplace(2, ANGER, " (С новым приливом ярости): Да сгнивай ты тут, кому ты нужен!");
+    Worlds[SADNESS].character[0].AddReplace(2, FEAR, " (С облегчением): Фух... Кажется, ничего страшного.Просто дерево.");
+
+    Worlds[SADNESS].character[0].AddReplace(3, SADNESS, " (C горькой иронией):  Вот и поговорили. Как всегда, я один несу свою чушь в пустоту");
+    Worlds[SADNESS].character[0].AddReplace(3, FEAR, " (Взяв себя в руки): Ладно... ладно. Сосредоточься. Нужно идти дальше.");
+    Worlds[SADNESS].character[0].AddReplace(3, CALM, " (Смирившись): Тишина... Иногда она лучше любых слов");
 
 }
 

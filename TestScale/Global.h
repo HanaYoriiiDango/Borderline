@@ -27,18 +27,38 @@ struct Peplace {
     string text;
 };
 
-struct NPC {
-    string name;
-    string text_NPC;
+struct Text_NPC {
     int ID;
+    string text;
     vector<Peplace> Answer;
-    void AddReplace(Emotion_ id, string t);
+
+
 };
+
+//struct NPC {
+//    string name;
+//    string text_NPC;
+//    int ID;
+//    vector<Peplace> Answer;
+//    void AddReplace(Emotion_ id, string t);
+//};
 
 struct Player {
     int current_loc = SADNESS;
     int emotions[COUNT_Emotions] = { 50, 50, 50, 50, 50, 50 };
     bool life = true;
+};
+
+class NPC {
+protected:
+    string name;
+    vector<Text_NPC> text_NPC;
+    int ID;
+
+public:
+    void AddtextNPC(int id, string t);
+    void AddReplace(int textID, Emotion_ id, string t);
+
 };
 
 struct Location {
@@ -48,6 +68,7 @@ struct Location {
     vector<Portal_> portal;
     vector<NPC> character;
 };
+
 
 struct GameSession { 
     // Основная информация о сессии

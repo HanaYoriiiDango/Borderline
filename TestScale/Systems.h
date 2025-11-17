@@ -59,7 +59,7 @@ public:
 
 };
 
-class OutputSystem { // обработка вывода
+class OutputSystem : NPC { // обработка вывода
 public:
     void OutputDialog(int npcID);
     void OutputStates();
