@@ -1,4 +1,4 @@
-﻿#include "systems.h"
+#include "systems.h"
 #include <iostream>
 #include <iomanip>
 #include <cstdlib>
@@ -7,7 +7,7 @@
 using namespace std;
 
 // Реализации методов InitSystem 
-void InitSystem::Info() { 
+void InitSystem::Info() {
 
     for (int i = 0; i < Emotion.size(); i++) {
 
@@ -53,10 +53,69 @@ void InitSystem::CreatePortals(Emotion_ WorldEmotion) {
     }
 }
 
+// Реализации методов текстового менеджера 
+// Загрузка JSON файла
+bool TextManager::DialogLoader(const string& filename) {
+    std::ifstream file(filename);
+    if (!file.is_open()) {
+        cout << "Ошибка открытия файла: " << filename << endl;
+        return false;
+    }
+
+    try {
+        file >> DialogData;  // ← ВСЁ! Всего одна строка!
+        cout << "Диалоги загружены: " << filename << endl;
+        return true;
+    }
+    catch (const exception& e) {
+        cout << "Ошибка загрузки JSON: " << e.what() << endl;
+        return false;
+    }
+}
+
+// Получение текста NPC
+string TextManager::GetNPCtext(const string& npcID, int textID) {
+    try {
+        // Автоматические проверки и преобразования
+        return DialogData["npcs"][npcID]["texts"][textID]["text"];
+    }
+    catch (const exception& e) {
+        return "Текст не найден";
+    }
+}
+
+// Количество текстов у NPC
+int TextManager::GetNPCcount(const string& npcID) {
+    try {
+        return DialogData["npcs"][npcID]["texts"].size();
+    }
+    catch (...) {
+        return 0;
+    }
+}
+
+// Получение ответов
+vector<string> TextManager::GetAnswers(const string& npcID, int textID) {
+    vector<string> answers;
+
+    try {
+        // Автоматически конвертирует JSON array в vector<string>
+        auto jsonAnswers = DialogData["npcs"][npcID]["texts"][textID]["answers"];
+        for (const auto& answer : jsonAnswers) {
+            answers.push_back(answer["text"]);
+        }
+    }
+    catch (...) {
+        // Просто возвращаем пустой вектор в случае ошибки
+    }
+
+    return answers;
+}
+
 // Реализации методов NPC
 void NPC::AddReplace(int textID, Emotion_ id, bool sign, string t) {
 
-    text_NPC[textID].Answer.push_back({ id, sign, t});
+    text_NPC[textID].Answer.push_back({ id, sign, t });
 
 }
 
@@ -68,30 +127,36 @@ void NPC::AddtextNPC(int id, string t) {
 
 void InitSystem::Dialogues() {
 
-    Worlds[SADNESS].character.emplace_back();
-    Worlds[SADNESS].character[0].name = "Beam";
-    Worlds[SADNESS].character[0].ID = 0;
+    if (DialogManager.DialogLoader("data/dialogs.json")) {
 
-    Worlds[SADNESS].character[0].AddtextNPC( 0, "Полуразложившееся бревно лежит под угрюмым небом");
-    Worlds[SADNESS].character[0].AddtextNPC( 1, "(Бревно молчит. Ветер шелестит листьями)");
-    Worlds[SADNESS].character[0].AddtextNPC( 2, "От бревна откалывается щепка");
-    Worlds[SADNESS].character[0].AddtextNPC( 3, "...");
+        cout << "Загрузка диалогов прошла успешно!" << endl;
 
-    Worlds[SADNESS].character[0].AddReplace(0, SADNESS, true, " (Сарказм) : Ну что, старина - бревно ? Нашел отличную компанию для беседы.Тебя тоже сюда выбросило за ненадобностью ?");
-    Worlds[SADNESS].character[0].AddReplace(0, ANGER, true, " (Раздраженно): И чего молчишь? Все вокруг только и умеют, что молчать! Скажи хоть что-нибудь! ");
-    Worlds[SADNESS].character[0].AddReplace(0, FEAR, true, " (С опаской): Ты... ты ведь не превратишься сейчас в кого-нибудь? В монстра?");
+    }
 
-    Worlds[SADNESS].character[0].AddReplace(1, ANGER, true, " (С горяча пнуть бревно ботинком): [Пнуть]");
-    Worlds[SADNESS].character[0].AddReplace(1, ANGER, false, " (Грустно сесть рядом): Знаешь, а ведь ты идеальный собеседник. Тебя невозможно разачаровать");
-    Worlds[SADNESS].character[0].AddReplace(1, FEAR, true," (Прислушиваясь к себе): Стоп. А что если это ловушка? Надо бы проверить окрестности");
+    /* Worlds[SADNESS].character.emplace_back();
+     Worlds[SADNESS].character[0].name = "Beam";
+     Worlds[SADNESS].character[0].ID = 0;
 
-    Worlds[SADNESS].character[0].AddReplace(2, FEAR, true," (В ужасе): Ой... Прости... Я не хотел... Я не хотел ломать...");
-    Worlds[SADNESS].character[0].AddReplace(2, ANGER, true, " (С новым приливом ярости): Да сгнивай ты тут, кому ты нужен!");
-    Worlds[SADNESS].character[0].AddReplace(2, FEAR, false," (С облегчением): Фух... Кажется, ничего страшного.Просто дерево.");
+     Worlds[SADNESS].character[0].AddtextNPC( 0, "Полуразложившееся бревно лежит под угрюмым небом");
+     Worlds[SADNESS].character[0].AddtextNPC( 1, "(Бревно молчит. Ветер шелестит листьями)");
+     Worlds[SADNESS].character[0].AddtextNPC( 2, "От бревна откалывается щепка");
+     Worlds[SADNESS].character[0].AddtextNPC( 3, "...");
 
-    Worlds[SADNESS].character[0].AddReplace(3, SADNESS, true, " (C горькой иронией):  Вот и поговорили. Как всегда, я один несу свою чушь в пустоту");
-    Worlds[SADNESS].character[0].AddReplace(3, FEAR, false, " (Взяв себя в руки): Ладно... ладно. Сосредоточься. Нужно идти дальше.");
-    Worlds[SADNESS].character[0].AddReplace(3, CALM, false, " (Смирившись): Тишина... Иногда она лучше любых слов");
+     Worlds[SADNESS].character[0].AddReplace(0, SADNESS, true, " (Сарказм) : Ну что, старина - бревно ? Нашел отличную компанию для беседы.Тебя тоже сюда выбросило за ненадобностью ?");
+     Worlds[SADNESS].character[0].AddReplace(0, ANGER, true, " (Раздраженно): И чего молчишь? Все вокруг только и умеют, что молчать! Скажи хоть что-нибудь! ");
+     Worlds[SADNESS].character[0].AddReplace(0, FEAR, true, " (С опаской): Ты... ты ведь не превратишься сейчас в кого-нибудь? В монстра?");
+
+     Worlds[SADNESS].character[0].AddReplace(1, ANGER, true, " (С горяча пнуть бревно ботинком): [Пнуть]");
+     Worlds[SADNESS].character[0].AddReplace(1, ANGER, false, " (Грустно сесть рядом): Знаешь, а ведь ты идеальный собеседник. Тебя невозможно разачаровать");
+     Worlds[SADNESS].character[0].AddReplace(1, FEAR, true," (Прислушиваясь к себе): Стоп. А что если это ловушка? Надо бы проверить окрестности");
+
+     Worlds[SADNESS].character[0].AddReplace(2, FEAR, true," (В ужасе): Ой... Прости... Я не хотел... Я не хотел ломать...");
+     Worlds[SADNESS].character[0].AddReplace(2, ANGER, true, " (С новым приливом ярости): Да сгнивай ты тут, кому ты нужен!");
+     Worlds[SADNESS].character[0].AddReplace(2, FEAR, false," (С облегчением): Фух... Кажется, ничего страшного.Просто дерево.");
+
+     Worlds[SADNESS].character[0].AddReplace(3, SADNESS, true, " (C горькой иронией):  Вот и поговорили. Как всегда, я один несу свою чушь в пустоту");
+     Worlds[SADNESS].character[0].AddReplace(3, FEAR, false, " (Взяв себя в руки): Ладно... ладно. Сосредоточься. Нужно идти дальше.");
+     Worlds[SADNESS].character[0].AddReplace(3, CALM, false, " (Смирившись): Тишина... Иногда она лучше любых слов");*/
 
 }
 
@@ -123,7 +188,7 @@ bool GameLogicSystem::HeroLocCheck() {
 Emotion_ GameLogicSystem::DetectedEmotion(int feels) {
 
     if (LimitCheck(Hero.emotions[feels])) return (Emotion_)feels;
-    return COUNT_Emotions; 
+    return COUNT_Emotions;
 
 }
 
@@ -364,12 +429,12 @@ void GameLogicSystem::ProcessGo() {
             statsCollector->Session.AllVisitCount++;
 
             switch (Hero.current_loc) {
-                case SADNESS: statsCollector->Session.worldVisitSad++; break;
-                case JOY: statsCollector->Session.worldVisitJoy++; break;
-                case POWER: statsCollector->Session.worldVisitPower++; break;
-                case FEAR: statsCollector->Session.worldVisitFear++; break;
-                case CALM: statsCollector->Session.worldVisitCalm++; break;
-                case ANGER: statsCollector->Session.worldVisitAnger++; break;
+            case SADNESS: statsCollector->Session.worldVisitSad++; break;
+            case JOY: statsCollector->Session.worldVisitJoy++; break;
+            case POWER: statsCollector->Session.worldVisitPower++; break;
+            case FEAR: statsCollector->Session.worldVisitFear++; break;
+            case CALM: statsCollector->Session.worldVisitCalm++; break;
+            case ANGER: statsCollector->Session.worldVisitAnger++; break;
             }
 
             cout << "Ты переместился в " << Worlds_Names[Hero.current_loc] << endl;
@@ -403,7 +468,7 @@ void OutputSystem::OutputStates() {
     for (int i = 0; i < Emotion.size(); i++) {
 
         cout << left << setw(20) << Emotion_Names[i] << "\t" <<
-                ((Hero.emotions[i] > 98 || Hero.emotions[i] < 2) ? "Disabled" : to_string(Hero.emotions[i])) << endl;
+            ((Hero.emotions[i] > 98 || Hero.emotions[i] < 2) ? "Disabled" : to_string(Hero.emotions[i])) << endl;
 
     }
 }
@@ -452,8 +517,8 @@ void InputSystem::InputHandler(int choice, int npcID, int textID) {
 // Реализации методов StatisticsCollector
 void StatisticsCollector::StartSession() {
 
-    Session.startTime = time(0); 
-    Session.ID = Session.startTime; 
+    Session.startTime = time(0);
+    Session.ID = Session.startTime;
 
     cout << "=== Начата новая игровая сессия ===" << endl;
     cout << "ID сессии: " << Session.ID << endl;
@@ -522,7 +587,7 @@ void GameCore::InitGame() {
 
     Init.CreateWorlds();
     Init.Dialogues();
-   
+
 }
 
 void GameCore::StartGame() {
@@ -563,8 +628,8 @@ void GameCore::Edit() {
         Emotion_ Opposite_num = Logic.GetOpposite((Emotion_)num);
         Hero.emotions[num] = choice2;
         Hero.emotions[Opposite_num] = choice2;
-        cout << "Установлено новое значение для шкал: " << Emotion_Names[num] << ": " << Hero.emotions[num]  
-             << " и " << Emotion_Names[Opposite_num] << ": " << Hero.emotions[Opposite_num] << endl;
+        cout << "Установлено новое значение для шкал: " << Emotion_Names[num] << ": " << Hero.emotions[num]
+            << " и " << Emotion_Names[Opposite_num] << ": " << Hero.emotions[Opposite_num] << endl;
         Logic.ChangeGamerule();
     }
     else {
@@ -603,38 +668,58 @@ int GameCore::DialogList(int npcID, int textID, int action) {
 
 }
 
+void GameCore::ShowDialog(const string& npcId, int textId) {
+
+    TextManager& dialogManager = Init.GetDialogManager();
+
+    string npcText = dialogManager.GetNPCtext(npcId, textId);
+    cout << "Здесь имя челика" << npcText << endl;
+
+    vector<string> answers = dialogManager.GetAnswers(npcId, textId);
+
+    for (int i = 0; i < answers.size(); i++) {
+        std::cout << (i + 1) << ") " << answers[i] << std::endl;
+    }
+
+    /* switch (Hero.current_loc) {
+     case JOY:
+         cout << "Не с кем болтать(((" << endl;
+         break;
+
+     case SADNESS:
+         cout << "____Поляна на окраине " << Worlds[Hero.current_loc].name << "____" << endl;
+         cout << "Немо подходит к бревну. Он выглядит растерянным и усталым" << endl;
+
+         DialogList(0, 0);
+         if (DialogList(0, 1, 1) == 1) DialogList(0, 2);
+         DialogList(0, 3);
+
+         break;
+
+     case POWER:
+         cout << "Не с кем болтать(((" << endl;
+         break;
+
+     case FEAR:
+         cout << "Не с кем болтать(((" << endl;
+         break;
+
+     case CALM:
+         cout << "Не с кем болтать(((" << endl;
+         break;
+
+     case ANGER:
+         cout << "Не с кем болтать(((" << endl;
+         break;
+
+     }*/
+}
+
 void GameCore::ProcessDialog() {
 
-    switch (Hero.current_loc) {
-    case JOY: 
-        cout << "Не с кем болтать(((" << endl;
-        break;
+    if (Hero.current_loc == SADNESS) {
 
-    case SADNESS: 
-        cout << "____Поляна на окраине " << Worlds[Hero.current_loc].name << "____" << endl;
-        cout << "Немо подходит к бревну. Он выглядит растерянным и усталым" << endl;
-
-        DialogList(0, 0);
-        if (DialogList(0, 1, 1) == 1) DialogList(0, 2);
-        DialogList(0, 3);
-        
-        break;
-
-    case POWER:
-        cout << "Не с кем болтать(((" << endl;
-        break;
-
-    case FEAR: 
-        cout << "Не с кем болтать(((" << endl;
-        break;
-
-    case CALM:
-        cout << "Не с кем болтать(((" << endl;
-        break;
-
-    case ANGER:
-        cout << "Не с кем болтать(((" << endl;
-        break;
+        ShowDialog("sadness_log", 0);
 
     }
 }

@@ -1,12 +1,34 @@
-﻿#pragma once
+#pragma once
 #include "Global.h"
+#include "json.hpp"
+#include <fstream>
+
+using json = nlohmann::json;
+
+
+class TextManager {
+private:
+    json DialogData;  
+
+public:
+    bool DialogLoader(const string& filename);
+    string GetNPCtext(const string& npcID, int textID);
+    int GetNPCcount(const string& npcID);
+    vector<string> GetAnswers(const string& npcID, int textID);
+};
 
 class InitSystem { // инициализация 
+private:
+    TextManager DialogManager;
+
+
 public:
+    void Dialogues();
+    TextManager& GetDialogManager() { return DialogManager; }
+
     void Info();
     void CreateWorlds();
     void CreatePortals(Emotion_ WorldEmotion);
-    void Dialogues();
 
 };
 
@@ -61,11 +83,12 @@ public:
 
 class OutputSystem : NPC { // обработка вывода
 public:
+
     void OutputDialog(int npcID, int textID);
     void OutputStates();
     void CommandInfo();
-};
 
+};
 
 class GameCore { // игровое ядро, все системы разделены по модулям 
 private:
@@ -85,13 +108,14 @@ public:
     void StartGame();
     void EndGame();
     void Edit();
-    void Help(); 
+    void Help();
     void StatusInfo();
     void InitInfo();
-    void ProcessDialog();
     int DialogList(int npcID, int textID, int action = -1);
+    void ShowDialog(const string& npcId, int textId);
     void Go();
     void ProcessCommand();
-    void ProcessClear(); 
-};
+    void ProcessClear();
+    void ProcessDialog();
 
+};

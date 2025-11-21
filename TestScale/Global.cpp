@@ -1,4 +1,4 @@
-﻿#include "Global.h"
+#include "Global.h"
 
 // Определения глобальных переменных
 vector<Emotion_> Emotion{ JOY, SADNESS, POWER, FEAR, CALM, ANGER };

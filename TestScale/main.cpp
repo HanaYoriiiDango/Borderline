@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <string>
 #include <vector>
 #include <iomanip>
@@ -7,7 +7,6 @@
 #include <thread>
 #include <chrono>
 #include <windows.h>
-
 #include "Global.h"
 #include "Systems.h"
 
@@ -15,9 +14,8 @@ using namespace std;
 
 int main() {
     // Настройки:    
-    setlocale(LC_ALL, "RU");
-    SetConsoleCP(1251);
-    SetConsoleOutputCP(1251);
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
     srand((time(nullptr)));
 
     GameCore Game;
