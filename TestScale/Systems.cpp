@@ -668,7 +668,7 @@ int GameCore::DialogList(int npcID, int textID, int action) {
 
 }
 
-void GameCore::ShowDialog(const string& npcId, int textId) {
+void GameCore::ShowDialog(const string& npcId, int textId) {  
 
     TextManager& dialogManager = Init.GetDialogManager();
 
