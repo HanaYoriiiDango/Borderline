@@ -1,4 +1,4 @@
-#include "systems.h"
+﻿#include "systems.h"
 #include <iostream>
 #include <iomanip>
 #include <cstdlib>
@@ -680,39 +680,7 @@ void GameCore::ShowDialog(const string& npcId, int textId) {
     for (int i = 0; i < answers.size(); i++) {
         std::cout << (i + 1) << ") " << answers[i] << std::endl;
     }
-
-    /* switch (Hero.current_loc) {
-     case JOY:
-         cout << "Не с кем болтать(((" << endl;
-         break;
-
-     case SADNESS:
-         cout << "____Поляна на окраине " << Worlds[Hero.current_loc].name << "____" << endl;
-         cout << "Немо подходит к бревну. Он выглядит растерянным и усталым" << endl;
-
-         DialogList(0, 0);
-         if (DialogList(0, 1, 1) == 1) DialogList(0, 2);
-         DialogList(0, 3);
-
-         break;
-
-     case POWER:
-         cout << "Не с кем болтать(((" << endl;
-         break;
-
-     case FEAR:
-         cout << "Не с кем болтать(((" << endl;
-         break;
-
-     case CALM:
-         cout << "Не с кем болтать(((" << endl;
-         break;
-
-     case ANGER:
-         cout << "Не с кем болтать(((" << endl;
-         break;
-
-     }*/
+    
 }
 
 void GameCore::ProcessDialog() {
