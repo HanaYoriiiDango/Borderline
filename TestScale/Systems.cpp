@@ -673,7 +673,7 @@ void GameCore::ShowDialog(const string& npcId, int textId) {
     TextManager& dialogManager = Init.GetDialogManager();
 
     string npcText = dialogManager.GetNPCtext(npcId, textId);
-    cout << "Здесь имя челика" << npcText << endl;
+    cout << "NAME" << npcText << endl;
 
     vector<string> answers = dialogManager.GetAnswers(npcId, textId);
 
