@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Global.h"
 #include "json.hpp"
 #include <fstream>
@@ -11,29 +11,15 @@ private:
 
 
 public:
-    int ReturnSizeAllNPCs();
-    vector<string> FindNPCsByKeyValue(const string& key, const string& value);
-    bool HasKey(const string& npcID, const string& key);
-    bool CheckKeyValue(const string& npcID, const string& key, const string& expectedValue);
 
-    void LoadAllNPCs();
-    void LoadNPC(const string& world, const string& filename);
-    string GetNPCtext(const string& npcID, int textID);
-    vector<string> GetAnswers(const string& npcID, int textID);
-    void ShowDialog(const string& npcID, int textID);
 
-    vector<string> GetNPCsInWorld(Emotion_ world);
+
+
+
 };
 
 class InitSystem { // инициализация 
-private:
-    TextManager DialogManager;
-
-
 public:
-    void Dialogues();
-    TextManager& GetDialogManager() { return DialogManager; }
-
     void Info();
     void CreateWorlds();
     void CreatePortals(Emotion_ WorldEmotion);

@@ -1,4 +1,4 @@
-#include "systems.h"
+﻿#include "systems.h"
 #include <iostream>
 #include <iomanip>
 #include <cstdlib>
@@ -56,156 +56,11 @@ void InitSystem::CreatePortals(Emotion_ WorldEmotion) {
 // Реализации методов текстового менеджера 
 // Загрузка JSON файла
 
-void TextManager::LoadNPC(const string& world, const string& filename) {
-    string filepath = "data/dialogs/" + world + "/" + filename;
 
-    std::ifstream file(filepath);
-    if (!file.is_open()) {
-        cout << "Ошибка: не могу открыть файл " << filepath << endl;
-        return;
-    }
 
-    try {
-        json npcData;
-        file >> npcData;
 
-        // Получаем ID из JSON, а не из имени файла
-        string npcID = npcData["id"];
 
-        // Добавляем/проверяем world_link
-        npcData["world_link"] = world;
 
-        // Сохраняем по правильному ID
-        AllNPCs[npcID] = npcData;
-
-        cout << "Загружен NPC: " << npcID << " из мира " << world << endl;
-    }
-    catch (const exception& e) {
-        cout << "Ошибка загрузки NPC из " << filepath << ": " << e.what() << endl;
-    }
-}
-
-void TextManager::LoadAllNPCs() {
-    
-    for (const string& world_folder : Folders) {
-        
-        if (world_folder == "SADNESS") {
-            LoadNPC(world_folder, "Sadness_Beam.json");
-        }
-        if (world_folder == "JOY") {
-            LoadNPC(world_folder, "Joy_Beam.json");
-        }
-    }
-}
-
-string TextManager::GetNPCtext(const string& npcID, int textID) {
-    // Шаг 1: Проверяем существует ли NPC
-    if (AllNPCs.find(npcID) == AllNPCs.end()) {
-        return "NPC '" + npcID + "' не найден";
-    }
-
-    // Шаг 2: Проверяем структуру данных NPC
-    try {
-        const auto& npc = AllNPCs[npcID];
-
-        // Проверяем что есть тексты и нужный textID
-        if (!npc.contains("texts") || !npc["texts"].is_array()) {
-            return "У NPC '" + npcID + "' нет текстов";
-        }
-
-        const auto& texts = npc["texts"];
-        if (textID < 0 || textID >= texts.size()) {
-            return "У NPC '" + npcID + "' нет текста с ID " + to_string(textID);
-        }
-
-        // Получаем конкретный текст
-        const auto& textObj = texts[textID];
-        if (!textObj.contains("text") || !textObj["text"].is_string()) {
-            return "У текста NPC нет поля 'text'";
-        }
-
-        return textObj["text"];
-    }
-    catch (const exception& e) {
-        return "Ошибка получения текста: " + string(e.what());
-    }
-}
-
-vector<string> TextManager::GetAnswers(const string& npcID, int textID) {
-    vector<string> answers;
-
-    // Базовая проверка существования NPC
-    if (AllNPCs.find(npcID) == AllNPCs.end()) {
-        return answers; // возвращаем пустой вектор
-    }
-
-    try {
-        const auto& npc = AllNPCs[npcID];
-
-        // Проверяем тексты
-        if (!npc.contains("texts") || !npc["texts"].is_array()) {
-            return answers;
-        }
-
-        const auto& texts = npc["texts"];
-
-        // Проверяем textID
-        if (textID < 0 || textID >= texts.size()) {
-            return answers;
-        }
-
-        const auto& textObj = texts[textID];
-
-        // Проверяем answers
-        if (!textObj.contains("answers") || !textObj["answers"].is_array()) {
-            return answers;
-        }
-
-        const auto& jsonAnswers = textObj["answers"];
-
-        // Извлекаем только тексты ответов
-        for (const auto& answerObj : jsonAnswers) {
-            if (answerObj.contains("text") && answerObj["text"].is_string()) {
-                answers.push_back(answerObj["text"]);
-            }
-        }
-    }
-    catch (...) {
-        // В случае любой ошибки - просто возвращаем пустой вектор
-    }
-
-    return answers;
-}
-
-vector<string> TextManager::GetNPCsInWorld(Emotion_ world) {
-    vector<string> npcsInWorld;
-    Emotion_ worldName = world; // "SADNESS", "JOY" и т.д.
-
-    for (const auto& pair : AllNPCs) {
-        const string& npcID = pair.first;
-        const json& npcData = pair.second;
-
-        try {
-            // Проверяем, что NPC принадлежит текущему миру
-            if (npcData.contains("world_link") &&
-                npcData["world_link"] == worldName) {
-                npcsInWorld.push_back(npcID);
-            }
-        }
-        catch (...) {
-            // Игнорируем NPC с некорректными данными
-        }
-    }
-
-    return npcsInWorld;
-}
-
-int TextManager::ReturnSizeAllNPCs() {
-
-    int size = AllNPCs.size();
-    return size;
-
-}
 
 // Реализации методов NPC
 void NPC::AddReplace(int textID, Emotion_ id, bool sign, string t) {
@@ -220,36 +75,31 @@ void NPC::AddtextNPC(int id, string t) {
 
 }
 
-void InitSystem::Dialogues() {
+/* Worlds[SADNESS].character.emplace_back();
+Worlds[SADNESS].character[0].name = "Beam";
+Worlds[SADNESS].character[0].ID = 0;
 
-    DialogManager.LoadAllNPCs();  // Просто вызываем загрузку всех NPC
+Worlds[SADNESS].character[0].AddtextNPC( 0, "Полуразложившееся бревно лежит под угрюмым небом");
+Worlds[SADNESS].character[0].AddtextNPC( 1, "(Бревно молчит. Ветер шелестит листьями)");
+Worlds[SADNESS].character[0].AddtextNPC( 2, "От бревна откалывается щепка");
+Worlds[SADNESS].character[0].AddtextNPC( 3, "...");
 
-    /* Worlds[SADNESS].character.emplace_back();
-     Worlds[SADNESS].character[0].name = "Beam";
-     Worlds[SADNESS].character[0].ID = 0;
+Worlds[SADNESS].character[0].AddReplace(0, SADNESS, true, " (Сарказм) : Ну что, старина - бревно ? Нашел отличную компанию для беседы.Тебя тоже сюда выбросило за ненадобностью ?");
+Worlds[SADNESS].character[0].AddReplace(0, ANGER, true, " (Раздраженно): И чего молчишь? Все вокруг только и умеют, что молчать! Скажи хоть что-нибудь! ");
+Worlds[SADNESS].character[0].AddReplace(0, FEAR, true, " (С опаской): Ты... ты ведь не превратишься сейчас в кого-нибудь? В монстра?");
 
-     Worlds[SADNESS].character[0].AddtextNPC( 0, "Полуразложившееся бревно лежит под угрюмым небом");
-     Worlds[SADNESS].character[0].AddtextNPC( 1, "(Бревно молчит. Ветер шелестит листьями)");
-     Worlds[SADNESS].character[0].AddtextNPC( 2, "От бревна откалывается щепка");
-     Worlds[SADNESS].character[0].AddtextNPC( 3, "...");
+Worlds[SADNESS].character[0].AddReplace(1, ANGER, true, " (С горяча пнуть бревно ботинком): [Пнуть]");
+Worlds[SADNESS].character[0].AddReplace(1, ANGER, false, " (Грустно сесть рядом): Знаешь, а ведь ты идеальный собеседник. Тебя невозможно разачаровать");
+Worlds[SADNESS].character[0].AddReplace(1, FEAR, true," (Прислушиваясь к себе): Стоп. А что если это ловушка? Надо бы проверить окрестности");
 
-     Worlds[SADNESS].character[0].AddReplace(0, SADNESS, true, " (Сарказм) : Ну что, старина - бревно ? Нашел отличную компанию для беседы.Тебя тоже сюда выбросило за ненадобностью ?");
-     Worlds[SADNESS].character[0].AddReplace(0, ANGER, true, " (Раздраженно): И чего молчишь? Все вокруг только и умеют, что молчать! Скажи хоть что-нибудь! ");
-     Worlds[SADNESS].character[0].AddReplace(0, FEAR, true, " (С опаской): Ты... ты ведь не превратишься сейчас в кого-нибудь? В монстра?");
+Worlds[SADNESS].character[0].AddReplace(2, FEAR, true," (В ужасе): Ой... Прости... Я не хотел... Я не хотел ломать...");
+Worlds[SADNESS].character[0].AddReplace(2, ANGER, true, " (С новым приливом ярости): Да сгнивай ты тут, кому ты нужен!");
+Worlds[SADNESS].character[0].AddReplace(2, FEAR, false," (С облегчением): Фух... Кажется, ничего страшного.Просто дерево.");
 
-     Worlds[SADNESS].character[0].AddReplace(1, ANGER, true, " (С горяча пнуть бревно ботинком): [Пнуть]");
-     Worlds[SADNESS].character[0].AddReplace(1, ANGER, false, " (Грустно сесть рядом): Знаешь, а ведь ты идеальный собеседник. Тебя невозможно разачаровать");
-     Worlds[SADNESS].character[0].AddReplace(1, FEAR, true," (Прислушиваясь к себе): Стоп. А что если это ловушка? Надо бы проверить окрестности");
+Worlds[SADNESS].character[0].AddReplace(3, SADNESS, true, " (C горькой иронией):  Вот и поговорили. Как всегда, я один несу свою чушь в пустоту");
+Worlds[SADNESS].character[0].AddReplace(3, FEAR, false, " (Взяв себя в руки): Ладно... ладно. Сосредоточься. Нужно идти дальше.");
+Worlds[SADNESS].character[0].AddReplace(3, CALM, false, " (Смирившись): Тишина... Иногда она лучше любых слов");*/
 
-     Worlds[SADNESS].character[0].AddReplace(2, FEAR, true," (В ужасе): Ой... Прости... Я не хотел... Я не хотел ломать...");
-     Worlds[SADNESS].character[0].AddReplace(2, ANGER, true, " (С новым приливом ярости): Да сгнивай ты тут, кому ты нужен!");
-     Worlds[SADNESS].character[0].AddReplace(2, FEAR, false," (С облегчением): Фух... Кажется, ничего страшного.Просто дерево.");
-
-     Worlds[SADNESS].character[0].AddReplace(3, SADNESS, true, " (C горькой иронией):  Вот и поговорили. Как всегда, я один несу свою чушь в пустоту");
-     Worlds[SADNESS].character[0].AddReplace(3, FEAR, false, " (Взяв себя в руки): Ладно... ладно. Сосредоточься. Нужно идти дальше.");
-     Worlds[SADNESS].character[0].AddReplace(3, CALM, false, " (Смирившись): Тишина... Иногда она лучше любых слов");*/
-
-}
 
 // Реализации методов GameLogicSystem
 Emotion_ GameLogicSystem::GetOpposite(Emotion_ feels) {
@@ -677,7 +527,7 @@ void StatisticsCollector::ClearStatistics() {
 void GameCore::InitGame() {
 
     Init.CreateWorlds();
-    Init.Dialogues();
+    //Manager.LoadAllNPCs();
 
 }
 
@@ -742,63 +592,16 @@ void GameCore::InitInfo() {
 }
 
 void GameCore::ShowDialog(const string& npcID, int textID) {
-    TextManager& dialogManager = Init.GetDialogManager();
 
-    string npcText = dialogManager.GetNPCtext(npcID, textID);
-    cout << npcText << endl << endl;
 
-    vector<string> answers = dialogManager.GetAnswers(npcID, textID);
 
-    for (int i = 0; i < answers.size(); i++) {
-        cout << (i + 1) << ") " << answers[i] << endl;
-    }
 }
 
 void GameCore::ProcessDialog() {
 
-    /*vector <string> AvailableNPC;
-
-    for (int i = 0; i < Manager.ReturnSizeAllNPCs(); i++) {
-
-        AvailableNPC = Manager.GetNPCsInWorld(Worlds[Hero.current_loc].linked_emotion);
-
-    }*/
 
 
-    //TextManager& dialogManager = Init.GetDialogManager();
 
-    // Автоматически получаем NPC для текущего мира
-    vector<string> availableNPCs = Manager.GetNPCsInWorld((Emotion_)Hero.current_loc);
-
-    if (availableNPCs.empty()) {
-        cout << "Здесь нет никого, с кем можно поговорить." << endl;
-        return;
-    }
-
-    // Если NPC только один - сразу начинаем диалог с ним
-    if (availableNPCs.size() == 1) {
-        cout << "Вы начинаете диалог..." << endl << endl;
-        ShowDialog(availableNPCs[0], 0); // начинаем с текста 0
-        return;
-    }
-
-    // Если NPC несколько - показываем список для выбора
-    cout << "Вы можете поговорить с:" << endl;
-    for (int i = 0; i < availableNPCs.size(); i++) {
-        cout << (i + 1) << ") " << availableNPCs[i] << endl;
-    }
-
-    cout << "С кем хотите поговорить? ";
-    int choice;
-    cin >> choice;
-
-    if (choice > 0 && choice <= availableNPCs.size()) {
-        cout << endl;
-        ShowDialog(availableNPCs[choice - 1], 0); // начинаем с текста 0
-    }
-    else {
-        cout << "Неверный выбор!" << endl;
-    }
 }
 
 void GameCore::Go() {
