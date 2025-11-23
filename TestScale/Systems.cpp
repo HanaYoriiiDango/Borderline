@@ -1,4 +1,4 @@
-#include "systems.h"
+﻿#include "systems.h"
 #include <iostream>
 #include <iomanip>
 #include <cstdlib>
@@ -56,28 +56,26 @@ void InitSystem::CreatePortals(Emotion_ WorldEmotion) {
 // Реализации методов текстового менеджера 
 // Загрузка JSON файла
 
-bool TextManager::LoadNPC(const string& world, const string& filename) {
-
+void TextManager::LoadNPC(const string& world, const string& filename) {
     string filepath = "data/dialogs/" + world + "/" + filename;
 
     std::ifstream file(filepath);
     if (!file.is_open()) {
-        cout << "Ошибка открытия файла: " << filepath << endl;
-        return false;
+        cout << "Ошибка: не могу открыть файл " << filepath << endl;
+        return;
     }
 
     try {
-        // Извлекаем имя NPC из имени файла (убираем .json)
-        string npcID = filename.substr(0, filename.find(".json"));
-
-        // Загружаем JSON данные
         json npcData;
         file >> npcData;
 
-        // Добавляем информацию о мире
+        // Получаем ID из JSON, а не из имени файла
+        string npcID = npcData["id"];
+
+        // Добавляем/проверяем world_link
         npcData["world_link"] = world;
 
-        // Сохраняем в общую коллекцию
+        // Сохраняем по правильному ID
         AllNPCs[npcID] = npcData;
 
         cout << "Загружен NPC: " << npcID << " из мира " << world << endl;
@@ -85,8 +83,6 @@ bool TextManager::LoadNPC(const string& world, const string& filename) {
     catch (const exception& e) {
         cout << "Ошибка загрузки NPC из " << filepath << ": " << e.what() << endl;
     }
-
-    return true;
 }
 
 void TextManager::LoadAllNPCs() {
@@ -102,6 +98,107 @@ void TextManager::LoadAllNPCs() {
     }
 }
 
+string TextManager::GetNPCtext(const string& npcID, int textID) {
+    // Шаг 1: Проверяем существует ли NPC
+    if (AllNPCs.find(npcID) == AllNPCs.end()) {
+        return "NPC '" + npcID + "' не найден";
+    }
+
+    // Шаг 2: Проверяем структуру данных NPC
+    try {
+        const auto& npc = AllNPCs[npcID];
+
+        // Проверяем что есть тексты и нужный textID
+        if (!npc.contains("texts") || !npc["texts"].is_array()) {
+            return "У NPC '" + npcID + "' нет текстов";
+        }
+
+        const auto& texts = npc["texts"];
+        if (textID < 0 || textID >= texts.size()) {
+            return "У NPC '" + npcID + "' нет текста с ID " + to_string(textID);
+        }
+
+        // Получаем конкретный текст
+        const auto& textObj = texts[textID];
+        if (!textObj.contains("text") || !textObj["text"].is_string()) {
+            return "У текста NPC нет поля 'text'";
+        }
+
+        return textObj["text"];
+    }
+    catch (const exception& e) {
+        return "Ошибка получения текста: " + string(e.what());
+    }
+}
+
+vector<string> TextManager::GetAnswers(const string& npcID, int textID) {
+    vector<string> answers;
+
+    // Базовая проверка существования NPC
+    if (AllNPCs.find(npcID) == AllNPCs.end()) {
+        return answers; // возвращаем пустой вектор
+    }
+
+    try {
+        const auto& npc = AllNPCs[npcID];
+
+        // Проверяем тексты
+        if (!npc.contains("texts") || !npc["texts"].is_array()) {
+            return answers;
+        }
+
+        const auto& texts = npc["texts"];
+
+        // Проверяем textID
+        if (textID < 0 || textID >= texts.size()) {
+            return answers;
+        }
+
+        const auto& textObj = texts[textID];
+
+        // Проверяем answers
+        if (!textObj.contains("answers") || !textObj["answers"].is_array()) {
+            return answers;
+        }
+
+        const auto& jsonAnswers = textObj["answers"];
+
+        // Извлекаем только тексты ответов
+        for (const auto& answerObj : jsonAnswers) {
+            if (answerObj.contains("text") && answerObj["text"].is_string()) {
+                answers.push_back(answerObj["text"]);
+            }
+        }
+    }
+    catch (...) {
+        // В случае любой ошибки - просто возвращаем пустой вектор
+    }
+
+    return answers;
+}
+
+vector<string> TextManager::GetNPCsInWorld(Emotion_ world) {
+    vector<string> npcsInWorld;
+    string worldName = Emotion_Names[world]; // "SADNESS", "JOY" и т.д.
+
+    for (const auto& pair : AllNPCs) {
+        const string& npcID = pair.first;
+        const json& npcData = pair.second;
+
+        try {
+            // Проверяем, что NPC принадлежит текущему миру
+            if (npcData.contains("world_link") &&
+                npcData["world_link"] == worldName) {
+                npcsInWorld.push_back(npcID);
+            }
+        }
+        catch (...) {
+            // Игнорируем NPC с некорректными данными
+        }
+    }
+
+    return npcsInWorld;
+}
 // Реализации методов NPC
 void NPC::AddReplace(int textID, Emotion_ id, bool sign, string t) {
 
@@ -636,17 +733,54 @@ void GameCore::InitInfo() {
     Init.Info();
 }
 
+void GameCore::ShowDialog(const string& npcID, int textID) {
+    TextManager& dialogManager = Init.GetDialogManager();
+
+    string npcText = dialogManager.GetNPCtext(npcID, textID);
+    cout << npcText << endl << endl;
+
+    vector<string> answers = dialogManager.GetAnswers(npcID, textID);
+
+    for (int i = 0; i < answers.size(); i++) {
+        cout << (i + 1) << ") " << answers[i] << endl;
+    }
+}
+
 void GameCore::ProcessDialog() {
+    TextManager& dialogManager = Init.GetDialogManager();
 
+    // Автоматически получаем NPC для текущего мира
+    vector<string> availableNPCs = dialogManager.GetNPCsInWorld((Emotion_)Hero.current_loc);
 
+    if (availableNPCs.empty()) {
+        cout << "Здесь нет никого, с кем можно поговорить." << endl;
+        return;
+    }
 
+    // Если NPC только один - сразу начинаем диалог с ним
+    if (availableNPCs.size() == 1) {
+        cout << "Вы начинаете диалог..." << endl << endl;
+        ShowDialog(availableNPCs[0], 0); // начинаем с текста 0
+        return;
+    }
 
+    // Если NPC несколько - показываем список для выбора
+    cout << "Вы можете поговорить с:" << endl;
+    for (int i = 0; i < availableNPCs.size(); i++) {
+        cout << (i + 1) << ") " << availableNPCs[i] << endl;
+    }
 
-    /*if (Hero.current_loc == SADNESS) {
+    cout << "С кем хотите поговорить? ";
+    int choice;
+    cin >> choice;
 
-        ShowDialog("sadness_log", 0);
-
-    }*/
+    if (choice > 0 && choice <= availableNPCs.size()) {
+        cout << endl;
+        ShowDialog(availableNPCs[choice - 1], 0); // начинаем с текста 0
+    }
+    else {
+        cout << "Неверный выбор!" << endl;
+    }
 }
 
 void GameCore::Go() {

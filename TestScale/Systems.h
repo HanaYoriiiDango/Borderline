@@ -11,8 +11,12 @@ private:
 
 public:
     void LoadAllNPCs();
-    bool LoadNPC(const string& world, const string& filename);
+    void LoadNPC(const string& world, const string& filename);
+    string GetNPCtext(const string& npcID, int textID);
+    vector<string> GetAnswers(const string& npcID, int textID);
+    void ShowDialog(const string& npcID, int textID);
 
+    vector<string> GetNPCsInWorld(Emotion_ world);
 };
 
 class InitSystem { // инициализация 
@@ -112,6 +116,7 @@ public:
     void Go();
     void ProcessCommand();
     void ProcessClear();
+    void ShowDialog(const string& npcID, int textID);
     void ProcessDialog();
 
 };
