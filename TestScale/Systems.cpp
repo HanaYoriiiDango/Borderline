@@ -1,4 +1,4 @@
-#include "systems.h"
+﻿#include "systems.h"
 #include <iostream>
 #include <iomanip>
 #include <cstdlib>
@@ -56,21 +56,27 @@ void InitSystem::CreatePortals(Emotion_ WorldEmotion) {
 // Реализации методов текстового менеджера 
 // Загрузка JSON файла
 bool TextManager::DialogLoader(const string& filename) {
-    std::ifstream file(filename);
-    if (!file.is_open()) {
-        cout << "Ошибка открытия файла: " << filename << endl;
-        return false;
-    }
 
-    try {
-        file >> DialogData;  // ← ВСЁ! Всего одна строка!
-        cout << "Диалоги загружены: " << filename << endl;
-        return true;
-    }
-    catch (const exception& e) {
-        cout << "Ошибка загрузки JSON: " << e.what() << endl;
-        return false;
-    }
+
+
+
+
+
+    //std::ifstream file(filename);
+    //if (!file.is_open()) {
+    //    cout << "Ошибка открытия файла: " << filename << endl;
+    //    return false;
+    //}
+
+    //try {
+    //    file >> DialogData;  // ← ВСЁ! Всего одна строка!
+    //    cout << "Диалоги загружены: " << filename << endl;
+    //    return true;
+    //}
+    //catch (const exception& e) {
+    //    cout << "Ошибка загрузки JSON: " << e.what() << endl;
+    //    return false;
+    //}
 }
 
 // Получение текста NPC
