@@ -6,10 +6,16 @@
 using json = nlohmann::json;
 
 class TextManager {
-private:
+private: 
     unordered_map<string, json> AllNPCs; // кэширование для всех npc
 
+
 public:
+    int ReturnSizeAllNPCs();
+    vector<string> FindNPCsByKeyValue(const string& key, const string& value);
+    bool HasKey(const string& npcID, const string& key);
+    bool CheckKeyValue(const string& npcID, const string& key, const string& expectedValue);
+
     void LoadAllNPCs();
     void LoadNPC(const string& world, const string& filename);
     string GetNPCtext(const string& npcID, int textID);
@@ -99,6 +105,7 @@ private:
     StatisticsCollector Collector;
     GameLogicSystem Logic;
     InputSystem Input;
+    TextManager Manager;
     string temp;
 
 

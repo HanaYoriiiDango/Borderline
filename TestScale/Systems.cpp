@@ -1,4 +1,4 @@
-﻿#include "systems.h"
+#include "systems.h"
 #include <iostream>
 #include <iomanip>
 #include <cstdlib>
@@ -179,7 +179,7 @@ vector<string> TextManager::GetAnswers(const string& npcID, int textID) {
 
 vector<string> TextManager::GetNPCsInWorld(Emotion_ world) {
     vector<string> npcsInWorld;
-    string worldName = Emotion_Names[world]; // "SADNESS", "JOY" и т.д.
+    Emotion_ worldName = world; // "SADNESS", "JOY" и т.д.
 
     for (const auto& pair : AllNPCs) {
         const string& npcID = pair.first;
@@ -199,6 +199,14 @@ vector<string> TextManager::GetNPCsInWorld(Emotion_ world) {
 
     return npcsInWorld;
 }
+
+int TextManager::ReturnSizeAllNPCs() {
+
+    int size = AllNPCs.size();
+    return size;
+
+}
+
 // Реализации методов NPC
 void NPC::AddReplace(int textID, Emotion_ id, bool sign, string t) {
 
@@ -747,10 +755,20 @@ void GameCore::ShowDialog(const string& npcID, int textID) {
 }
 
 void GameCore::ProcessDialog() {
-    TextManager& dialogManager = Init.GetDialogManager();
+
+    /*vector <string> AvailableNPC;
+
+    for (int i = 0; i < Manager.ReturnSizeAllNPCs(); i++) {
+
+        AvailableNPC = Manager.GetNPCsInWorld(Worlds[Hero.current_loc].linked_emotion);
+
+    }*/
+
+
+    //TextManager& dialogManager = Init.GetDialogManager();
 
     // Автоматически получаем NPC для текущего мира
-    vector<string> availableNPCs = dialogManager.GetNPCsInWorld((Emotion_)Hero.current_loc);
+    vector<string> availableNPCs = Manager.GetNPCsInWorld((Emotion_)Hero.current_loc);
 
     if (availableNPCs.empty()) {
         cout << "Здесь нет никого, с кем можно поговорить." << endl;
