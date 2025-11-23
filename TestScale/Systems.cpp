@@ -1,4 +1,4 @@
-﻿#include "systems.h"
+#include "systems.h"
 #include <iostream>
 #include <iomanip>
 #include <cstdlib>
@@ -55,67 +55,51 @@ void InitSystem::CreatePortals(Emotion_ WorldEmotion) {
 
 // Реализации методов текстового менеджера 
 // Загрузка JSON файла
-bool TextManager::DialogLoader(const string& filename) {
 
+bool TextManager::LoadNPC(const string& world, const string& filename) {
 
+    string filepath = "data/dialogs/" + world + "/" + filename;
 
+    std::ifstream file(filepath);
+    if (!file.is_open()) {
+        cout << "Ошибка открытия файла: " << filepath << endl;
+        return false;
+    }
 
-
-
-    //std::ifstream file(filename);
-    //if (!file.is_open()) {
-    //    cout << "Ошибка открытия файла: " << filename << endl;
-    //    return false;
-    //}
-
-    //try {
-    //    file >> DialogData;  // ← ВСЁ! Всего одна строка!
-    //    cout << "Диалоги загружены: " << filename << endl;
-    //    return true;
-    //}
-    //catch (const exception& e) {
-    //    cout << "Ошибка загрузки JSON: " << e.what() << endl;
-    //    return false;
-    //}
-}
-
-// Получение текста NPC
-string TextManager::GetNPCtext(const string& npcID, int textID) {
     try {
-        // Автоматические проверки и преобразования
-        return DialogData["npcs"][npcID]["texts"][textID]["text"];
+        // Извлекаем имя NPC из имени файла (убираем .json)
+        string npcID = filename.substr(0, filename.find(".json"));
+
+        // Загружаем JSON данные
+        json npcData;
+        file >> npcData;
+
+        // Добавляем информацию о мире
+        npcData["world_link"] = world;
+
+        // Сохраняем в общую коллекцию
+        AllNPCs[npcID] = npcData;
+
+        cout << "Загружен NPC: " << npcID << " из мира " << world << endl;
     }
     catch (const exception& e) {
-        return "Текст не найден";
+        cout << "Ошибка загрузки NPC из " << filepath << ": " << e.what() << endl;
     }
+
+    return true;
 }
 
-// Количество текстов у NPC
-int TextManager::GetNPCcount(const string& npcID) {
-    try {
-        return DialogData["npcs"][npcID]["texts"].size();
-    }
-    catch (...) {
-        return 0;
-    }
-}
-
-// Получение ответов
-vector<string> TextManager::GetAnswers(const string& npcID, int textID) {
-    vector<string> answers;
-
-    try {
-        // Автоматически конвертирует JSON array в vector<string>
-        auto jsonAnswers = DialogData["npcs"][npcID]["texts"][textID]["answers"];
-        for (const auto& answer : jsonAnswers) {
-            answers.push_back(answer["text"]);
+void TextManager::LoadAllNPCs() {
+    
+    for (const string& world_folder : Folders) {
+        
+        if (world_folder == "SADNESS") {
+            LoadNPC(world_folder, "Sadness_Beam.json");
+        }
+        if (world_folder == "JOY") {
+            LoadNPC(world_folder, "Joy_Beam.json");
         }
     }
-    catch (...) {
-        // Просто возвращаем пустой вектор в случае ошибки
-    }
-
-    return answers;
 }
 
 // Реализации методов NPC
@@ -133,11 +117,7 @@ void NPC::AddtextNPC(int id, string t) {
 
 void InitSystem::Dialogues() {
 
-    if (DialogManager.DialogLoader("data/dialogs.json")) {
-
-        cout << "Загрузка диалогов прошла успешно!" << endl;
-
-    }
+    DialogManager.LoadAllNPCs();  // Просто вызываем загрузку всех NPC
 
     /* Worlds[SADNESS].character.emplace_back();
      Worlds[SADNESS].character[0].name = "Beam";
@@ -656,46 +636,17 @@ void GameCore::InitInfo() {
     Init.Info();
 }
 
-int GameCore::DialogList(int npcID, int textID, int action) {
-
-    int choice;
-
-    cout << endl;
-
-    Output.OutputStates();
-    cout << endl;
-
-    Output.OutputDialog(npcID, textID);
-
-    cin >> choice;
-    Input.InputHandler(choice, npcID, textID);
-
-    if (action == choice) return action;
-
-}
-
-void GameCore::ShowDialog(const string& npcId, int textId) {  
-
-    TextManager& dialogManager = Init.GetDialogManager();
-
-    string npcText = dialogManager.GetNPCtext(npcId, textId);
-    cout << "NAME" << npcText << endl;
-
-    vector<string> answers = dialogManager.GetAnswers(npcId, textId);
-
-    for (int i = 0; i < answers.size(); i++) {
-        std::cout << (i + 1) << ") " << answers[i] << std::endl;
-    }
-    
-}
-
 void GameCore::ProcessDialog() {
 
-    if (Hero.current_loc == SADNESS) {
+
+
+
+
+    /*if (Hero.current_loc == SADNESS) {
 
         ShowDialog("sadness_log", 0);
 
-    }
+    }*/
 }
 
 void GameCore::Go() {

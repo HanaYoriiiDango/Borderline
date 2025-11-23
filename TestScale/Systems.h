@@ -5,16 +5,14 @@
 
 using json = nlohmann::json;
 
-
 class TextManager {
 private:
-    json DialogData;  
+    unordered_map<string, json> AllNPCs; // кэширование для всех npc
 
 public:
-    bool DialogLoader(const string& filename);
-    string GetNPCtext(const string& npcID, int textID);
-    int GetNPCcount(const string& npcID);
-    vector<string> GetAnswers(const string& npcID, int textID);
+    void LoadAllNPCs();
+    bool LoadNPC(const string& world, const string& filename);
+
 };
 
 class InitSystem { // инициализация 
@@ -111,8 +109,6 @@ public:
     void Help();
     void StatusInfo();
     void InitInfo();
-    int DialogList(int npcID, int textID, int action = -1);
-    void ShowDialog(const string& npcId, int textId);
     void Go();
     void ProcessCommand();
     void ProcessClear();
