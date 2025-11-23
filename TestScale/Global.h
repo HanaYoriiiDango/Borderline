@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <vector>
 #include <string>
 #include <ctime> 
@@ -23,18 +23,26 @@ struct Portal_ {
     bool open = true;
 };
 
-struct Peplace {
-    Emotion_ id;
-    bool sign;
+// Структура для ответов
+struct DialogAnswer {
     string text;
+    Emotion_ emotion;
+    bool sign; // true = увеличить, false = уменьшить
 };
 
-struct Text_NPC {
-    int ID;
+// Структура для текста NPC
+struct DialogText {
+    int id;
     string text;
-    vector<Peplace> Answer;
+    vector<DialogAnswer> answers;
+};
 
-
+// Структура для NPC
+struct NPC {
+    string id;
+    string name;
+    Emotion_ world_link; // Линк персонажа с миром 
+    vector<DialogText> texts;
 };
 
 struct Player {
@@ -43,22 +51,12 @@ struct Player {
     bool life = true;
 };
 
-class NPC {
-public:
-    string name;
-    int ID;
-    vector<Text_NPC> text_NPC;
-    void AddtextNPC(int id, string t);
-    void AddReplace(int textID, Emotion_ id, bool sign, string t);
-
-};
-
 struct Location {
     string name; 
     Emotion_ linked_emotion;
     bool is_locked = false;
     vector<Portal_> portal;
-    vector<NPC> character;
+ 
 };
 
 
@@ -85,3 +83,4 @@ struct GameSession {
 // Глобальные переменные
 extern Player Hero;
 extern Location Worlds[COUNT_Emotions];
+extern vector<NPC> Characters; // Все NPC игры

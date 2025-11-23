@@ -1,4 +1,4 @@
-﻿#include "systems.h"
+#include "systems.h"
 #include <iostream>
 #include <iomanip>
 #include <cstdlib>
