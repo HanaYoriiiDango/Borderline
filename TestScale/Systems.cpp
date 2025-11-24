@@ -1,4 +1,4 @@
-﻿#include "systems.h"
+#include "systems.h"
 #include <iostream>
 #include <iomanip>
 #include <cstdlib>
@@ -511,7 +511,7 @@ void OutputSystem::OutputStates() {
 
     for (int i = 0; i < Emotion.size(); i++) {
 
-        cout << left << setw(20) << Emotion_Names[i] << "\t" <<
+        cout << left << setw(40) << Emotion_Names[i] << "\t" <<
             ((Hero.emotions[i] > 98 || Hero.emotions[i] < 2) ? "Disabled" : to_string(Hero.emotions[i])) << endl;
 
     }
@@ -730,6 +730,8 @@ void GameCore::ShowDialog(NPC* npc) {
         cout << "Этот NPC не может говорить." << endl;
         return;
     }
+
+    Output.OutputStates();
 
     // Начинаем с первого текста (id = 0)
     int currentTextID = 0;
