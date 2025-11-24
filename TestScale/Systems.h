@@ -7,20 +7,21 @@ using json = nlohmann::json;
 
 class TextManager {
 public:
-    // Основная функция загрузки ВСЕХ NPC
+    // Общие методы
     void LoadAllNPCs();
-
-    // Утилиты для поиска NPC
     vector<NPC*> GetNPCsInWorld(Emotion_ world);
     NPC* GetNPCByID(const string& npcID);
     bool HasNPCInWorld(Emotion_ world);
 
 private:
-    // Вспомогательные функции
+    // Внутренние методы
+    vector<string> FindWorldFolders();
+    vector<string> FindJSONFiles(const string& folderPath);
     NPC LoadNPCFromFile(const string& filepath);
+    DialogText ParseDialogText(const json& textJson);
+    DialogAnswer ParseAnswer(const json& answerJson);
     Emotion_ StringToEmotion(const string& emotionStr);
 };
-
 
 class InitSystem { // инициализация 
 public:

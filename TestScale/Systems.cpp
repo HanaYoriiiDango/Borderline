@@ -1,10 +1,12 @@
 #include "systems.h"
+#include <filesystem>
 #include <iostream>
 #include <iomanip>
 #include <cstdlib>
 #include <ctime>
 
 using namespace std;
+namespace fs = std::filesystem;
 
 // Реализации методов InitSystem 
 void InitSystem::Info() {
@@ -66,12 +68,32 @@ Emotion_ TextManager::StringToEmotion(const string& emotionStr) {
     return COUNT_Emotions;
 }
 
+DialogAnswer TextManager::ParseAnswer(const json& answerJson) {
+    DialogAnswer answer;
+    answer.text = answerJson["text"];
+    answer.emotion = StringToEmotion(answerJson["emotion"]);
+    answer.sign = answerJson["sign"];
+    return answer;
+}
+
+DialogText TextManager::ParseDialogText(const json& textJson) {
+    DialogText text;
+    text.id = textJson["id"];
+    text.text = textJson["text"];
+
+    for (const auto& answerJson : textJson["answers"]) {
+        text.answers.push_back(ParseAnswer(answerJson));
+    }
+
+    return text;
+}
+
 NPC TextManager::LoadNPCFromFile(const string& filepath) {
     NPC npc;
 
     ifstream file(filepath);
     if (!file.is_open()) {
-        cout << "Ошибка: не могу открыть " << filepath << endl;
+        cerr << "Не могу открыть: " << filepath << endl;
         return npc;
     }
 
@@ -79,71 +101,71 @@ NPC TextManager::LoadNPCFromFile(const string& filepath) {
         json jsonData;
         file >> jsonData;
 
-        // Заполняем структуру NPC из JSON
         npc.id = jsonData["id"];
         npc.name = jsonData["name"];
         npc.world_link = StringToEmotion(jsonData["world_link"]);
 
-        // Загружаем тексты
         for (const auto& textJson : jsonData["texts"]) {
-            DialogText text;
-            text.id = textJson["id"];
-            text.text = textJson["text"];
-
-            // Загружаем ответы
-            for (const auto& answerJson : textJson["answers"]) {
-                DialogAnswer answer;
-                answer.text = answerJson["text"];
-                answer.emotion = StringToEmotion(answerJson["emotion"]);
-                answer.sign = answerJson["sign"];
-                text.answers.push_back(answer);
-            }
-
-            npc.texts.push_back(text);
+            npc.texts.push_back(ParseDialogText(textJson));
         }
-
-        cout << "Успешно: " << npc.id << " (" << npc.name << ")" << endl;
     }
     catch (const exception& e) {
-        cout << "Ошибка загрузки " << filepath << ": " << e.what() << endl;
+        cerr << "Ошибка в файле " << filepath << ": " << e.what() << endl;
     }
 
     return npc;
 }
 
-void TextManager::LoadAllNPCs() {
+vector<string> TextManager::FindJSONFiles(const string& folderPath) {
+    vector<string> files;
 
-    for (const string& folder_world : Folder_Names) {
-        string folderPath = "data/dialogs/" + folder_world + "/";
+    if (!fs::exists(folderPath)) return files;
 
-        // Пока загружаем только известные файлы
-        if (folder_world == "SADNESS") {
-            NPC npc = LoadNPCFromFile(folderPath + "Sadness_Beam.json");
-            Characters.push_back(npc);
-        }
-        if (folder_world == "JOY") {
-            NPC npc = LoadNPCFromFile(folderPath + "Joy_Beam.json");
-            Characters.push_back(npc);
-        }
-        if (folder_world == "ANGER") {
-            NPC npc = LoadNPCFromFile(folderPath + "Anger_Beam.json");
-            Characters.push_back(npc);
-        }
-        if (folder_world == "FEAR") {
-            NPC npc = LoadNPCFromFile(folderPath + "Fear_Beam.json");
-            Characters.push_back(npc);
-        }
-        if (folder_world == "POWER") {
-            NPC npc = LoadNPCFromFile(folderPath + "Power_Beam.json");
-            Characters.push_back(npc);
-        }
-        if (folder_world == "CALM") {
-            NPC npc = LoadNPCFromFile(folderPath + "Calm_Beam.json");
-            Characters.push_back(npc);
+    for (const auto& entry : fs::directory_iterator(folderPath)) {
+        if (entry.is_regular_file() && entry.path().extension() == ".json") {
+            files.push_back(entry.path().filename().string());
         }
     }
 
-    cout << "Загружено NPC: " << Characters.size() << endl;
+    return files;
+}
+vector<string> TextManager::FindWorldFolders() {
+    vector<string> worlds;
+    string basePath = "data/dialogs/";
+
+    if (!fs::exists(basePath)) return worlds;
+
+    for (const auto& entry : fs::directory_iterator(basePath)) {
+        if (entry.is_directory()) {
+            worlds.push_back(entry.path().filename().string());
+        }
+    }
+
+    return worlds;
+}
+
+void TextManager::LoadAllNPCs() {
+    auto worldFolders = FindWorldFolders();
+    int totalLoaded = 0;
+
+    for (const string& world : worldFolders) {
+        string path = "data/dialogs/" + world + "/";
+        auto files = FindJSONFiles(path);
+
+        if (!files.empty()) {
+            cout << world << ": " << files.size() << " NPC" << endl;
+        }
+
+        for (const string& file : files) {
+            NPC npc = LoadNPCFromFile(path + file);
+            if (!npc.id.empty()) {
+                Characters.push_back(move(npc));
+                totalLoaded++;
+            }
+        }
+    }
+
+    cout << "Всего загружено: " << totalLoaded << " NPC из " << worldFolders.size() << " миров" << endl;
 }
 
 vector<NPC*> TextManager::GetNPCsInWorld(Emotion_ world) {
