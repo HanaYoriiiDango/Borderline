@@ -56,24 +56,111 @@ void InitSystem::CreatePortals(Emotion_ WorldEmotion) {
 // Реализации методов текстового менеджера 
 // Загрузка JSON файла
 
-
-
-
-
-
-
-// Реализации методов NPC
-void NPC::AddReplace(int textID, Emotion_ id, bool sign, string t) {
-
-    text_NPC[textID].Answer.push_back({ id, sign, t });
-
+Emotion_ TextManager::StringToEmotion(const string& emotionStr) {
+    if (emotionStr == "SADNESS") return SADNESS;
+    if (emotionStr == "JOY") return JOY;
+    if (emotionStr == "FEAR") return FEAR;
+    if (emotionStr == "POWER") return POWER;
+    if (emotionStr == "CALM") return CALM;
+    if (emotionStr == "ANGER") return ANGER;
+    return COUNT_Emotions;
 }
 
-void NPC::AddtextNPC(int id, string t) {
+NPC TextManager::LoadNPCFromFile(const string& filepath) {
+    NPC npc;
 
-    text_NPC.push_back({ id, t });
+    ifstream file(filepath);
+    if (!file.is_open()) {
+        cout << "Ошибка: не могу открыть " << filepath << endl;
+        return npc;
+    }
 
+    try {
+        json jsonData;
+        file >> jsonData;
+
+        // Заполняем структуру NPC из JSON
+        npc.id = jsonData["id"];
+        npc.name = jsonData["name"];
+        npc.world_link = StringToEmotion(jsonData["world_link"]);
+
+        // Загружаем тексты
+        for (const auto& textJson : jsonData["texts"]) {
+            DialogText text;
+            text.id = textJson["id"];
+            text.text = textJson["text"];
+
+            // Загружаем ответы
+            for (const auto& answerJson : textJson["answers"]) {
+                DialogAnswer answer;
+                answer.text = answerJson["text"];
+                answer.emotion = StringToEmotion(answerJson["emotion"]);
+                answer.sign = answerJson["sign"];
+                text.answers.push_back(answer);
+            }
+
+            npc.texts.push_back(text);
+        }
+
+        cout << "Успешно: " << npc.id << " (" << npc.name << ")" << endl;
+    }
+    catch (const exception& e) {
+        cout << "Ошибка загрузки " << filepath << ": " << e.what() << endl;
+    }
+
+    return npc;
 }
+
+void TextManager::LoadAllNPCs() {
+
+    for (const string& folder_world : Folder_Names) {
+        string folderPath = "data/dialogs/" + folder_world + "/";
+
+        // Пока загружаем только известные файлы
+        if (folder_world == "SADNESS") {
+            NPC npc = LoadNPCFromFile(folderPath + "Sadness_Beam.json");
+            Characters.push_back(npc);
+        }
+        if (folder_world == "JOY") {
+            NPC npc = LoadNPCFromFile(folderPath + "Joy_Beam.json");
+            Characters.push_back(npc);
+        }
+    }
+
+    cout << "Загружено NPC: " << Characters.size() << endl;
+}
+
+vector<NPC*> TextManager::GetNPCsInWorld(Emotion_ world) {
+    vector<NPC*> result;
+
+    for (NPC& npc : Characters) {
+        if (npc.world_link == world) {
+            result.push_back(&npc);
+        }
+    }
+
+    return result;
+}
+
+bool TextManager::HasNPCInWorld(Emotion_ world) {
+    return !GetNPCsInWorld(world).empty();
+}
+
+NPC* TextManager::GetNPCByID(const string& npcID) {
+    for (NPC& npc : Characters) {
+        if (npc.id == npcID) {
+            return &npc;
+        }
+    }
+    return nullptr; // не найден
+}
+
+
+
+
+
+
+
 
 /* Worlds[SADNESS].character.emplace_back();
 Worlds[SADNESS].character[0].name = "Beam";
@@ -390,7 +477,7 @@ void GameLogicSystem::ProcessGo() {
 // Реализации методов OutputSystem 
 void OutputSystem::OutputDialog(int npcID, int textID) {
 
-    for (int i = 0; i < Worlds[Hero.current_loc].character.size(); i++) {
+    /*for (int i = 0; i < Worlds[Hero.current_loc].character.size(); i++) {
 
         if (Worlds[Hero.current_loc].character[i].ID == npcID) {
 
@@ -401,7 +488,7 @@ void OutputSystem::OutputDialog(int npcID, int textID) {
                 cout << j + 1 << ") " << Worlds[Hero.current_loc].character[npcID].text_NPC[textID].Answer[j].text << endl;
             }
         }
-    }
+    }*/
 }
 
 void OutputSystem::OutputStates() {
@@ -429,7 +516,7 @@ void OutputSystem::CommandInfo() {
 // Реализации методов InputSystem
 void InputSystem::InputHandler(int choice, int npcID, int textID) {
 
-    int actualChoice = choice - 1;
+   /* int actualChoice = choice - 1;
 
     Emotion_ selectedEmotion = COUNT_Emotions;
     bool flag;
@@ -451,7 +538,7 @@ void InputSystem::InputHandler(int choice, int npcID, int textID) {
     if (selectedEmotion != COUNT_Emotions) {
         ChangeEmotions(selectedEmotion, flag);
         statsCollector->Session.counterChoices++;
-    }
+    }*/
 }
 
 
@@ -527,7 +614,7 @@ void StatisticsCollector::ClearStatistics() {
 void GameCore::InitGame() {
 
     Init.CreateWorlds();
-    //Manager.LoadAllNPCs();
+    Manager.LoadAllNPCs();
 
 }
 
@@ -591,19 +678,93 @@ void GameCore::InitInfo() {
     Init.Info();
 }
 
-void GameCore::ShowDialog(const string& npcID, int textID) {
-
-
-
-}
-
 void GameCore::ProcessDialog() {
 
+    // Шаг 1: Проверяем есть ли NPC в текущем мире
+    if (!Manager.HasNPCInWorld(Worlds[Hero.current_loc].linked_emotion)) {
+        cout << "Здесь не с кем поговорить." << endl;
+        return;
+    }
 
+    // Шаг 2: Получаем всех NPC в этом мире
+    vector<NPC*> availableNPCs = Manager.GetNPCsInWorld(Worlds[Hero.current_loc].linked_emotion);
 
+    // Шаг 3: Если NPC один - сразу начинаем диалог
+    if (availableNPCs.size() == 1) {
+        ShowDialog(availableNPCs[0]);
+    }
+    // Если несколько - показываем выбор
+    else {
+        cout << "Вы можете поговорить с:" << endl;
+        for (int i = 0; i < availableNPCs.size(); i++) {
+            cout << (i + 1) << ") " << availableNPCs[i]->name << endl;
+        }
 
+        int choice;
+        cin >> choice;
+
+        if (choice > 0 && choice <= availableNPCs.size()) {
+            ShowDialog(availableNPCs[choice - 1]);
+        }
+    }
 }
 
+void GameCore::ShowDialog(NPC* npc) {
+    if (!npc || npc->texts.empty()) {
+        cout << "Этот NPC не может говорить." << endl;
+        return;
+    }
+
+    // Начинаем с первого текста (id = 0)
+    int currentTextID = 0;
+
+    while (true) {
+        // Находим текст по ID
+        DialogText* currentText = nullptr;
+        for (DialogText& text : npc->texts) {
+            if (text.id == currentTextID) {
+                currentText = &text;
+                break;
+            }
+        }
+
+        if (!currentText) {
+            cout << "(Диалог завершен)" << endl;
+            break;
+        }
+
+        // Показываем текст NPC
+        cout << currentText->text << endl << endl;
+
+        // Показываем ответы
+        if (currentText->answers.empty()) {
+            cout << "(Диалог завершен)" << endl;
+            break;
+        }
+
+        for (int i = 0; i < currentText->answers.size(); i++) {
+            cout << (i + 1) << ") " << currentText->answers[i].text << endl;
+        }
+
+        // Игрок выбирает ответ
+        cout << "Ваш выбор: ";
+        int choice;
+        cin >> choice;
+
+        if (choice > 0 && choice <= currentText->answers.size()) {
+            // Применяем эффект эмоции
+            DialogAnswer& selectedAnswer = currentText->answers[choice - 1];
+            Logic.ChangeEmotions(selectedAnswer.emotion, selectedAnswer.sign);
+
+            // Переходим к следующему тексту (простая логика)
+            currentTextID = choice; // или другая логика переходов
+        }
+        else {
+            cout << "Неверный выбор!" << endl;
+            break;
+        }
+    }
+}
 void GameCore::Go() {
 
     Logic.ProcessGo();

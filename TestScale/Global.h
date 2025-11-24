@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <vector>
 #include <string>
 #include <ctime> 
@@ -12,7 +12,7 @@ enum Emotion_ { JOY, SADNESS, POWER, FEAR, CALM, ANGER, COUNT_Emotions };
 
 // Внешние объявления глобальных переменных
 extern vector<Emotion_> Emotion;
-extern vector<string> Folders;
+extern vector<string> Folder_Names;
 extern string Emotion_Names[COUNT_Emotions];
 extern string Worlds_Names[COUNT_Emotions];
 

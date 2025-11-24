@@ -6,17 +6,21 @@
 using json = nlohmann::json;
 
 class TextManager {
-private: 
-    unordered_map<string, json> AllNPCs; // кэширование для всех npc
-
-
 public:
+    // Основная функция загрузки ВСЕХ NPC
+    void LoadAllNPCs();
 
+    // Утилиты для поиска NPC
+    vector<NPC*> GetNPCsInWorld(Emotion_ world);
+    NPC* GetNPCByID(const string& npcID);
+    bool HasNPCInWorld(Emotion_ world);
 
-
-
-
+private:
+    // Вспомогательные функции
+    NPC LoadNPCFromFile(const string& filepath);
+    Emotion_ StringToEmotion(const string& emotionStr);
 };
+
 
 class InitSystem { // инициализация 
 public:
@@ -109,7 +113,7 @@ public:
     void Go();
     void ProcessCommand();
     void ProcessClear();
-    void ShowDialog(const string& npcID, int textID);
+    void ShowDialog(NPC * npc);
     void ProcessDialog();
 
 };
