@@ -1,4 +1,4 @@
-#include "systems.h"
+﻿#include "systems.h"
 #include <iostream>
 #include <iomanip>
 #include <cstdlib>
@@ -123,6 +123,22 @@ void TextManager::LoadAllNPCs() {
         }
         if (folder_world == "JOY") {
             NPC npc = LoadNPCFromFile(folderPath + "Joy_Beam.json");
+            Characters.push_back(npc);
+        }
+        if (folder_world == "ANGER") {
+            NPC npc = LoadNPCFromFile(folderPath + "Anger_Beam.json");
+            Characters.push_back(npc);
+        }
+        if (folder_world == "FEAR") {
+            NPC npc = LoadNPCFromFile(folderPath + "Fear_Beam.json");
+            Characters.push_back(npc);
+        }
+        if (folder_world == "POWER") {
+            NPC npc = LoadNPCFromFile(folderPath + "Power_Beam.json");
+            Characters.push_back(npc);
+        }
+        if (folder_world == "CALM") {
+            NPC npc = LoadNPCFromFile(folderPath + "Calm_Beam.json");
             Characters.push_back(npc);
         }
     }
