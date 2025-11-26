@@ -84,25 +84,39 @@ class OutputSystem : NPC { // обработка вывода
 public:
 
     void OutputDialog(int npcID, int textID);
-    void OutputStates();
-    void CommandInfo();
+ 
+
+};
+
+class DialogSystem {
+private:
+    TextManager& textManager;
+    GameLogicSystem& gameLogic;
+
+
+public:
+    DialogSystem(TextManager& tm, GameLogicSystem& gl)
+        :textManager(tm), gameLogic(gl) {};
+    
+    void RunDialog(NPC* npc);
+    void ProcessDialog();
+
 
 };
 
 class GameCore { // игровое ядро, все системы разделены по модулям 
 private:
     InitSystem Init;
-    OutputSystem Output;
+    TextManager Manager;
+    DialogSystem Dialog;
     StatisticsCollector Collector;
     GameLogicSystem Logic;
-    InputSystem Input;
-    TextManager Manager;
     string temp;
 
 
 public:
 
-    GameCore() : Logic(&Collector), Input(&Collector) {}
+    GameCore() : Logic(&Collector), Dialog(Manager, Logic) {};
 
     void InitGame();
     void StartGame();
@@ -111,10 +125,8 @@ public:
     void Help();
     void StatusInfo();
     void InitInfo();
-    void Go();
     void ProcessCommand();
     void ProcessClear();
-    void ShowDialog(NPC * npc);
     void ProcessDialog();
 
 };

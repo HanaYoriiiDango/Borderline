@@ -1,4 +1,4 @@
-﻿#include "systems.h"
+#include "systems.h"
 #include <filesystem>
 #include <iostream>
 #include <iomanip>
@@ -529,28 +529,6 @@ void OutputSystem::OutputDialog(int npcID, int textID) {
     }*/
 }
 
-void OutputSystem::OutputStates() {
-
-    for (int i = 0; i < Emotion.size(); i++) {
-
-        cout << left << setw(40) << Emotion_Names[i] << "\t" <<
-            ((Hero.emotions[i] > 98 || Hero.emotions[i] < 2) ? "Disabled" : to_string(Hero.emotions[i])) << endl;
-
-    }
-}
-
-void OutputSystem::CommandInfo() {
-
-    cout << "help - список команд \n";
-    cout << "edit - изменить эмоции\n";
-    cout << "info - информация о инициализированных объектах \n";
-    cout << "status - информация о состоянии персонажа \n";
-    cout << "go - для перемещения \n";
-    cout << "start - начать диалог с персонажем (если есть с кем поболтать)\n";
-    cout << "exit - завершить игровую сессию\n";
-
-}
-
 // Реализации методов InputSystem
 void InputSystem::InputHandler(int choice, int npcID, int textID) {
 
@@ -705,31 +683,44 @@ void GameCore::Edit() {
 }
 
 void GameCore::Help() {
-    Output.CommandInfo();
+
+    cout << "help - список команд \n";
+    cout << "edit - изменить эмоции\n";
+    cout << "info - информация о инициализированных объектах \n";
+    cout << "status - информация о состоянии персонажа \n";
+    cout << "go - для перемещения \n";
+    cout << "start - начать диалог с персонажем (если есть с кем поболтать)\n";
+    cout << "exit - завершить игровую сессию\n";
+
 }
 
 void GameCore::StatusInfo() {
-    Output.OutputStates();
+    for (int i = 0; i < Emotion.size(); i++) {
+
+        cout << left << setw(40) << Emotion_Names[i] << "\t" <<
+            ((Hero.emotions[i] > 98 || Hero.emotions[i] < 2) ? "Disabled" : to_string(Hero.emotions[i])) << endl;
+
+    }
 }
 
 void GameCore::InitInfo() {
     Init.Info();
 }
 
-void GameCore::ProcessDialog() {
+void DialogSystem::ProcessDialog() {
 
     // Шаг 1: Проверяем есть ли NPC в текущем мире
-    if (!Manager.HasNPCInWorld(Worlds[Hero.current_loc].linked_emotion)) {
+    if (!textManager.HasNPCInWorld(Worlds[Hero.current_loc].linked_emotion)) {
         cout << "Здесь не с кем поговорить." << endl;
         return;
     }
 
     // Шаг 2: Получаем всех NPC в этом мире
-    vector<NPC*> availableNPCs = Manager.GetNPCsInWorld(Worlds[Hero.current_loc].linked_emotion);
+    vector<NPC*> availableNPCs = textManager.GetNPCsInWorld(Worlds[Hero.current_loc].linked_emotion);
 
     // Шаг 3: Если NPC один - сразу начинаем диалог
     if (availableNPCs.size() == 1) {
-        ShowDialog(availableNPCs[0]);
+        RunDialog(availableNPCs[0]);
     }
     // Если несколько - показываем выбор
     else {
@@ -742,18 +733,16 @@ void GameCore::ProcessDialog() {
         cin >> choice;
 
         if (choice > 0 && choice <= availableNPCs.size()) {
-            ShowDialog(availableNPCs[choice - 1]);
+            RunDialog(availableNPCs[choice - 1]);
         }
     }
 }
 
-void GameCore::ShowDialog(NPC* npc) {
+void DialogSystem::RunDialog(NPC* npc) {
     if (!npc || npc->texts.empty()) {
         cout << "Этот NPC не может говорить." << endl;
         return;
     }
-
-    Output.OutputStates();
 
     // Начинаем с первого текста (id = 0)
     int currentTextID = 0;
@@ -794,7 +783,7 @@ void GameCore::ShowDialog(NPC* npc) {
         if (choice > 0 && choice <= currentText->answers.size()) {
             // Применяем эффект эмоции
             DialogAnswer& selectedAnswer = currentText->answers[choice - 1];
-            Logic.ChangeEmotions(selectedAnswer.emotion, selectedAnswer.sign);
+            gameLogic.ChangeEmotions(selectedAnswer.emotion, selectedAnswer.sign);
 
             // Переходим к следующему тексту (простая логика)
             currentTextID = choice; // или другая логика переходов
@@ -805,17 +794,6 @@ void GameCore::ShowDialog(NPC* npc) {
         }
     }
 }
-void GameCore::Go() {
-
-    Logic.ProcessGo();
-
-}
-
-void GameCore::ProcessClear() {
-
-    Collector.ClearStatistics();
-
-}
 
 void GameCore::ProcessCommand() {
 
@@ -823,9 +801,9 @@ void GameCore::ProcessCommand() {
     if (temp == "edit" || temp == "Edit") Edit();
     if (temp == "help" || temp == "Help") Help();
     if (temp == "status" || temp == "Status") StatusInfo();
-    if (temp == "info" || temp == "Info") InitInfo();
-    if (temp == "go" || temp == "Go") Go();
-    if (temp == "start" || temp == "Start") ProcessDialog();
+    if (temp == "info" || temp == "Info") Init.Info();
+    if (temp == "go" || temp == "Go") Logic.ProcessGo();
+    if (temp == "start" || temp == "Start") Dialog.ProcessDialog();
     if (temp == "exit" || temp == "Exit") EndGame();
-    if (temp == "CLEAR23") ProcessClear();
+    if (temp == "CLEAR23") Collector.ClearStatistics();
 }
