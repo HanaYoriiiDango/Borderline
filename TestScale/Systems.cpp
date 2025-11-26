@@ -1,4 +1,4 @@
-#include "systems.h"
+﻿#include "systems.h"
 #include <filesystem>
 #include <iostream>
 #include <iomanip>
@@ -129,7 +129,7 @@ vector<string> TextManager::FindJSONFiles(const string& folderPath) {
 
     return files;
 }
-vector<string> TextManager::FindWorldFolders() {
+vector<string> TextManager::FindWorldFolders() { 
     vector<string> worlds;
     string basePath = "data/dialogs/";
 
