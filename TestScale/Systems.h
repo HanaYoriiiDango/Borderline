@@ -70,21 +70,7 @@ public:
     void Subtraction(Emotion_ feels, vector<Emotion_> Array);
     void ChangeEmotions(Emotion_ DominationEmotion, bool sign);
     void ProcessGo();
-
-};
-
-class InputSystem : public GameLogicSystem { // обработка ввода, связана с игровой логикой
-public:
-    InputSystem(StatisticsCollector* collector) : GameLogicSystem(collector) {}
-    void InputHandler(int choice, int npcID, int textID);
-
-};
-
-class OutputSystem : NPC { // обработка вывода
-public:
-
-    void OutputDialog(int npcID, int textID);
- 
+    void StatusInfo();
 
 };
 
@@ -92,11 +78,11 @@ class DialogSystem {
 private:
     TextManager& textManager;
     GameLogicSystem& gameLogic;
-
+    StatisticsCollector& statsCollector;
 
 public:
-    DialogSystem(TextManager& tm, GameLogicSystem& gl)
-        :textManager(tm), gameLogic(gl) {};
+    DialogSystem(TextManager& tm, GameLogicSystem& gl, StatisticsCollector& sc)
+        :textManager(tm), gameLogic(gl), statsCollector(sc) {};
     
     void RunDialog(NPC* npc);
     void ProcessDialog();
@@ -106,27 +92,25 @@ public:
 
 class GameCore { // игровое ядро, все системы разделены по модулям 
 private:
-    InitSystem Init;
-    TextManager Manager;
-    DialogSystem Dialog;
-    StatisticsCollector Collector;
-    GameLogicSystem Logic;
+   
+    StatisticsCollector Collector;  
+    InitSystem Init;                
+    TextManager Manager;            
+    GameLogicSystem Logic;          
+    DialogSystem Dialog;           
     string temp;
-
 
 public:
 
-    GameCore() : Logic(&Collector), Dialog(Manager, Logic) {};
+    GameCore()
+        : Logic(&Collector),
+        Dialog(Manager, Logic, Collector) 
+    {}
 
     void InitGame();
     void StartGame();
     void EndGame();
-    void Edit();
     void Help();
-    void StatusInfo();
-    void InitInfo();
     void ProcessCommand();
-    void ProcessClear();
-    void ProcessDialog();
 
 };

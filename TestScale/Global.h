@@ -28,6 +28,7 @@ struct DialogAnswer {
     string text;
     Emotion_ emotion;
     bool sign; // true = увеличить, false = уменьшить
+    int next_text_id;
 };
 
 // Структура для текста NPC

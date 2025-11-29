@@ -1,4 +1,4 @@
-#include "systems.h"
+﻿#include "systems.h"
 #include <filesystem>
 #include <iostream>
 #include <iomanip>
@@ -73,6 +73,7 @@ DialogAnswer TextManager::ParseAnswer(const json& answerJson) {
     answer.text = answerJson["text"];
     answer.emotion = StringToEmotion(answerJson["emotion"]);
     answer.sign = answerJson["sign"];
+    answer.next_text_id = answerJson["next_text_id"]; 
     return answer;
 }
 
@@ -192,39 +193,6 @@ NPC* TextManager::GetNPCByID(const string& npcID) {
     }
     return nullptr; // не найден
 }
-
-
-
-
-
-
-
-
-/* Worlds[SADNESS].character.emplace_back();
-Worlds[SADNESS].character[0].name = "Beam";
-Worlds[SADNESS].character[0].ID = 0;
-
-Worlds[SADNESS].character[0].AddtextNPC( 0, "Полуразложившееся бревно лежит под угрюмым небом");
-Worlds[SADNESS].character[0].AddtextNPC( 1, "(Бревно молчит. Ветер шелестит листьями)");
-Worlds[SADNESS].character[0].AddtextNPC( 2, "От бревна откалывается щепка");
-Worlds[SADNESS].character[0].AddtextNPC( 3, "...");
-
-Worlds[SADNESS].character[0].AddReplace(0, SADNESS, true, " (Сарказм) : Ну что, старина - бревно ? Нашел отличную компанию для беседы.Тебя тоже сюда выбросило за ненадобностью ?");
-Worlds[SADNESS].character[0].AddReplace(0, ANGER, true, " (Раздраженно): И чего молчишь? Все вокруг только и умеют, что молчать! Скажи хоть что-нибудь! ");
-Worlds[SADNESS].character[0].AddReplace(0, FEAR, true, " (С опаской): Ты... ты ведь не превратишься сейчас в кого-нибудь? В монстра?");
-
-Worlds[SADNESS].character[0].AddReplace(1, ANGER, true, " (С горяча пнуть бревно ботинком): [Пнуть]");
-Worlds[SADNESS].character[0].AddReplace(1, ANGER, false, " (Грустно сесть рядом): Знаешь, а ведь ты идеальный собеседник. Тебя невозможно разачаровать");
-Worlds[SADNESS].character[0].AddReplace(1, FEAR, true," (Прислушиваясь к себе): Стоп. А что если это ловушка? Надо бы проверить окрестности");
-
-Worlds[SADNESS].character[0].AddReplace(2, FEAR, true," (В ужасе): Ой... Прости... Я не хотел... Я не хотел ломать...");
-Worlds[SADNESS].character[0].AddReplace(2, ANGER, true, " (С новым приливом ярости): Да сгнивай ты тут, кому ты нужен!");
-Worlds[SADNESS].character[0].AddReplace(2, FEAR, false," (С облегчением): Фух... Кажется, ничего страшного.Просто дерево.");
-
-Worlds[SADNESS].character[0].AddReplace(3, SADNESS, true, " (C горькой иронией):  Вот и поговорили. Как всегда, я один несу свою чушь в пустоту");
-Worlds[SADNESS].character[0].AddReplace(3, FEAR, false, " (Взяв себя в руки): Ладно... ладно. Сосредоточься. Нужно идти дальше.");
-Worlds[SADNESS].character[0].AddReplace(3, CALM, false, " (Смирившись): Тишина... Иногда она лучше любых слов");*/
-
 
 // Реализации методов GameLogicSystem
 Emotion_ GameLogicSystem::GetOpposite(Emotion_ feels) {
@@ -512,52 +480,6 @@ void GameLogicSystem::ProcessGo() {
     }
 }
 
-// Реализации методов OutputSystem 
-void OutputSystem::OutputDialog(int npcID, int textID) {
-
-    /*for (int i = 0; i < Worlds[Hero.current_loc].character.size(); i++) {
-
-        if (Worlds[Hero.current_loc].character[i].ID == npcID) {
-
-            cout << Worlds[Hero.current_loc].character[i].text_NPC[textID].text << endl << endl;
-
-            for (int j = 0; j < Worlds[Hero.current_loc].character[i].text_NPC[textID].Answer.size(); j++) {
-
-                cout << j + 1 << ") " << Worlds[Hero.current_loc].character[npcID].text_NPC[textID].Answer[j].text << endl;
-            }
-        }
-    }*/
-}
-
-// Реализации методов InputSystem
-void InputSystem::InputHandler(int choice, int npcID, int textID) {
-
-   /* int actualChoice = choice - 1;
-
-    Emotion_ selectedEmotion = COUNT_Emotions;
-    bool flag;
-    int originalLocation = Hero.current_loc;
-
-    for (int i = 0; i < Worlds[originalLocation].character.size(); i++) {
-        if (Worlds[originalLocation].character[i].ID == npcID) {
-            for (int j = 0; j < Worlds[originalLocation].character[i].text_NPC[textID].Answer.size(); j++) {
-                if (actualChoice == j) {
-                    selectedEmotion = Worlds[originalLocation].character[i].text_NPC[textID].Answer[j].id;
-                    flag = Worlds[originalLocation].character[i].text_NPC[textID].Answer[j].sign;
-                    break;
-                }
-            }
-            break;
-        }
-    }
-
-    if (selectedEmotion != COUNT_Emotions) {
-        ChangeEmotions(selectedEmotion, flag);
-        statsCollector->Session.counterChoices++;
-    }*/
-}
-
-
 // Реализации методов StatisticsCollector
 void StatisticsCollector::StartSession() {
 
@@ -624,6 +546,9 @@ void StatisticsCollector::ClearStatistics() {
         cout << "✓ Statistics cleared!\n";
 
     }
+
+    Hero.life = false;
+
 }
 
 // Реализации методов GameCore
@@ -648,44 +573,9 @@ void GameCore::EndGame() {
 
 }
 
-void GameCore::Edit() {
-
-    string temp;
-    int choice1;
-    int choice2;
-
-    for (int i = 0; i < Emotion.size(); i++) {
-
-        cout << i + 1 << ")" << left << setw(20) << Emotion_Names[i] << "\t" << Hero.emotions[i] << endl;
-
-    }
-
-    cout << "Номер эмоции которую хотите изменить?" << endl;
-    cin >> choice1;
-
-    if (choice1 > 0 && choice1 < Emotion.size()) {
-
-        cout << "Какое значение установить для выбранной шкалы? (изменит сразу всю пару на указанное значение)" << endl;
-        cin >> choice2;
-        int num = choice1 - 1;
-
-        Emotion_ Opposite_num = Logic.GetOpposite((Emotion_)num);
-        Hero.emotions[num] = choice2;
-        Hero.emotions[Opposite_num] = choice2;
-        cout << "Установлено новое значение для шкал: " << Emotion_Names[num] << ": " << Hero.emotions[num]
-            << " и " << Emotion_Names[Opposite_num] << ": " << Hero.emotions[Opposite_num] << endl;
-        Logic.ChangeGamerule();
-    }
-    else {
-        cout << "Выбор неккоректный, пиши команду заново" << endl;
-
-    }
-}
-
 void GameCore::Help() {
 
     cout << "help - список команд \n";
-    cout << "edit - изменить эмоции\n";
     cout << "info - информация о инициализированных объектах \n";
     cout << "status - информация о состоянии персонажа \n";
     cout << "go - для перемещения \n";
@@ -694,7 +584,7 @@ void GameCore::Help() {
 
 }
 
-void GameCore::StatusInfo() {
+void GameLogicSystem::StatusInfo() {
     for (int i = 0; i < Emotion.size(); i++) {
 
         cout << left << setw(40) << Emotion_Names[i] << "\t" <<
@@ -703,26 +593,25 @@ void GameCore::StatusInfo() {
     }
 }
 
-void GameCore::InitInfo() {
-    Init.Info();
-}
-
 void DialogSystem::ProcessDialog() {
 
-    // Шаг 1: Проверяем есть ли NPC в текущем мире
+    // Проверяем есть ли NPC в текущем мире
     if (!textManager.HasNPCInWorld(Worlds[Hero.current_loc].linked_emotion)) {
         cout << "Здесь не с кем поговорить." << endl;
         return;
     }
 
-    // Шаг 2: Получаем всех NPC в этом мире
+    // Получаем всех NPC в этом мире
     vector<NPC*> availableNPCs = textManager.GetNPCsInWorld(Worlds[Hero.current_loc].linked_emotion);
 
-    // Шаг 3: Если NPC один - сразу начинаем диалог
+    // Если NPC один сразу начинаем диалог
     if (availableNPCs.size() == 1) {
+        gameLogic.StatusInfo();
         RunDialog(availableNPCs[0]);
+        gameLogic.StatusInfo();
+
     }
-    // Если несколько - показываем выбор
+    // Если несколько показываем выбор
     else {
         cout << "Вы можете поговорить с:" << endl;
         for (int i = 0; i < availableNPCs.size(); i++) {
@@ -733,22 +622,21 @@ void DialogSystem::ProcessDialog() {
         cin >> choice;
 
         if (choice > 0 && choice <= availableNPCs.size()) {
+            gameLogic.StatusInfo();
             RunDialog(availableNPCs[choice - 1]);
+            gameLogic.StatusInfo();
+
         }
     }
 }
 
 void DialogSystem::RunDialog(NPC* npc) {
-    if (!npc || npc->texts.empty()) {
-        cout << "Этот NPC не может говорить." << endl;
-        return;
-    }
+    if (!npc || npc->texts.empty()) return;
 
-    // Начинаем с первого текста (id = 0)
     int currentTextID = 0;
-
+    
     while (true) {
-        // Находим текст по ID
+        // Находим текущий текст
         DialogText* currentText = nullptr;
         for (DialogText& text : npc->texts) {
             if (text.id == currentTextID) {
@@ -756,39 +644,44 @@ void DialogSystem::RunDialog(NPC* npc) {
                 break;
             }
         }
-
+        
         if (!currentText) {
-            cout << "(Диалог завершен)" << endl;
+            cout << "(Диалог завершён)" << endl;
             break;
         }
-
-        // Показываем текст NPC
+        
+        // Показываем текст и ответы
         cout << currentText->text << endl << endl;
-
-        // Показываем ответы
+        
         if (currentText->answers.empty()) {
-            cout << "(Диалог завершен)" << endl;
+            cout << "(Диалог завершён)" << endl;
             break;
         }
-
+        
         for (int i = 0; i < currentText->answers.size(); i++) {
             cout << (i + 1) << ") " << currentText->answers[i].text << endl;
         }
-
-        // Игрок выбирает ответ
+        
+        // Получаем выбор игрока
         cout << "Ваш выбор: ";
         int choice;
         cin >> choice;
-
+        
         if (choice > 0 && choice <= currentText->answers.size()) {
-            // Применяем эффект эмоции
             DialogAnswer& selectedAnswer = currentText->answers[choice - 1];
+            
+           
             gameLogic.ChangeEmotions(selectedAnswer.emotion, selectedAnswer.sign);
-
-            // Переходим к следующему тексту (простая логика)
-            currentTextID = choice; // или другая логика переходов
-        }
-        else {
+            
+            
+            currentTextID = selectedAnswer.next_text_id;
+            
+            
+            if (currentTextID == -1) {
+                cout << "(Диалог завершён)" << endl;
+                break;
+            }
+        } else {
             cout << "Неверный выбор!" << endl;
             break;
         }
@@ -798,9 +691,8 @@ void DialogSystem::RunDialog(NPC* npc) {
 void GameCore::ProcessCommand() {
 
     cin >> temp;
-    if (temp == "edit" || temp == "Edit") Edit();
     if (temp == "help" || temp == "Help") Help();
-    if (temp == "status" || temp == "Status") StatusInfo();
+    if (temp == "status" || temp == "Status") Logic.StatusInfo();
     if (temp == "info" || temp == "Info") Init.Info();
     if (temp == "go" || temp == "Go") Logic.ProcessGo();
     if (temp == "start" || temp == "Start") Dialog.ProcessDialog();
