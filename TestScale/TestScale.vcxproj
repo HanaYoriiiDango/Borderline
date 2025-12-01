@@ -128,9 +128,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Collector.cpp" />
+    <ClCompile Include="Core.cpp" />
+    <ClCompile Include="Dialog.cpp" />
+    <ClCompile Include="Logic.cpp" />
     <ClCompile Include="Global.cpp" />
+    <ClCompile Include="Init.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Systems.cpp" />
+    <ClCompile Include="TextManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Global.h" />

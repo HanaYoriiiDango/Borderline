@@ -1,14 +1,8 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include <iomanip>
-#include <cstdlib>
-#include <ctime>
-#include <thread>
-#include <chrono>
-#include <windows.h>
+﻿#include <windows.h>
 #include "Global.h"
 #include "Systems.h"
+#include <cstdlib>
+#include <ctime>
 
 using namespace std;  
 
