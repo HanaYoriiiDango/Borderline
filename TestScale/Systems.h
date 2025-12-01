@@ -33,26 +33,28 @@ public:
 
 class StatisticsCollector {
 public:
-    GameSession Session;
+    GameSession session;
     ofstream SaveStatistics;
     void StartSession();
     void EndSession();
     void SaveData();
     void ClearStatistics();
+    void RecordVisit();
 
 };
 
 class GameLogicSystem { // игровая логика
 private:
-    Emotion_ ArrayNum;
-    int dominationRate = 10;
-    int passiveRate = 5;
+    //зависимости
+    StatisticsCollector& Collector;
 
-protected:
-    StatisticsCollector* statsCollector;
+    // вспом. переменные и массивы
+    Emotion_ ArrayNum;
+    int dominationRate = 5;
+    int passiveRate = 2;
 
 public:
-    GameLogicSystem(StatisticsCollector* collector) : statsCollector(collector) {}
+    GameLogicSystem(StatisticsCollector& collector) : Collector(collector) {}
 
     vector<Emotion_> Positive;
     vector<Emotion_> Negative;
@@ -76,6 +78,7 @@ public:
 
 class DialogSystem {
 private:
+    // Зависимости:
     TextManager& textManager;
     GameLogicSystem& gameLogic;
     StatisticsCollector& statsCollector;
@@ -92,7 +95,7 @@ public:
 
 class GameCore { // игровое ядро, все системы разделены по модулям 
 private:
-   
+    // Игровое ядро должно именно ВЛАДЕТЬ своими модулями - композиция 
     StatisticsCollector Collector;  
     InitSystem Init;                
     TextManager Manager;            
@@ -103,7 +106,7 @@ private:
 public:
 
     GameCore()
-        : Logic(&Collector),
+        : Logic(Collector),
         Dialog(Manager, Logic, Collector) 
     {}
 
@@ -114,3 +117,4 @@ public:
     void ProcessCommand();
 
 };
+

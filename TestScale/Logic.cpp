@@ -271,16 +271,10 @@ void GameLogicSystem::ProcessGo() {
         if (portal.open && !Worlds[portal.target].is_locked) {
 
             Hero.current_loc = portal.target;
-            statsCollector->Session.AllVisitCount++;
+            Collector.session.AllVisitCount++;
+            Collector.RecordVisit();
 
-            switch (Hero.current_loc) {
-            case SADNESS: statsCollector->Session.worldVisitSad++; break;
-            case JOY: statsCollector->Session.worldVisitJoy++; break;
-            case POWER: statsCollector->Session.worldVisitPower++; break;
-            case FEAR: statsCollector->Session.worldVisitFear++; break;
-            case CALM: statsCollector->Session.worldVisitCalm++; break;
-            case ANGER: statsCollector->Session.worldVisitAnger++; break;
-            }
+            
 
             cout << "Ты переместился в " << Worlds_Names[Hero.current_loc] << endl;
 
