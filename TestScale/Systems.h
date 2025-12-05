@@ -52,12 +52,12 @@ private:
     Emotion_ ArrayNum;
     int dominationRate = 5;
     int passiveRate = 2;
+    vector<Emotion_> Positive;
+    vector<Emotion_> Negative;
 
 public:
     GameLogicSystem(StatisticsCollector& collector) : Collector(collector) {}
 
-    vector<Emotion_> Positive;
-    vector<Emotion_> Negative;
     Emotion_ GetOpposite(Emotion_ feels);
     bool LimitCheck(int value);
     bool HeroLocCheck();

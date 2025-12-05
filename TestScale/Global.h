@@ -33,6 +33,8 @@ struct DialogAnswer {
 struct DialogText {
     int id;
     string text;
+    Emotion_ emotion;
+    bool sign; // true = увеличить, false = уменьшить
     vector<DialogAnswer> answers;
 };
 

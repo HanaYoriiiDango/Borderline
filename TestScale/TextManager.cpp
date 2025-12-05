@@ -29,6 +29,8 @@ DialogText TextManager::ParseDialogText(const json& textJson) {
     DialogText text;
     text.id = textJson["id"];
     text.text = textJson["text"];
+    text.emotion = StringToEmotion(textJson["emotion"]);
+    text.sign = textJson["sign"];
 
     for (const auto& answerJson : textJson["answers"]) {
         text.answers.push_back(ParseAnswer(answerJson));

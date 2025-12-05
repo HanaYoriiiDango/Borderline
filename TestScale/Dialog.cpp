@@ -16,9 +16,7 @@ void DialogSystem::ProcessDialog() {
 
     // Если NPC один сразу начинаем диалог
     if (availableNPCs.size() == 1) {
-        gameLogic.StatusInfo();
         RunDialog(availableNPCs[0]);
-        gameLogic.StatusInfo();
 
     }
     // Если несколько показываем выбор
@@ -32,9 +30,7 @@ void DialogSystem::ProcessDialog() {
         cin >> choice;
 
         if (choice > 0 && choice <= availableNPCs.size()) {
-            gameLogic.StatusInfo();
             RunDialog(availableNPCs[choice - 1]);
-            gameLogic.StatusInfo();
 
         }
     }
@@ -48,6 +44,7 @@ void DialogSystem::RunDialog(NPC* npc) {
     while (true) {
         // Находим текущий текст
         DialogText* currentText = nullptr;
+
         for (DialogText& text : npc->texts) {
             if (text.id == currentTextID) {
                 currentText = &text;
@@ -60,8 +57,12 @@ void DialogSystem::RunDialog(NPC* npc) {
             break;
         }
 
+
         // Показываем текст и ответы
         cout << currentText->text << endl << endl;
+
+        gameLogic.ChangeEmotions(currentText->emotion, currentText->sign);
+        gameLogic.StatusInfo();
 
         if (currentText->answers.empty()) {
             cout << "(Диалог завершён)" << endl;

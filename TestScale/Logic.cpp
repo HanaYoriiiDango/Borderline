@@ -218,6 +218,9 @@ void GameLogicSystem::Subtraction(Emotion_ feels, vector<Emotion_> Array) {
 
 void GameLogicSystem::ChangeEmotions(Emotion_ DominationEmotion, bool sign) {
 
+    vector<Emotion_>().swap(Positive);
+    vector<Emotion_>().swap(Negative);
+
     for (int i = 0; i < Emotion.size(); i++) {
 
         if (Emotion[i] % 2 == 0) {
