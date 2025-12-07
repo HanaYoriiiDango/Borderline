@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <vector>
 #include <string>
 #include <ctime> 
@@ -6,7 +6,7 @@
 using namespace std;
 
 // Перечисления
-enum Emotion_ { JOY, SADNESS, POWER, FEAR, CALM, ANGER, COUNT_Emotions }; 
+enum Emotion_ { JOY, SADNESS, POWER, FEAR, CALM, ANGER, COUNT_Emotions };  
 
 // Внешние объявления глобальных переменных
 extern vector<Emotion_> Emotion;
