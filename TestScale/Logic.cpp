@@ -37,41 +37,6 @@ Emotion_ GameLogicSystem::DetectedEmotion(int feels) {
 
 }
 
-void GameLogicSystem::LockedWorlds() { // Закрывает миры 
-
-    for (int i = 0; i < Emotion.size(); i++) { // перебирает все эмоции
-
-        Emotion_ feels = DetectedEmotion(i); // смотрит достигли ли они предела, если да - return emotion
-        if (feels == COUNT_Emotions) continue; // если таких эмоций нет, то пропускаем иттерацию
-
-        if (!Worlds[feels].is_locked) {
-
-            Worlds[feels].is_locked = true;
-            Emotion_ OppositeWorld = GetOpposite(Emotion[feels]);
-            Worlds[OppositeWorld].is_locked = true;
-            cout << "Мир " << Worlds[feels].name << " и " << Worlds[OppositeWorld].name << " закрыты!" << endl;
-            cout << Emotion_Names[feels] << " и " << Emotion_Names[OppositeWorld] << " достигли своих пределов!" << endl;
-
-        }
-    }
-}
-
-void GameLogicSystem::UnlockedWorlds() {
-
-    for (int i = 0; i < Emotion.size(); i++) { // перебирает все эмоции
-
-        if (Worlds[i].is_locked) {
-
-            Worlds[i].is_locked = false;
-            Emotion_ OppositeWorld = GetOpposite(Emotion[i]);
-            Worlds[OppositeWorld].is_locked = false;
-            cout << "Мир " << Worlds[i].name << " и " << Worlds[OppositeWorld].name << " открыты!" << endl;
-            cout << Emotion_Names[i] << " и " << Emotion_Names[OppositeWorld] << " восстановились!" << endl;
-
-        }
-    }
-}
-
 void GameLogicSystem::LockedValue(Emotion_ feels) {
 
     int value = Hero.emotions[feels];
@@ -274,11 +239,6 @@ void GameLogicSystem::ProcessGo() {
         if (portal.open && !Worlds[portal.target].is_locked) {
 
             Hero.current_loc = portal.target;
-            Collector.session.AllVisitCount++;
-            Collector.RecordVisit();
-
-            
-
             cout << "Ты переместился в " << Worlds_Names[Hero.current_loc] << endl;
 
         }

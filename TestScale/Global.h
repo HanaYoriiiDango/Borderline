@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <vector>
 #include <string>
 #include <ctime> 
@@ -10,8 +10,7 @@ enum Emotion_ { JOY, SADNESS, POWER, FEAR, CALM, ANGER, COUNT_Emotions };
 
 // Внешние объявления глобальных переменных
 extern vector<Emotion_> Emotion;
-extern vector<string> Folder_Names;
-extern string Emotion_Names[COUNT_Emotions];
+extern string Emotion_Names[COUNT_Emotions]; 
 extern string Worlds_Names[COUNT_Emotions];
 
 // Структуры
@@ -58,27 +57,6 @@ struct Location {
     bool is_locked = false;
     vector<Portal_> portal;
  
-};
-
-
-struct GameSession { 
-    // Основная информация о сессии
-    int ID; // номер сессии
-    time_t startTime, endTime; // Начало сессии / конец сессии
-    double TimeMin; // перевод в минутах
-
-    // Основная статистика
-    int worldVisitSad;        // Сколько раз посещал sadness
-    int worldVisitJoy;        // Сколько раз посещал joy и т.д
-    int worldVisitPower;        
-    int worldVisitFear;        
-    int worldVisitCalm;        
-    int worldVisitAnger;       
-    int AllVisitCount;        // Сколько раз перемещался в общем 
-
-    // Статистика по диалогам
-    int counterChoices;                  // Всего принятых диалоговых решений
-
 };
 
 // Глобальные переменные

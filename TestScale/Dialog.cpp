@@ -1,4 +1,4 @@
-#include "systems.h"
+﻿#include "systems.h"
 #include <iostream>
 
 using namespace std;
@@ -6,13 +6,13 @@ using namespace std;
 void DialogSystem::ProcessDialog() {
 
     // Проверяем есть ли NPC в текущем мире
-    if (!textManager.HasNPCInWorld(Worlds[Hero.current_loc].linked_emotion)) {
+    if (!d_textManager.HasNPCInWorld(Worlds[Hero.current_loc].linked_emotion)) {
         cout << "Здесь не с кем поговорить." << endl;
         return;
     }
 
     // Получаем всех NPC в этом мире
-    vector<NPC*> availableNPCs = textManager.GetNPCsInWorld(Worlds[Hero.current_loc].linked_emotion);
+    vector<NPC*> availableNPCs = d_textManager.GetNPCsInWorld(Worlds[Hero.current_loc].linked_emotion);
 
     // Если NPC один сразу начинаем диалог
     if (availableNPCs.size() == 1) {
@@ -61,8 +61,8 @@ void DialogSystem::RunDialog(NPC* npc) {
         // Показываем текст и ответы
         cout << currentText->text << endl << endl;
 
-        gameLogic.ChangeEmotions(currentText->emotion, currentText->sign);
-        gameLogic.StatusInfo();
+        d_gameLogic.ChangeEmotions(currentText->emotion, currentText->sign);
+        d_gameLogic.StatusInfo();
 
         if (currentText->answers.empty()) {
             cout << "(Диалог завершён)" << endl;
@@ -82,7 +82,7 @@ void DialogSystem::RunDialog(NPC* npc) {
             DialogAnswer& selectedAnswer = currentText->answers[choice - 1];
 
 
-            gameLogic.ChangeEmotions(selectedAnswer.emotion, selectedAnswer.sign);
+            d_gameLogic.ChangeEmotions(selectedAnswer.emotion, selectedAnswer.sign);
 
 
             currentTextID = selectedAnswer.next_text_id;

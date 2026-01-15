@@ -11,16 +11,8 @@ void GameCore::InitGame() {
 
 }
 
-void GameCore::StartGame() {
-
-    Collector.StartSession();
-
-}
-
 void GameCore::EndGame() {
 
-    Collector.EndSession();
-    Collector.SaveData();
     Hero.life = false;
 
 }
@@ -45,6 +37,5 @@ void GameCore::ProcessCommand() {
     if (temp == "go" || temp == "Go") Logic.ProcessGo();
     if (temp == "start" || temp == "Start") Dialog.ProcessDialog();
     if (temp == "exit" || temp == "Exit") EndGame();
-    if (temp == "CLEAR23") Collector.ClearStatistics();
 
 }

@@ -128,7 +128,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Collector.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="Dialog.cpp" />
     <ClCompile Include="Logic.cpp" />

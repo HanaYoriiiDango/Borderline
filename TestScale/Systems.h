@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Global.h"
 #include "json.hpp"
 #include <fstream>
@@ -6,13 +6,6 @@
 using json = nlohmann::json;
 
 class TextManager {
-public:
-    // Общие методы
-    void LoadAllNPCs();
-    vector<NPC*> GetNPCsInWorld(Emotion_ world);
-    NPC* GetNPCByID(const string& npcID);
-    bool HasNPCInWorld(Emotion_ world);
-
 private:
     // Внутренние методы
     vector<string> FindWorldFolders();
@@ -21,6 +14,13 @@ private:
     DialogText ParseDialogText(const json& textJson);
     DialogAnswer ParseAnswer(const json& answerJson);
     Emotion_ StringToEmotion(const string& emotionStr);
+
+public:
+    // Общие методы
+    void LoadAllNPCs();
+    vector<NPC*> GetNPCsInWorld(Emotion_ world);
+    NPC* GetNPCByID(const string& npcID);
+    bool HasNPCInWorld(Emotion_ world);
 };
 
 class InitSystem { // инициализация 
@@ -31,22 +31,8 @@ public:
 
 };
 
-class StatisticsCollector {
-public:
-    GameSession session;
-    ofstream SaveStatistics;
-    void StartSession();
-    void EndSession();
-    void SaveData();
-    void ClearStatistics();
-    void RecordVisit();
-
-};
-
 class GameLogicSystem { // игровая логика
 private:
-    //зависимости
-    StatisticsCollector& Collector;
 
     // вспом. переменные и массивы
     Emotion_ ArrayNum;
@@ -56,13 +42,10 @@ private:
     vector<Emotion_> Negative;
 
 public:
-    GameLogicSystem(StatisticsCollector& collector) : Collector(collector) {}
 
     Emotion_ GetOpposite(Emotion_ feels);
     bool LimitCheck(int value);
     bool HeroLocCheck();
-    void LockedWorlds();
-    void UnlockedWorlds();
     void LockedValue(Emotion_ feels);
     Emotion_ DetectedEmotion(int feels);
     void MovingPlayer();
@@ -79,13 +62,13 @@ public:
 class DialogSystem {
 private:
     // Зависимости:
-    TextManager& textManager;
-    GameLogicSystem& gameLogic;
-    StatisticsCollector& statsCollector;
+    TextManager& d_textManager;
+    GameLogicSystem& d_gameLogic;
+
 
 public:
-    DialogSystem(TextManager& tm, GameLogicSystem& gl, StatisticsCollector& sc)
-        :textManager(tm), gameLogic(gl), statsCollector(sc) {};
+    DialogSystem(TextManager& tm, GameLogicSystem& gl)
+        : d_textManager(tm), d_gameLogic(gl) {};
     
     void RunDialog(NPC* npc);
     void ProcessDialog();
@@ -95,8 +78,7 @@ public:
 
 class GameCore { // игровое ядро, все системы разделены по модулям 
 private:
-    // Игровое ядро должно именно ВЛАДЕТЬ своими модулями - композиция 
-    StatisticsCollector Collector;  
+    // Игровое ядро должно именно ВЛАДЕТЬ своими модулями - композиция  
     InitSystem Init;                
     TextManager Manager;            
     GameLogicSystem Logic;          
@@ -106,12 +88,10 @@ private:
 public:
 
     GameCore()
-        : Logic(Collector),
-        Dialog(Manager, Logic, Collector) 
+        : Dialog(Manager, Logic) 
     {}
 
     void InitGame();
-    void StartGame();
     void EndGame();
     void Help();
     void ProcessCommand();

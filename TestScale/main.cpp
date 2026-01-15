@@ -13,7 +13,6 @@ int main() {
     srand((time(nullptr)));
 
     GameCore Game;
-    Game.StartGame();
     Game.InitGame();
     Game.Help();
 
