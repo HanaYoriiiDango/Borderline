@@ -41,8 +41,7 @@ private:
     vector<Emotion_> Positive;
     vector<Emotion_> Negative;
 
-public:
-
+    // Внутренние методы
     Emotion_ GetOpposite(Emotion_ feels);
     bool LimitCheck(int value);
     bool HeroLocCheck();
@@ -53,6 +52,9 @@ public:
     void Transfuse(Emotion_ feels);
     void Addition(Emotion_ feels, vector<Emotion_> Array);
     void Subtraction(Emotion_ feels, vector<Emotion_> Array);
+
+public:
+
     void ChangeEmotions(Emotion_ DominationEmotion, bool sign);
     void ProcessGo();
     void StatusInfo();
