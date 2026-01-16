@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Global.h"
 #include "json.hpp"
 #include <fstream>
@@ -55,6 +55,7 @@ private:
 
 public:
 
+    // Публичные методы 
     void ChangeEmotions(Emotion_ DominationEmotion, bool sign);
     void ProcessGo();
     void StatusInfo();

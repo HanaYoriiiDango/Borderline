@@ -14,7 +14,6 @@ extern string Emotion_Names[COUNT_Emotions];
 extern string Worlds_Names[COUNT_Emotions];
 
 // Структуры: 
-
 struct Portal_ { // Структура порталов 
     string name;
     int target;
