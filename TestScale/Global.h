@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <vector>
 #include <string>
 #include <ctime> 
@@ -13,23 +13,22 @@ extern vector<Emotion_> Emotion;
 extern string Emotion_Names[COUNT_Emotions]; 
 extern string Worlds_Names[COUNT_Emotions];
 
-// Структуры
-struct Portal_ {
+// Структуры: 
+
+struct Portal_ { // Структура порталов 
     string name;
     int target;
     bool open = true;
 };
 
-// Структура для ответов
-struct DialogAnswer {
+struct DialogAnswer { // Структура для ответов
     string text;
     Emotion_ emotion;
     bool sign; // true = увеличить, false = уменьшить
-    int next_text_id;
+    int next_text_id; // Переход к следующему диалогу по айди
 };
 
-// Структура для текста NPC
-struct DialogText {
+struct DialogText { // Структура для текста NPC
     int id;
     string text;
     Emotion_ emotion;
@@ -37,21 +36,20 @@ struct DialogText {
     vector<DialogAnswer> answers;
 };
 
-// Структура для NPC
-struct NPC {
+struct NPC { // Структура для NPC
     string id;
     string name;
     Emotion_ world_link; // Линк персонажа с миром 
     vector<DialogText> texts;
 };
 
-struct Player {
+struct Player { // Структура игрока 
     int current_loc = SADNESS;
     int emotions[COUNT_Emotions] = { 50, 50, 50, 50, 50, 50 };
     bool life = true;
 };
 
-struct Location {
+struct Location { // Структура локации 
     string name; 
     Emotion_ linked_emotion;
     bool is_locked = false;
