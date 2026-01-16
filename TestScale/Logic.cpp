@@ -1,4 +1,4 @@
-#include "systems.h"
+﻿#include "systems.h"
 #include <iostream>
 #include <iomanip>
 #include <cstdlib>
@@ -6,7 +6,7 @@
 using namespace std;
 
 // Реализации методов GameLogicSystem
-Emotion_ GameLogicSystem::GetOpposite(Emotion_ feels) {
+Emotion_ GameLogicSystem::GetOpposite(Emotion_ feels) { // Возвращает противоположную эмоцию
     switch (feels) {
     case SADNESS: return JOY;
     case JOY: return SADNESS;
@@ -17,34 +17,34 @@ Emotion_ GameLogicSystem::GetOpposite(Emotion_ feels) {
     default: cout << "ERROR: Unknown emotion in GetOpposite: " << feels << endl;
     }
 }
-bool GameLogicSystem::LimitCheck(int value) {
+bool GameLogicSystem::LimitCheck(int value) { // Проверка на достижение пределов шкал
 
     if (value <= 2 || value >= 98) return true;
     else return false;
 
 }
 
-bool GameLogicSystem::HeroLocCheck() {
+bool GameLogicSystem::HeroLocCheck() { // Проверка на флаг текущего мира 
 
     return Worlds[Hero.current_loc].is_locked;
 
 }
 
-Emotion_ GameLogicSystem::DetectedEmotion(int feels) {
+Emotion_ GameLogicSystem::DetectedEmotion(int feels) { // Возвращает эмоцию, которая достигла предела 
 
     if (LimitCheck(Hero.emotions[feels])) return (Emotion_)feels;
     return COUNT_Emotions;
 
 }
 
-void GameLogicSystem::LockedValue(Emotion_ feels) {
+void GameLogicSystem::LockedValue(Emotion_ feels) { // Контролирует чтобы эмоции не вышли за пределы
 
     int value = Hero.emotions[feels];
 
-    if (value < 0) value = 0;
+    if (value < 0) value = 0; // проверяем, если достигли - фиксируем
     if (value > 100) value = 100;
 
-    Hero.emotions[feels] = value;
+    Hero.emotions[feels] = value; // перезаписываем
 
 }
 
@@ -135,60 +135,64 @@ void GameLogicSystem::ChangeGamerule() {
 }
 
 
-void GameLogicSystem::Transfuse(Emotion_ feels) {
+void GameLogicSystem::Transfuse(Emotion_ feels) { // Меняем значение пары и проверяем их на пределы
 
-    Emotion_ opposite_emotion = GetOpposite(feels);
-    int new_value = 100 - Hero.emotions[feels];
-    Hero.emotions[opposite_emotion] = new_value;
+    Emotion_ opposite_emotion = GetOpposite(feels); // Ищем противоположную эмоцию
+    int new_value = 100 - Hero.emotions[feels]; // Получаем новое значение противоположной шкалы 
+    Hero.emotions[opposite_emotion] = new_value; // Записываем новое значение
+
+    // проверяем на достижение пределов
     LockedValue(feels);
     LockedValue(opposite_emotion);
 
 }
 
-void GameLogicSystem::Addition(Emotion_ feels, vector<Emotion_> Array) {
+void GameLogicSystem::Addition(Emotion_ feels, vector<Emotion_> Array) { // операция увеличения шкалы
 
-    Hero.emotions[feels] += dominationRate;
-    Transfuse(feels);
+    Hero.emotions[feels] += dominationRate; // увеличиваем доминирующую
+    Transfuse(feels); // меняем связанную 
 
-    for (int i = 0; i < Array.size(); i++) {
+    for (int i = 0; i < Array.size(); i++) { // Перебираем группу 
 
-        ArrayNum = Array[i];
+        ArrayNum = Array[i]; // используем вспомогательную переменную
 
-        if (ArrayNum != feels) {
+        if (ArrayNum != feels) { // Она не должна быть доминирующей 
 
-            Hero.emotions[ArrayNum] -= passiveRate;
-            Transfuse(ArrayNum);
-
-        }
-    }
-}
-
-void GameLogicSystem::Subtraction(Emotion_ feels, vector<Emotion_> Array) {
-
-    Hero.emotions[feels] -= dominationRate;
-    Transfuse(feels);
-
-    for (int j = 0; j < Array.size(); j++) {
-
-        ArrayNum = Array[j];
-
-        if (ArrayNum != feels) {
-
-            Hero.emotions[ArrayNum] += passiveRate;
-            Transfuse(ArrayNum);
+            Hero.emotions[ArrayNum] -= passiveRate; // уменьшаем пассивные
+            Transfuse(ArrayNum); // и связанные с ними
 
         }
     }
 }
 
-void GameLogicSystem::ChangeEmotions(Emotion_ DominationEmotion, bool sign) {
+void GameLogicSystem::Subtraction(Emotion_ feels, vector<Emotion_> Array) { // операция уменьшения шкалы
 
+    Hero.emotions[feels] -= dominationRate; // Уменьшаем доминирующую
+    Transfuse(feels); // меняем связанную
+
+    for (int j = 0; j < Array.size(); j++) { // перебираем группу
+
+        ArrayNum = Array[j]; // используем вспомогательную переменную
+
+        if (ArrayNum != feels) { // она не должна быть доминирующей
+
+            Hero.emotions[ArrayNum] += passiveRate; // увеличиваем пассивные 
+            Transfuse(ArrayNum); // и связанные с ними
+
+        }
+    }
+}
+
+void GameLogicSystem::ChangeEmotions(Emotion_ DominationEmotion, bool sign) { // изменение шкал эмоций
+
+    // 1. Предварительная очистка
     vector<Emotion_>().swap(Positive);
     vector<Emotion_>().swap(Negative);
 
+    // 2. Перебираем эмоции на группы 
     for (int i = 0; i < Emotion.size(); i++) {
 
-        if (Emotion[i] % 2 == 0) {
+        if (Emotion[i] % 2 == 0) { // проверяем на четность
 
             Positive.push_back({ Emotion[i] });
 
@@ -199,6 +203,8 @@ void GameLogicSystem::ChangeEmotions(Emotion_ DominationEmotion, bool sign) {
 
         }
     }
+
+    // 3. Проверяем переданную эмоцию на четность / нечетность, выбираем операцию, передаем массив
     if (DominationEmotion % 2 == 0) {
 
         sign ? Addition(DominationEmotion, Positive) : Subtraction(DominationEmotion, Positive);
@@ -210,6 +216,7 @@ void GameLogicSystem::ChangeEmotions(Emotion_ DominationEmotion, bool sign) {
 
     }
 
+    // 4. После использования очищаем массивы
     vector<Emotion_>().swap(Positive);
     vector<Emotion_>().swap(Negative);
 
@@ -217,7 +224,7 @@ void GameLogicSystem::ChangeEmotions(Emotion_ DominationEmotion, bool sign) {
 
 }
 
-void GameLogicSystem::ProcessGo() {
+void GameLogicSystem::ProcessGo() { // функция перемещения игрока 
 
     for (int i = 0; i < Worlds[Hero.current_loc].portal.size(); i++) {
 
@@ -248,7 +255,7 @@ void GameLogicSystem::ProcessGo() {
     }
 }
 
-void GameLogicSystem::StatusInfo() {
+void GameLogicSystem::StatusInfo() { // Выводит информацию о состоянии игрока 
     for (int i = 0; i < Emotion.size(); i++) {
 
         cout << left << setw(40) << Emotion_Names[i] << "\t" <<
