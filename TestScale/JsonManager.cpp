@@ -1,4 +1,4 @@
-#include "systems.h"
+﻿#include "systems.h"
 #include <filesystem>
 #include <iostream>
 
@@ -6,7 +6,7 @@ using namespace std;
 namespace fs = std::filesystem;
 
 //Реализация методов TextManager
-Emotion_ TextManager::StringToEmotion(const string& emotionStr) {
+Emotion_ JsonManager::StringToEmotion(const string& emotionStr) {
     if (emotionStr == "SADNESS") return SADNESS;
     if (emotionStr == "JOY") return JOY;
     if (emotionStr == "FEAR") return FEAR;
@@ -16,7 +16,7 @@ Emotion_ TextManager::StringToEmotion(const string& emotionStr) {
     return COUNT_Emotions;
 }
 
-DialogAnswer TextManager::ParseAnswer(const json& answerJson) {
+DialogAnswer JsonManager::ParseAnswer(const json& answerJson) {
     DialogAnswer answer;
     answer.text = answerJson["text"];
     answer.emotion = StringToEmotion(answerJson["emotion"]);
@@ -25,7 +25,7 @@ DialogAnswer TextManager::ParseAnswer(const json& answerJson) {
     return answer;
 }
 
-DialogText TextManager::ParseDialogText(const json& textJson) {
+DialogText JsonManager::ParseDialogText(const json& textJson) {
     DialogText text;
     text.id = textJson["id"];
     text.text = textJson["text"];
@@ -39,7 +39,7 @@ DialogText TextManager::ParseDialogText(const json& textJson) {
     return text;
 }
 
-NPC TextManager::LoadNPCFromFile(const string& filepath) {
+NPC JsonManager::LoadNPCFromFile(const string& filepath) {
     NPC npc;
 
     ifstream file(filepath);
@@ -67,7 +67,7 @@ NPC TextManager::LoadNPCFromFile(const string& filepath) {
     return npc;
 }
 
-vector<string> TextManager::FindJSONFiles(const string& folderPath) {
+vector<string> JsonManager::FindJSONFiles(const string& folderPath) {
     vector<string> files;
 
     if (!fs::exists(folderPath)) return files;
@@ -80,7 +80,7 @@ vector<string> TextManager::FindJSONFiles(const string& folderPath) {
 
     return files;
 }
-vector<string> TextManager::FindWorldFolders() {
+vector<string> JsonManager::FindWorldFolders() {
     vector<string> worlds;
     string basePath = "data/dialogs/";
 
@@ -95,7 +95,7 @@ vector<string> TextManager::FindWorldFolders() {
     return worlds;
 }
 
-void TextManager::LoadAllNPCs() {
+void JsonManager::LoadAllNPCs() {
     auto worldFolders = FindWorldFolders();
     int totalLoaded = 0;
 
@@ -119,7 +119,7 @@ void TextManager::LoadAllNPCs() {
     cout << "Всего загружено: " << totalLoaded << " NPC из " << worldFolders.size() << " миров" << endl;
 }
 
-vector<NPC*> TextManager::GetNPCsInWorld(Emotion_ world) {
+vector<NPC*> JsonManager::GetNPCsInWorld(Emotion_ world) {
     vector<NPC*> result;
 
     for (NPC& npc : Characters) {
@@ -131,11 +131,11 @@ vector<NPC*> TextManager::GetNPCsInWorld(Emotion_ world) {
     return result;
 }
 
-bool TextManager::HasNPCInWorld(Emotion_ world) {
+bool JsonManager::HasNPCInWorld(Emotion_ world) {
     return !GetNPCsInWorld(world).empty();
 }
 
-NPC* TextManager::GetNPCByID(const string& npcID) {
+NPC* JsonManager::GetNPCByID(const string& npcID) {
     for (NPC& npc : Characters) {
         if (npc.id == npcID) {
             return &npc;

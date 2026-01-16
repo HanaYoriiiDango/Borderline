@@ -24,7 +24,7 @@
     <ClCompile Include="Logic.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="TextManager.cpp">
+    <ClCompile Include="JsonManager.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="Init.cpp">

@@ -5,7 +5,7 @@
 
 using json = nlohmann::json;
 
-class TextManager {
+class JsonManager {
 private:
     // Внутренние методы
     vector<string> FindWorldFolders();
@@ -64,12 +64,12 @@ public:
 class DialogSystem {
 private:
     // Зависимости:
-    TextManager& d_textManager;
+    JsonManager& d_textManager;
     GameLogicSystem& d_gameLogic;
 
 
 public:
-    DialogSystem(TextManager& tm, GameLogicSystem& gl)
+    DialogSystem(JsonManager& tm, GameLogicSystem& gl)
         : d_textManager(tm), d_gameLogic(gl) {};
     
     void RunDialog(NPC* npc);
@@ -82,7 +82,7 @@ class GameCore { // игровое ядро, все системы раздел�
 private:
     // Игровое ядро должно именно ВЛАДЕТЬ своими модулями - композиция  
     InitSystem Init;                
-    TextManager Manager;            
+    JsonManager Manager;            
     GameLogicSystem Logic;          
     DialogSystem Dialog;           
     string temp;
