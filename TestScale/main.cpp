@@ -1,4 +1,4 @@
-#include <windows.h>
+﻿#include <windows.h>
 #include "Global.h"
 #include "Systems.h"
 #include <cstdlib>
